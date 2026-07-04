@@ -1,0 +1,132 @@
+---
+title: "Erros Inatos do Metabolismo no SUS"
+subtitle: "Microdados do DATASUS · CID-10 E70–E90 + triagem neonatal · SIA · SIH · SIM · SINASC · 2021–2025"
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+```
+
+```{r kpis-calc}
+sia_core_n <- D$sia |> dplyr::filter(camada == "core") |> dplyr::count() |>
+  dplyr::collect() |> dplyr::pull(n)
+sih_princ  <- sum(D$sih$eim_principal, na.rm = TRUE)
+sih_qualq  <- sum(D$sih$eim_qualquer,  na.rm = TRUE)
+sim_cb     <- sum(D$sim$eim_causa_basica, na.rm = TRUE)
+
+# Mortalidade infantil por EIM / 100 mil NV (pool 2021–2023, SIM causa básica <1 ano)
+obitos_inf <- sum(D$sim$eim_causa_basica & D$sim$obito_infantil, na.rm = TRUE)
+nv_pool    <- D$nv |> dplyr::filter(ano %in% ANOS_SIM) |> dplyr::summarise(nv = sum(nv)) |>
+  dplyr::pull(nv)
+mort_inf_100k <- 1e5 * obitos_inf / nv_pool
+```
+
+Os **Erros Inatos do Metabolismo (EIM)** são um grupo **grande e heterogêneo** de doenças
+genéticas raras — aminoacidopatias, acidúrias orgânicas, doenças de depósito lisossômico
+(MPS, Gaucher/Fabry/Pompe), distúrbios do ciclo da ureia, glicogenoses, entre muitas
+outras — em que a **triagem neonatal precoce** (teste do pezinho) e o **tratamento
+específico** (dieta, terapia de reposição enzimática) mudam radicalmente o prognóstico.
+Não há uma **fonte censitária de prevalência**; caracterizamos o grupo triangulando
+**quatro fontes** do DATASUS — **SIA-PA** (ambulatorial), **SIH-RD** (internações),
+**SIM-DO** (mortalidade) e **SINASC** (nascidos vivos, denominador de incidência) — no
+período **2021–2025** (SIM disponível até **2023**). A definição de caso **não é um CID
+único** (como em doenças de código próprio): usa uma **lookup** de prefixos CID-10
+(`scripts/eim_lookup.R`) com camadas *core*, *limítrofe* e *envelope*.
+
+```{r kpis}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(sia_core_n), "registros ambulatoriais (SIA, core)"),
+  c(fmt_n(sih_princ),  "AIH com EIM principal (SIH)"),
+  c(fmt_n(sih_qualq),  "AIH com EIM em qualquer campo (SIH)"),
+  c(fmt_n(sim_cb),     "óbitos por EIM (SIM, causa básica, 2021–2023)"),
+  c(paste0(fmt_2(mort_inf_100k), "/100k NV"), "mortalidade infantil por EIM (2021–2023)")
+)))
+```
+
+::: {.callout-nota}
+**Como ler estes números.**
+
+- São indicadores de **detecção, uso de serviço e mortalidade registrada** — **não de
+  prevalência**. Os EIM não têm fonte censitária.
+- As bases medem coisas distintas e **NÃO se somam** — o mesmo indivíduo pode aparecer em
+  várias, e cada base filtra por uma janela seletiva (SIA = crônicos acompanhados;
+  SIH = descompensações/terapia de reposição enzimática; SIM = letais precoces).
+- **EIM é um grupo heterogêneo**: não interpretar um "total de EIM" como uma doença única;
+  cada traçadora tem história natural própria.
+- **Detecção ≠ prevalência**; a variação geográfica reflete em grande parte **acesso e
+  oferta de serviços/triagem**, não incidência da doença.
+- Aplicamos **supressão de N<5** (LGPD; regra estrutural em doença rara) nas taxas
+  divulgadas. Rótulos CID-10 de 4 caracteres e valores de incidência da literatura
+  marcados `[VERIFICAR]`.
+
+Método e limitações: `plano_analise_EIM_datasus.md` e `RESULTADOS_PRELIMINARES.md`.
+:::
+
+## Triangulação das três bases (core, 2021–2025)
+
+```{r trend}
+#| fig-width: 10
+#| fig-height: 5
+serie_sia <- D$sia |> dplyr::filter(camada == "core") |> dplyr::select(ano) |>
+  dplyr::collect() |> dplyr::count(ano)
+serie_sih <- D$sih |> dplyr::filter(eim_principal) |> dplyr::count(ano)
+serie_sim <- D$sim |> dplyr::filter(eim_causa_basica) |> dplyr::count(ano)
+
+# eixo Y duplo: SIA (esquerda) é ~40× maior que SIH/SIM (direita)
+fac <- max(serie_sia$n) / max(c(serie_sih$n, serie_sim$n))
+
+ggplot(mapping = aes(ano)) +
+  geom_line(data = serie_sia, aes(y = n, color = "SIA (ambulatorial, core)"), linewidth = 1.2) +
+  geom_point(data = serie_sia, aes(y = n, color = "SIA (ambulatorial, core)"), size = 2.3) +
+  geom_line(data = serie_sih, aes(y = n*fac, color = "SIH (internação principal)"), linewidth = 1.2) +
+  geom_point(data = serie_sih, aes(y = n*fac, color = "SIH (internação principal)"), size = 2.3) +
+  geom_line(data = serie_sim, aes(y = n*fac, color = "SIM (óbito causa básica)"), linewidth = 1.2) +
+  geom_point(data = serie_sim, aes(y = n*fac, color = "SIM (óbito causa básica)"), size = 2.3) +
+  scale_y_continuous(
+    name = "SIA — registros ambulatoriais", labels = scales::label_number(big.mark = "."),
+    sec.axis = sec_axis(~ . / fac, name = "SIH / SIM — registros",
+                        labels = scales::label_number(big.mark = "."))) +
+  scale_x_continuous(breaks = ANOS) +
+  scale_color_manual(values = c("SIA (ambulatorial, core)"   = "#1B6F6A",
+                                "SIH (internação principal)" = "#3E5C8A",
+                                "SIM (óbito causa básica)"    = "#7FA6D9")) +
+  labs(x = NULL, color = NULL,
+       title = "Carga registrada de EIM por base, 2021–2025",
+       subtitle = "Eixo esquerdo: SIA (~40× maior). Eixo direito: SIH e SIM. SIM disponível só até 2023.") +
+  theme_eim() +
+  theme(axis.title.y.left  = element_text(color = "#1B6F6A"),
+        axis.title.y.right = element_text(color = "#3E5C8A"))
+```
+
+Todas as três bases estão **em alta** no período. No ambulatorial (SIA) e nas internações
+(SIH) isso reflete sobretudo **aumento de detecção, expansão da triagem e incorporação de
+terapias de reposição enzimática**, não necessariamente mudança de incidência. A
+mortalidade (SIM, causa básica) é o eixo **mais estável e mais robusto** deste grupo (ver
+[Mortalidade](sim_eim.qmd)) — a inversão relevante em relação a doenças de baixa letalidade.
+
+## Onde a mortalidade por EIM é maior — taxa padronizada por UF
+
+```{r mapa}
+#| fig-width: 10
+#| fig-height: 7
+num_sim <- D$sim |> dplyr::filter(eim_causa_basica) |>
+  contar_estrato(col_uf = "uf_res")
+tx_uf <- taxas_padronizadas(num_sim, D$pop, grupos = "uf")
+mapa_uf(dplyr::select(tx_uf, uf, taxa_pad), valor = "taxa_pad",
+        titulo = "Mortalidade por EIM (causa básica), padronizada por idade e sexo",
+        legenda = "por 100 mil\n(pessoa-anos)")
+```
+
+A mortalidade por EIM como causa básica é **relativamente estável nacionalmente
+(~1,66/100 mil)**; a variação por UF combina **incidência, acesso a diagnóstico/tratamento
+e qualidade de codificação** da declaração de óbito — leia como mortalidade **registrada**,
+não risco populacional puro. Detalhes em [Mortalidade (SIM)](sim_eim.qmd).
+
+## Navegação
+
+- **[Ambulatorial (SIA)](sia_eim.qmd)** — core vs envelope (bracketing), traçadoras, detecção padronizada por UF.
+- **[Internações (SIH)](sih_eim.qmd)** — dois sabores (principal vs qualquer campo), peso das MPS/TRE, permanência.
+- **[Mortalidade (SIM)](sim_eim.qmd)** — eixo central: mortalidade padronizada e infantil, incidência ao nascimento por traçadora.
+- **[Teste do pezinho](pezinho.qmd)** — painel completo (tradicional PNTN + expandido, Lei 14.154/2021), EIM e não-EIM.

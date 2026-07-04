@@ -1,0 +1,72 @@
+---
+title: "Discussão e recomendações"
+subtitle: "Interpretação dos resultados e insights acionáveis para o poder público · perspectivas de saúde pública e clínico-genética"
+toc: false
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+```
+
+Esta seção reúne **duas leituras independentes** dos resultados do painel — uma de
+**saúde pública / epidemiologia** e outra de **genética clínica / medicina de doenças
+raras** — e as traduz em **recomendações acionáveis** para a gestão do SUS (Ministério da
+Saúde, Secretarias Estaduais, CONITEC e as coordenações de Doenças Raras e de Triagem
+Neonatal).
+
+::: {.callout-nota}
+**Como ler esta discussão.** Estudo **ecológico/descritivo** sobre dados administrativos
+(SIA-PA, SIH-RD, SIM-DO, SINASC): mede **detecção, uso de serviço e mortalidade registrada
+— nunca prevalência ou incidência verdadeiras**; as bases **não se somam**; "EIM" é um
+**grupo heterogêneo** (nunca ler um "total EIM" como doença). Toda leitura causal é
+apresentada como **"compatível com"**, não como prova (falácia ecológica). Marcos
+normativos e prevalências de literatura estão `[VERIFICAR]` até confirmação em fonte
+primária. Ver o [Glossário](glossario.qmd) para os termos técnicos.
+:::
+
+## O que os dados mostram — em uma frase
+
+A **internação por EIM sobe ~+9%/ano** (2,17 → 2,83/100 mil hab) enquanto a **mortalidade
+padronizada fica estável** (~1,66/100 mil) — padrão **compatível com expansão de triagem e
+de terapia** (não com aumento de incidência); a **mortalidade infantil por EIM** (~3,2–3,7/
+100 mil NV, ~82–100 óbitos/ano) concentra-se nos **letais precoces** cuja triagem ainda está
+em implantação; a rede é **centralizada** (Recife concentra ~77% do ambulatorial de PE, mas
+~12,5% dos óbitos); e a **codificação é, ela própria, um achado** (biotinidase invisível no
+balde E88.9; Gaucher/Fabry/Niemann-Pick fundidos em E75.2).
+
+## Recomendações prioritárias para o poder público (síntese)
+
+Consolidação das duas perspectivas (o detalhamento e os indicadores completos estão nas
+seções de aprofundamento abaixo). Cada recomendação parte de um **achado do estudo**.
+
+```{r rec-tabela}
+recs <- tibble::tribble(
+  ~`Prioridade`, ~`Recomendação`, ~`Achado que a motiva`, ~`Indicador de acompanhamento`,
+  "Alta", "Ampliar e monitorar a triagem neonatal (Lei 14.154) por UF, priorizando tratabilidade × letalidade — e acoplar protocolo de emergência metabólica aos letais precoces (MSUD, ciclo da ureia)", "Dissociação incidência × mortalidade infantil: tratáveis rastreadas quase não matam; letais precoces morrem mesmo detectados (janela terapêutica estreita)", "Cobertura efetiva (% de NV triados por doença/etapa por UF); tempo coleta→resultado→referência",
+  "Alta", "Fechar o ciclo da triagem: laboratório confirmatório (espectrometria/enzimático/molecular) + geneticista clínico", "Triagem positiva é suspeita, não diagnóstico; a CID-10 não chega à doença molecular", "% de triagens positivas com confirmação; % com diagnóstico molecular específico",
+  "Alta", "Vigiar a mortalidade infantil por EIM como indicador-sentinela nos Comitês de Óbito, com investigação nominal", "~82–100 óbitos infantis/ano, concentrados na Etapa 2 ainda em implantação — cada óbito = oportunidade perdida de rastreio", "Coeficiente/100 mil NV por UF; % dos óbitos infantis que haviam sido triados",
+  "Alta", "Regionalizar a rede de referência, levar telegenética ao interior e qualificar o fluxo de TFD", "Recife concentra ~77% do ambulatorial mas ~12,5% dos óbitos — vazio assistencial no interior; óbito ocorre antes de chegar à referência", "Razão detecção/óbitos por macrorregião; vazios de pontos de coleta; nº geneticistas/100 mil hab",
+  "Alta (pré-condição)", "Qualificar a codificação: CID específico (tirar biotinidase de E88.9), vínculo procedimento-APAC↔doença, Orphacode", "Biotinidase invisível em E88.9; E75.2/E74.0 fundem lisossômicas; E71.4 zerado; envelope ~20× o core", "Razão core:inespecífico (E88.x) como índice de qualidade; % de TRE com doença identificável",
+  "Alta", "Gerir o alto custo (TRE, moduladores de CFTR/Trikafta, fórmulas) e antecipar a judicialização; garantir dispensação regular por PCDT", "MPS com peso hospitalar de infusão; gasto medido é piso (parte via judicial/compra central); FC pressiona com moduladores de CFTR", "Gasto por caso desagregado via APAC-enzima; % atendido por via administrativa vs judicial; projeção de demanda",
+  "Média", "Estruturar aconselhamento genético e triagem de portadores em regiões de alta consanguinidade (NE)", "Maioria dos EIM é autossômica recessiva; consanguinidade/efeito fundador no NE eleva a incidência real (hipótese)", "Nº de famílias com caso-índice que receberam aconselhamento; cobertura pré-concepcional",
+  "Média", "Institucionalizar o DATASUS como vigilância contínua de doenças raras e fechar o painel completo do pezinho (falciforme, IDP/SCID, toxoplasmose)", "O pipeline reprodutível já produz taxas padronizadas e incidência ao nascimento; falciforme e toxoplasmose exigem escopo isolado", "Periodicidade do painel; sinais de aberração investigados/ano; cobertura por condição do painel completo"
+)
+tabela_eim(recs,
+  titulo = "Recomendações acionáveis — síntese das perspectivas de saúde pública e clínico-genética",
+  nota = "Detalhamento (ação e indicadores completos) nas seções de aprofundamento abaixo. Leitura ecológica: recomendações são hipóteses de política a testar, não conclusões causais.")
+```
+
+---
+
+Abaixo, as **duas análises na íntegra**. Cada perspectiva declara suas próprias ressalvas e
+ancora cada recomendação no achado que a motiva, com o respectivo indicador de
+acompanhamento.
+
+# Aprofundamento I — Perspectiva de saúde pública
+
+{{< include ../ref/discussao_epidemiologica.md >}}
+
+# Aprofundamento II — Perspectiva clínico-genética
+
+{{< include ../ref/discussao_genetica.md >}}

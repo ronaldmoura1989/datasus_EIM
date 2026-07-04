@@ -1,0 +1,27 @@
+# === Sistema / editores ===
+.DS_Store
+Thumbs.db
+.claude/
+misc/
+
+# === Dados (microdados DATASUS + agregados regeneráveis) ===
+# NÃO versionar: volumosos e reconstruíveis pelo pipeline (ver README — reextração
+# via SSH no remoto + get_*.R). O site publicado (docs/) é self-contained e não
+# depende destes arquivos.
+data/
+logs/
+
+# === R ===
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+renv/library/
+renv/staging/
+
+# === Quarto (cache/intermediários; docs/ renderizado É versionado p/ Pages) ===
+/.quarto/
+qmd/.quarto/
+*_cache/
+/qmd/*_files/

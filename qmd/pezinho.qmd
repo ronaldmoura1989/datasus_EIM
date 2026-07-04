@@ -1,0 +1,127 @@
+---
+title: "Teste do pezinho"
+subtitle: "Painel completo · triagem tradicional (PNTN) + expandida (Lei 14.154/2021) · EIM e não-EIM · 2021–2025"
+toc: false
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+pz <- D$m_pezinho
+```
+
+```{r kpis}
+#| output: asis
+n_doencas <- nrow(pz)
+n_eim     <- sum(pz$eim)
+n_exp     <- sum(pz$etapa == "Expandido")
+falcif    <- pz |> dplyr::filter(prefixo == "D57")
+cat(kpi_row(list(
+  c(fmt_n(n_doencas), "condições no painel do pezinho"),
+  c(fmt_n(n_eim), "são EIM (as demais são não-EIM rastreadas)"),
+  c(fmt_n(n_exp), "no painel expandido (Lei 14.154/2021)"),
+  c(fmt_n(falcif$SIA_princ), "registros SIA da doença falciforme (D57)")
+)))
+```
+
+O painel da triagem neonatal reúne **EIM e condições não-EIM** rastreadas pelo mesmo teste.
+A **Lei 14.154/2021** e a **Portaria GM/MS nº 7.293/2025** `[VERIFICAR número/data em DOU
+e gov.br]` expandem o Programa Nacional de Triagem Neonatal (**PNTN** — o "teste do pezinho"
+do SUS) em etapas. Este painel foi montado após **re-extração dos 4 CIDs não-EIM ausentes**
+— D57 doença falciforme, D56 talassemias, D81 imunodeficiências primárias / imunodeficiência
+combinada grave (IDP/SCID) e P37.1 toxoplasmose congênita — analisados **em separado** e
+**nunca somados às taxas de EIM** das demais páginas.
+
+::: {.callout-nota}
+**Escopo isolado, não somável.** As condições não-EIM (falciforme, talassemias, SCID,
+toxoplasmose) entram **apenas neste painel** e **jamais** nas taxas de EIM das demais
+páginas. Detecção no 1º ano por 100 mil NV (SINASC) mede **uso de serviço**, não incidência.
+:::
+
+## Triagem tradicional (PNTN)
+
+```{r tradicional}
+pz |>
+  dplyr::filter(etapa == "Tradicional") |>
+  dplyr::arrange(dplyr::desc(SIA_princ)) |>
+  dplyr::transmute(
+    Doença = stringr::str_replace_all(subgrupo, "_", " "),
+    CID = prefixo,
+    EIM = dplyr::if_else(eim, "EIM", "não-EIM"),
+    `SIA princ.` = fmt_n(SIA_princ),
+    `SIH princ.` = fmt_n(SIH_princ),
+    `SIM c.básica` = fmt_n(SIM_cbasica),
+    `SIH <1a/100k NV` = fmt_2(SIH_inf_100k_nv),
+    `SIM <1a/100k NV` = fmt_2(SIM_inf_100k_nv)) |>
+  tabela_eim(titulo = "Triagem tradicional (PNTN): EIM e não-EIM",
+             nota = "Detecção no 1º ano por 100 mil NV (SINASC). Doença falciforme (não-EIM) domina o volume. Biotinidase codificada em E88.9 é TETO. Não somar entre bases.")
+```
+
+## Triagem expandida (Lei 14.154/2021)
+
+```{r expandido}
+pz |>
+  dplyr::filter(etapa == "Expandido") |>
+  dplyr::arrange(dplyr::desc(SIH_princ)) |>
+  dplyr::transmute(
+    Doença = stringr::str_replace_all(subgrupo, "_", " "),
+    CID = prefixo,
+    EIM = dplyr::if_else(eim, "EIM", "não-EIM"),
+    `SIA princ.` = fmt_n(SIA_princ),
+    `SIH princ.` = fmt_n(SIH_princ),
+    `SIM c.básica` = fmt_n(SIM_cbasica),
+    `SIH <1a/100k NV` = fmt_2(SIH_inf_100k_nv),
+    `SIM <1a/100k NV` = fmt_2(SIM_inf_100k_nv)) |>
+  tabela_eim(titulo = "Triagem expandida (Lei 14.154/2021): EIM e não-EIM",
+             nota = "Toxoplasmose congênita (não-EIM, P371) tem a maior detecção hospitalar no 1º ano de todo o painel. Não somar entre bases.")
+```
+
+## Detecção hospitalar no 1º ano de vida (por 100 mil NV)
+
+```{r det-inf}
+pz |>
+  dplyr::filter(SIH_inf_100k_nv > 0) |>
+  dplyr::mutate(rotulo = paste0(stringr::str_replace_all(subgrupo, "_", " "), " (", prefixo, ")"),
+                grp = dplyr::case_when(!eim ~ "não-EIM (rastreada)",
+                                       TRUE ~ "EIM")) |>
+  ggplot(aes(reorder(rotulo, SIH_inf_100k_nv), SIH_inf_100k_nv, fill = grp)) +
+  geom_col(width = 0.75) +
+  geom_text(aes(label = fmt_2(SIH_inf_100k_nv)), hjust = -0.1, size = 2.7, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.16))) +
+  scale_fill_manual(values = c("EIM" = "#1B6F6A", "não-EIM (rastreada)" = "#7FA6D9"),
+                    name = NULL) +
+  labs(x = NULL, y = "AIH no 1º ano de vida por 100 mil NV (SINASC)",
+       title = "Detecção hospitalar no 1º ano de vida — painel do pezinho",
+       subtitle = "Toxoplasmose congênita e doença falciforme (não-EIM) lideram; refletem tratamento neonatal prolongado.") +
+  theme_eim()
+```
+
+## Achados do painel
+
+- **Doença falciforme (D57) domina o painel**: `r fmt_n(falcif$SIA_princ)` registros SIA,
+  `r fmt_n(falcif$SIH_princ)` AIH, `r fmt_n(falcif$SIM_cbasica)` óbitos — de longe a maior
+  carga da triagem, mas **isolada** em `escopo = painel_pezinho` (não contamina nenhuma taxa
+  de EIM).
+- **Toxoplasmose congênita (P371)**: **maior detecção hospitalar no 1º ano de todo o painel
+  (~93/100k NV)** — coerente com tratamento neonatal prolongado.
+- **IDP/SCID (D81)**: triagem TREC recém-incorporada; detecção e mortalidade infantil ainda
+  baixas, esperado consolidar com a expansão.
+
+::: {.callout-nota}
+**A expansão desigual por UF confunde detecção com incidência.** Enquanto o painel expandido
+é implantado em ritmos diferentes entre estados, um estado com triagem mais avançada
+"detecta mais" — o que aparece como **maior detecção** pode ser apenas **cobertura de
+triagem**, não maior incidência. Interpretar variação geográfica com cautela.
+:::
+
+## Limitações
+
+::: {.callout-nota}
+- Painel do pezinho em **escopo isolado** (`painel_pezinho`) — **nunca** somado às taxas de
+  EIM das outras páginas.
+- Detecção/uso, **não prevalência nem cobertura de triagem**; expansão desigual por UF.
+- **Biotinidase codificada em E88.9** é TETO inespecífico (agrega outros distúrbios).
+- Detecção no 1º ano via SIA são **registros, não crianças**; supressão de N<5 aplicada.
+- Rótulos CID e vínculo doença↔etapa do PNTN em parte `[VERIFICAR]` (ver `ref/painel_pezinho_normativo.md`).
+:::

@@ -1,0 +1,205 @@
+---
+title: "Internações (SIH-RD)"
+subtitle: "Dois sabores (principal vs qualquer campo) · peso das MPS/TRE · permanência · 2021–2025"
+toc: false
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+sih <- D$sih
+uti_m <- readr::read_csv(here::here("manifest/sih_uti.csv"), show_col_types = FALSE)
+```
+
+```{r kpis}
+#| output: asis
+n_princ <- dplyr::n_distinct(sih$n_aih[sih$eim_principal])
+n_qualq <- dplyr::n_distinct(sih$n_aih[sih$eim_qualquer])
+perm_med <- stats::median(sih$dias_perm[sih$eim_principal], na.rm = TRUE)
+gasto <- sum(sih$val_tot[sih$eim_principal], na.rm = TRUE)
+cat(kpi_row(list(
+  c(fmt_n(n_princ), "AIH com EIM principal"),
+  c(fmt_n(n_qualq), "AIH com EIM em qualquer campo"),
+  c(paste0(fmt_1(perm_med), " dias"), "permanência mediana (principal)"),
+  c(paste0("R$ ", fmt_n(round(gasto))), "gasto hospitalar (principal)")
+)))
+```
+
+A internação por EIM captura **descompensações agudas** e, sobretudo, os **procedimentos de
+alto custo** (infusões de **terapia de reposição enzimática — TRE** das mucopolissacaridoses
+e outras doenças de depósito). O SIH tem **dois sabores** que **não devem ser somados** nem
+entre si nem com o SIA:
+
+- **Diagnóstico principal** (`diag_princ`): a EIM foi o **motivo** da internação — leitura
+  conservadora, `r fmt_n(n_princ)` AIH.
+- **Qualquer campo** (principal + secundários `diagsec1–9`): a EIM aparece em **qualquer
+  posição** — `r fmt_n(n_qualq)` AIH, teto que inclui comorbidade/contexto.
+
+## Os dois sabores
+
+```{r sabores}
+tibble::tibble(
+  sabor = c("EIM como diagnóstico principal", "EIM em qualquer campo (princ. + secundários)"),
+  aih   = c(n_princ, n_qualq)) |>
+  ggplot(aes(reorder(sabor, aih), aih, fill = sabor)) +
+  geom_col(width = 0.55) +
+  geom_text(aes(label = fmt_n(aih)), hjust = -0.1, size = 3.4, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     expand = expansion(mult = c(0, 0.18))) +
+  scale_fill_manual(values = c("EIM como diagnóstico principal" = "#1B6F6A",
+                               "EIM em qualquer campo (princ. + secundários)" = "#7FA6D9"),
+                    guide = "none") +
+  labs(x = NULL, y = "AIH distintas (2021–2025)",
+       title = "SIH: dois sabores de captura — NÃO somar",
+       subtitle = "Qualquer campo (~6×) inclui comorbidade e contexto; principal é o motivo da internação.") +
+  theme_eim()
+```
+
+## Peso das mucopolissacaridoses (MPS) e demais traçadoras
+
+```{r tracadoras}
+sih |>
+  dplyr::filter(eim_principal, !is.na(tracadora)) |>
+  dplyr::group_by(tracadora) |>
+  dplyr::summarise(aih = dplyr::n_distinct(n_aih), .groups = "drop") |>
+  dplyr::filter(aih >= 50) |>
+  dplyr::mutate(tracadora = stringr::str_replace_all(tracadora, "_", " "),
+                mps = stringr::str_detect(tracadora, "^MPS")) |>
+  ggplot(aes(reorder(tracadora, aih), aih, fill = mps)) +
+  geom_col(width = 0.75) +
+  geom_text(aes(label = fmt_n(aih)), hjust = -0.1, size = 2.8, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     expand = expansion(mult = c(0, 0.16))) +
+  scale_fill_manual(values = c(`TRUE` = "#1B6F6A", `FALSE` = "#2E9E96"),
+                    labels = c(`TRUE` = "MPS (infusões TRE)", `FALSE` = "Outras"),
+                    name = NULL) +
+  labs(x = NULL, y = "AIH com EIM principal (2021–2025)",
+       title = "Traçadoras nas internações — peso desproporcional das MPS",
+       subtitle = "MPS (I, II, outras) somam grande parte das AIH: infusões de terapia de reposição enzimática (TRE).") +
+  theme_eim()
+```
+
+::: {.callout-nota}
+**MPS = internações recorrentes de TRE.** As mucopolissacaridoses têm peso hospitalar
+desproporcional ao seu número de pacientes porque cada paciente gera **múltiplas AIH de
+infusão** (terapia de reposição enzimática periódica) — o volume de AIH mede **intensidade
+de tratamento**, não número de indivíduos.
+:::
+
+## Tendência de internação padronizada
+
+```{r tx-internacao}
+num_sih <- sih |> dplyr::filter(eim_principal) |>
+  contar_estrato(col_uf = "uf_res", distinct_por = "n_aih")
+tx_ano <- taxas_padronizadas(num_sih, D$pop, grupos = "ano")
+
+tx_ano |>
+  ggplot(aes(ano, taxa_pad)) +
+  geom_ribbon(aes(ymin = ic_inf, ymax = ic_sup), fill = "#8FD3C7", alpha = 0.5) +
+  geom_line(color = "#1B6F6A", linewidth = 1.1) +
+  geom_point(color = "#1B6F6A", size = 2.4) +
+  geom_text(aes(label = fmt_2(taxa_pad)), vjust = -1.1, size = 3, color = "#0E2F38") +
+  scale_x_continuous(breaks = ANOS) +
+  labs(x = NULL, y = "por 100 mil (padronizada)",
+       title = "Taxa de internação por EIM (principal), padronizada por idade e sexo",
+       subtitle = "Alta clara: ~2,17 (2021) → ~2,83 (2024), razão de taxas ~+9%/ano — expansão de detecção/TRE.") +
+  theme_eim()
+```
+
+Em alta clara: **2,17 → 2,43 → 2,64 → 2,83** por 100 mil (2021–2024; ~2,79 em 2025), razão
+de taxas **~+9%/ano**. Compatível com **expansão de detecção e de TRE**, não necessariamente
+aumento de incidência.
+
+## Estrutura etária e por sexo das internações
+
+```{r piramide-sih}
+#| fig-width: 11
+#| fig-height: 6
+sih |>
+  dplyr::filter(eim_principal) |>
+  piramide_etaria(
+    titulo = "Pirâmide etária × sexo das AIH de EIM (diagnóstico principal)",
+    subtitulo = "Perfil bimodal: infusões de TRE em crianças/jovens e descompensações em adultos.",
+    unidade = "AIH")
+```
+
+## Permanência hospitalar
+
+```{r permanencia}
+sih |>
+  dplyr::filter(eim_principal, !is.na(dias_perm),
+                dias_perm <= stats::quantile(dias_perm, 0.98, na.rm = TRUE)) |>
+  ggplot(aes(dias_perm)) +
+  geom_histogram(binwidth = 1, fill = "#2E9E96", color = "white") +
+  labs(x = "Dias de permanência", y = "AIH",
+       title = "Distribuição da permanência hospitalar (EIM principal)",
+       subtitle = paste0("Mediana ", fmt_1(stats::median(sih$dias_perm[sih$eim_principal], na.rm = TRUE)),
+                          " dias (>50% são internações de 0 dia — hospital-dia de infusão).\nCauda longa = descompensações graves. (2% sup. omitidos.)")) +
+  theme_eim()
+```
+
+## Uso de UTI e tempo de internação
+
+O SIH permite distinguir a **internação de infusão** (hospital-dia, curta, sem UTI) da
+**descompensação grave** (com UTI). Usamos `MARCA_UTI` (≠ "00" = usou UTI) e `UTI_MES_TO`
+(nº de diárias de UTI); `DIAS_PERM` é a permanência total. O termo **TRE** (terapia de
+reposição enzimática) está no [Glossário](glossario.qmd).
+
+```{r uti-kpi}
+#| output: asis
+g <- uti_m |> dplyr::filter(tracadora == "TODAS (EIM principal)")
+cat(kpi_row(list(
+  c(paste0(fmt_1(g$pct_uti), "%"), "das AIH-EIM (principal) usaram UTI"),
+  c(fmt_n(g$aih_com_uti), "AIH-EIM com passagem por UTI"),
+  c(paste0(fmt_1(g$perm_mediana), " dias"), "permanência total mediana"),
+  c(paste0(fmt_1(g$diarias_uti_mediana_entre_uti), " diárias"), "UTI mediana (entre quem usou)")
+)))
+```
+
+```{r uti-tab}
+uti_m |>
+  dplyr::filter(tracadora != "TODAS (EIM principal)", !is.na(pct_uti)) |>
+  dplyr::arrange(dplyr::desc(pct_uti)) |>
+  dplyr::transmute(
+    Traçadora = stringr::str_replace_all(tracadora, "_", " "),
+    AIH = fmt_n(aih),
+    `AIH c/ UTI` = fmt_n(aih_com_uti),
+    `% com UTI` = fmt_1(pct_uti),
+    `Perm. mediana (dias)` = fmt_1(perm_mediana),
+    `UTI mediana (diárias, entre quem usou)` =
+      dplyr::if_else(is.na(diarias_uti_mediana_entre_uti), "—",
+                     fmt_1(diarias_uti_mediana_entre_uti))) |>
+  tabela_eim(
+    titulo = "UTI e permanência por traçadora (AIH com EIM principal)",
+    nota = "Ordenado por % de AIH com UTI. UTI = MARCA_UTI ≠ '00'. Diárias de UTI medianas calculadas entre AIH que usaram UTI. Supressão N<5. Traçadoras com AIH-UTI < 5 têm % suprimido.")
+```
+
+::: {.callout-nota}
+**A gravidade não está na infusão, está na descompensação.** As traçadoras de **infusão
+crônica** (MPS, Gaucher/Fabry) têm **baixa proporção de UTI** e muitas internações de 0 dia —
+o volume de AIH mede intensidade de tratamento. Já os **letais precoces** (ciclo da ureia,
+MSUD, tirosinemia) têm **alta proporção de UTI** e mais diárias — a AIH aqui é a crise
+metabólica aguda. É a mesma dissociação da mortalidade (ver [Mortalidade](sim_eim.qmd)).
+:::
+
+## Onde as internações se concentram — taxa padronizada por UF
+
+```{r mapa}
+#| fig-width: 10
+#| fig-height: 7
+tx_uf <- taxas_padronizadas(num_sih, D$pop, grupos = "uf")
+mapa_uf(dplyr::select(tx_uf, uf, taxa_pad), valor = "taxa_pad",
+        titulo = "Taxa de internação por EIM (principal), padronizada por idade e sexo",
+        legenda = "por 100 mil\n(pessoa-anos)")
+```
+
+## Limitações
+
+::: {.callout-nota}
+- **Dois sabores não somáveis** e não somáveis com o SIA; cada AIH é um evento de
+  internação, **não uma pessoa** (TRE gera múltiplas AIH por paciente/ano).
+- Detecção/uso, **não prevalência**; variação por UF reflete acesso e rede de referência.
+- N baixo em traçadoras raras → taxas instáveis; supressão de N<5 nas taxas divulgadas.
+:::

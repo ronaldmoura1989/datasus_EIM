@@ -1,0 +1,36 @@
+/*-- scss:defaults --*/
+// Paleta do projeto EIM (verde-azulado → índigo) — 00_setup.R §1 (PAL_EIM)
+$verde-escuro:   #1B6F6A;
+$verde-medio:    #2E9E96;
+$verde-claro:    #8FD3C7;
+$indigo-medio:   #3E5C8A;
+$azul-claro:     #7FA6D9;
+$petroleo:       #26495C;
+$verde-prof:     #0E2F38;
+
+$primary:      $verde-escuro;
+$secondary:    $verde-medio;
+$link-color:   $verde-medio;
+$body-color:   #1f2a2c;
+
+$font-family-sans-serif: "Source Sans Pro", -apple-system, system-ui, sans-serif;
+$headings-font-weight: 600;
+
+/*-- scss:rules --*/
+h1, h2, h3 { color: $verde-escuro; }
+.navbar { font-weight: 600; }
+
+// Cartões de KPI
+.kpi-row { display: flex; flex-wrap: wrap; gap: .9rem; margin: 1.2rem 0; }
+.kpi-card {
+  flex: 1 1 160px; padding: 1rem 1.1rem; border-radius: 12px;
+  background: linear-gradient(135deg, $verde-claro 0%, #ffffff 90%);
+  border: 1px solid rgba(27,111,106,.20);
+}
+.kpi-card .v { font-size: 1.9rem; font-weight: 700; color: $verde-escuro; line-height: 1.1; }
+.kpi-card .l { font-size: .82rem; color: $petroleo; margin-top: .25rem; }
+
+.callout-nota {
+  border-left: 4px solid $verde-medio; background: rgba(143,211,199,.20);
+  padding: .6rem .9rem; border-radius: 6px; font-size: .92rem;
+}

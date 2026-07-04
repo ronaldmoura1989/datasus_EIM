@@ -1,0 +1,535 @@
+---
+title: "Erros Inatos do Metabolismo em Pernambuco"
+subtitle: "Recorte estadual (PE) · SIA · SIH · SIM · teste do pezinho e doença falciforme · 2021–2025 (SIM 2021–2023)"
+toc: false
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+
+# --- SIA core, recorte PE (uf_pcn == "PE") ------------------------------------
+sia_core <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))
+sia_pe   <- sia_core |> dplyr::filter(uf_pcn == "PE", camada == "core")
+
+# --- SIH nacional, recorte PE (uf_res == "PE") --------------------------------
+sih_pe <- D$sih |> dplyr::filter(uf_res == "PE", !is.na(uf_res))
+
+# --- SIM nacional, recorte PE (uf_res == "PE", 2021–2023) ---------------------
+sim_pe <- D$sim |> dplyr::filter(uf_res == "PE", !is.na(uf_res))
+
+# --- Painel do pezinho, recorte PE --------------------------------------------
+pz_sia_pe <- D$pz_sia |> dplyr::filter(uf_pcn == "PE")
+pz_sih_pe <- D$pz_sih |> dplyr::filter(uf_res == "PE", !is.na(uf_res))
+pz_sim_pe <- D$pz_sim |> dplyr::filter(uf_res == "PE", !is.na(uf_res))
+
+# Helper de supressão N<5 para rótulos de contagem
+sup5 <- function(x) dplyr::if_else(x < N_SUPRESSAO & x > 0, NA_integer_, as.integer(x))
+```
+
+```{r kpis}
+#| output: asis
+k_sia    <- nrow(sia_pe)
+k_aih_p  <- dplyr::n_distinct(sih_pe$n_aih[sih_pe$eim_principal])
+k_obitos <- sum(sim_pe$eim_causa_basica, na.rm = TRUE)
+k_obinf  <- sum(sim_pe$eim_causa_basica & sim_pe$obito_infantil, na.rm = TRUE)
+cat(kpi_row(list(
+  c(fmt_n(k_sia),    "registros SIA core (EIM nomeados) — PE"),
+  c(fmt_n(k_aih_p),  "AIH com EIM principal (SIH) — PE"),
+  c(fmt_n(k_obitos), "óbitos por EIM (causa básica, SIM) — PE"),
+  c(fmt_n(k_obinf),  "óbitos infantis por EIM (<1 ano) — PE")
+)))
+```
+
+Esta página recorta **Pernambuco (PE)** nas três bases do DATASUS — ambulatorial (SIA-PA,
+`uf_pcn`), internação (SIH-RD, `uf_res`) e mortalidade (SIM-DO, `uf_res`, 2021–2023) — e
+acrescenta um bloco do **teste do pezinho** com destaque para a **doença falciforme (D57)**,
+condição de altíssima carga no Nordeste. Todas as contagens seguem a **regra de supressão
+N<5** (LGPD; doença rara por município é especialmente sensível).
+
+::: {.callout-nota}
+**Detecção/uso e mortalidade registrada — não prevalência.** Cada registro SIA é uma linha de
+produção ambulatorial (não uma pessoa); cada AIH é um evento de internação (a terapia de
+reposição enzimática — TRE — gera múltiplas AIH por paciente/ano); a mortalidade é a
+**registrada** na Declaração de Óbito. As três bases **não se somam**. A variação intraestadual
+reflege sobretudo **acesso a centros de referência** e qualidade de codificação — não incidência.
+:::
+
+## Distribuição municipal dos EIM em Pernambuco
+
+O mapa junta o código IBGE de município do geobr (7 dígitos) ao código do DATASUS
+(6 dígitos) por `substr(code_muni, 1, 6)`. Sem denominador populacional municipal confiável
+para doença rara, mostramos **contagem bruta** de registros/AIH por município de residência —
+a leitura correta é de **onde o SUS registra atendimento**, dominada pela **Região Metropolitana
+do Recife** (sede dos serviços especializados), não de onde os casos "existem".
+
+::: {.callout-nota}
+**Fernando de Noronha (código IBGE 260545) não é exibido no mapa.** O arquipélago fica isolado
+e distante do continente, o que obriga o mapa a "abrir espaço" e distorce o enquadramento da
+parte continental — foi **removido do polígono e do dado** para o mapa focar em PE
+continental. Os valores do arquipélago (não perdidos, apenas reportados à parte) estão logo
+abaixo de cada mapa.
+:::
+
+```{r mapa-sia}
+#| fig-width: 12
+#| fig-height: 7
+NORONHA_6 <- "260545"
+
+mun_sia <- sia_pe |>
+  dplyr::count(munic_6 = pa_munpcn, name = "registros") |>
+  dplyr::mutate(registros = sup5(registros))
+noronha_sia <- sum(mun_sia$registros[mun_sia$munic_6 == NORONHA_6], na.rm = TRUE)
+
+mapa_municipio_pe(
+  mun_sia, valor = "registros",
+  titulo = "Registros ambulatoriais de EIM (SIA core) por município de residência — PE (continental)",
+  subtitulo = "Contagem bruta (sem denominador municipal). Concentração na RM do Recife = acesso a serviços, não incidência.",
+  legenda = "registros\nSIA (core)",
+  excluir_munic6 = NORONHA_6)
+```
+
+Fernando de Noronha (não exibido no mapa): **`r fmt_n(noronha_sia)` registros SIA** de EIM
+(supressão N<5 aplicada; "0" pode indicar ausência de registro ou valor suprimido).
+
+```{r mapa-sih}
+#| fig-width: 12
+#| fig-height: 7
+mun_sih <- sih_pe |>
+  dplyr::filter(eim_principal) |>
+  dplyr::group_by(munic_6 = munic_res) |>
+  dplyr::summarise(aih = dplyr::n_distinct(n_aih), .groups = "drop") |>
+  dplyr::mutate(aih = sup5(aih))
+noronha_sih <- sum(mun_sih$aih[mun_sih$munic_6 == NORONHA_6], na.rm = TRUE)
+
+mapa_municipio_pe(
+  mun_sih, valor = "aih",
+  titulo = "AIH com EIM principal (SIH) por município de residência — PE (continental)",
+  subtitulo = "Contagem bruta de AIH distintas. Municípios com N<5 suprimidos (cinza).",
+  legenda = "AIH\n(EIM princ.)",
+  excluir_munic6 = NORONHA_6)
+```
+
+Fernando de Noronha (não exibido no mapa): **`r fmt_n(noronha_sih)` AIH** com EIM principal
+(supressão N<5 aplicada; "0" pode indicar ausência de registro ou valor suprimido).
+
+::: {.callout-nota}
+**Municípios em cinza = supressão N<5 ou sem registro.** A concentração no Recife e entorno é
+o padrão esperado de uma rede de referência centralizada; municípios do interior "aparecem
+pouco" sobretudo por **encaminharem** seus pacientes aos centros da capital — o município de
+residência registrado pode inclusive já ser o da RM.
+:::
+
+## Estrutura etária × sexo em Pernambuco
+
+```{r piramide}
+#| fig-width: 11
+#| fig-height: 6
+piramide_etaria(
+  sia_pe,
+  titulo = "Pirâmide etária × sexo dos registros ambulatoriais de EIM (SIA core) — PE",
+  subtitulo = "Registros (não pessoas). Predomínio pediátrico reflete triagem e acompanhamento de crônicos rastreados.",
+  unidade = "registros")
+```
+
+::: {.callout-nota}
+**Registros, não pessoas.** A idade no SIA vem em anos inteiros e é mal preenchida — a barra
+`<1 mês` × `1–11 m` é frágil. A pirâmide indica **estrutura de uso do serviço**, não a
+distribuição etária dos casos de EIM na população pernambucana.
+:::
+
+## Procedimentos SIGTAP mais frequentes em PE
+
+Cada registro SIA carrega um procedimento **SIGTAP** (`pa_proc_id`). Os mais frequentes em PE
+revelam o que o SUS de fato executa: **medicamentos de alto custo** (alfadornase e pancreatina
+na fibrose cística; fórmulas metabólicas na PKU), **consultas especializadas** e **exames
+diagnósticos**. Os nomes vêm da tabela SIGTAP (`microdatasus::sigtab`); códigos sem
+correspondência saem marcados `[VERIFICAR nome SIGTAP]`.
+
+```{r sigtap-pe}
+# Resolver nomes SIGTAP: dataset embutido (offline) + fallback no manifest já resolvido
+sig_nomes <- local({
+  ok <- requireNamespace("microdatasus", quietly = TRUE)
+  base <- if (ok) tryCatch({
+    e <- new.env(); utils::data("sigtab", package = "microdatasus", envir = e)
+    tibble::as_tibble(get("sigtab", envir = e)) |>
+      dplyr::transmute(pa_proc_id = as.character(COD), nome_proc = as.character(nome_proced))
+  }, error = function(...) NULL) else NULL
+  man <- tryCatch(
+    readr::read_csv(here::here("manifest/sia_procedimentos_top.csv"),
+                    show_col_types = FALSE) |>
+      dplyr::distinct(pa_proc_id, nome_proc), error = function(...) NULL)
+  dplyr::bind_rows(base, man) |> dplyr::distinct(pa_proc_id, .keep_all = TRUE)
+})
+
+top_pe <- sia_pe |>
+  dplyr::group_by(pa_proc_id) |>
+  dplyr::summarise(registros = dplyr::n(),
+                   valor_apr = sum(pa_valapr, na.rm = TRUE), .groups = "drop") |>
+  dplyr::filter(registros >= N_SUPRESSAO) |>
+  dplyr::arrange(dplyr::desc(registros)) |>
+  dplyr::slice_head(n = 12) |>
+  dplyr::left_join(sig_nomes, by = "pa_proc_id") |>
+  dplyr::mutate(nome_proc = dplyr::if_else(is.na(nome_proc) | nome_proc == "",
+                                           "[VERIFICAR nome SIGTAP]", nome_proc))
+
+top_pe |>
+  dplyr::transmute(
+    `Cód. SIGTAP` = pa_proc_id,
+    Procedimento  = stringr::str_to_sentence(nome_proc),
+    Registros     = fmt_n(registros),
+    `Valor aprovado (R$)` = paste0("R$ ", fmt_n(round(valor_apr)))) |>
+  tabela_eim(
+    titulo = "Top 12 procedimentos SIGTAP no SIA-EIM (core) — Pernambuco, 2021–2025",
+    nota = "Nomes via microdatasus::sigtab. Supressão N<5. Detecção/uso, não prevalência.")
+```
+
+## Internações (SIH) em Pernambuco
+
+```{r kpis-sih}
+#| output: asis
+n_princ_pe <- dplyr::n_distinct(sih_pe$n_aih[sih_pe$eim_principal])
+n_qualq_pe <- dplyr::n_distinct(sih_pe$n_aih[sih_pe$eim_qualquer])
+perm_pe    <- stats::median(sih_pe$dias_perm[sih_pe$eim_principal], na.rm = TRUE)
+uti_pe     <- sih_pe |> dplyr::filter(eim_principal) |>
+  dplyr::summarise(pct = 100 * mean(uti, na.rm = TRUE)) |> dplyr::pull(pct)
+cat(kpi_row(list(
+  c(fmt_n(n_princ_pe), "AIH com EIM principal"),
+  c(fmt_n(n_qualq_pe), "AIH com EIM em qualquer campo"),
+  c(paste0(fmt_1(perm_pe), " dias"), "permanência mediana (principal)"),
+  c(paste0(fmt_1(uti_pe), "%"), "das AIH-EIM (principal) usaram UTI")
+)))
+```
+
+O SIH tem **dois sabores não somáveis**: *diagnóstico principal* (a EIM foi o motivo da
+internação) e *qualquer campo* (principal + secundários). Em PE, como no país, as
+**mucopolissacaridoses (MPS)** dominam o volume hospitalar — cada paciente gera múltiplas AIH
+de infusão de **TRE** (terapia de reposição enzimática).
+
+```{r tracadoras-sih}
+sih_pe |>
+  dplyr::filter(eim_principal, !is.na(tracadora)) |>
+  dplyr::group_by(tracadora) |>
+  dplyr::summarise(aih = dplyr::n_distinct(n_aih), .groups = "drop") |>
+  dplyr::filter(aih >= N_SUPRESSAO) |>
+  dplyr::arrange(dplyr::desc(aih)) |>
+  dplyr::slice_head(n = 12) |>
+  dplyr::mutate(tracadora = stringr::str_replace_all(tracadora, "_", " "),
+                mps = stringr::str_detect(tracadora, "^MPS")) |>
+  ggplot(aes(reorder(tracadora, aih), aih, fill = mps)) +
+  geom_col(width = 0.75) +
+  geom_text(aes(label = fmt_n(aih)), hjust = -0.1, size = 2.9, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     expand = expansion(mult = c(0, 0.16))) +
+  scale_fill_manual(values = c(`TRUE` = "#1B6F6A", `FALSE` = "#2E9E96"),
+                    labels = c(`TRUE` = "MPS (infusões TRE)", `FALSE` = "Outras"),
+                    name = NULL) +
+  labs(x = NULL, y = "AIH com EIM principal (2021–2025)",
+       title = "Traçadoras nas internações de EIM — Pernambuco",
+       subtitle = "MPS concentram as AIH: infusões periódicas de terapia de reposição enzimática (TRE), não nº de pacientes.") +
+  theme_eim()
+```
+
+### Principais doenças que motivam a internação (diagnóstico principal)
+
+A tabela abaixo tabula `diag_princ` — o **diagnóstico principal** da AIH, ou seja, o **motivo**
+da internação — por `subgrupo` clínico (rótulo amigável do CID), não pela traçadora individual.
+Reforça a leitura do gráfico anterior sob outro agrupamento e evidencia a **ressalva de
+intensidade**: MPS e demais doenças de depósito internam repetidamente para infusão de TRE,
+então o nº de AIH mede uso do serviço, não nº de pacientes.
+
+```{r diag-princ-sih}
+.NOMES_SUBGRUPO <- c(
+  mucopolissacaridose         = "Mucopolissacaridoses (MPS)",
+  esfingolipidose_outras      = "Esfingolipidoses (Gaucher/Fabry/NP-C)",
+  fibrose_cistica             = "Fibrose cística",
+  glicogenose                 = "Glicogenoses (inclui Pompe)",
+  aminoacidopatia_tirosina    = "Tirosinemia",
+  amiloidose_familiar         = "Amiloidose familiar (PAF-TTR)",
+  hiperplasia_adrenal_cong    = "Hiperplasia adrenal congênita (HAC)",
+  metab_piruvato              = "Distúrbios do metabolismo do piruvato",
+  metab_cobre                 = "Doença de Wilson",
+  aminoacidopatia_PKU         = "Fenilcetonúria (PKU)",
+  hipotireoidismo_congenito   = "Hipotireoidismo congênito",
+  metab_minerais_outros       = "Distúrbios do metabolismo de minerais (outros)",
+  atrofia_muscular_espinhal   = "Atrofia muscular espinhal (AME, contexto)",
+  hemofilia_A                 = "Hemofilia A (contexto)",
+  hemofilia_B                 = "Hemofilia B (contexto)",
+  porfiria_bilirrubina_outros = "Porfirias / distúrbios da bilirrubina",
+  amiloidose_outras           = "Amiloidoses (outras)")
+
+diag_princ_pe <- sih_pe |>
+  dplyr::filter(eim_principal, !is.na(subgrupo)) |>
+  dplyr::group_by(subgrupo) |>
+  dplyr::summarise(aih = dplyr::n_distinct(n_aih),
+                   perm_mediana = stats::median(dias_perm, na.rm = TRUE),
+                   .groups = "drop") |>
+  dplyr::filter(aih >= N_SUPRESSAO) |>
+  dplyr::arrange(dplyr::desc(aih)) |>
+  dplyr::slice_head(n = 10) |>
+  dplyr::mutate(doenca = dplyr::coalesce(.NOMES_SUBGRUPO[subgrupo],
+                                        stringr::str_replace_all(subgrupo, "_", " ")))
+
+diag_princ_pe |>
+  dplyr::transmute(
+    Doença = doenca,
+    `AIH (diag. principal)` = fmt_n(aih),
+    `% do total (principal)` = fmt_1(100 * aih / n_princ_pe),
+    `Perm. mediana (dias)` = fmt_1(perm_mediana)) |>
+  tabela_eim(
+    titulo = "Top 10 doenças/subgrupos que motivam internação por EIM — diagnóstico principal, Pernambuco",
+    nota = "diag_princ = motivo da internação (não somar com 'qualquer campo'). Nº de AIH mede intensidade de tratamento (infusões TRE em MPS/esfingolipidoses), não nº de pacientes. Supressão N<5.")
+```
+
+```{r sabores-sih}
+tibble::tibble(
+  sabor = c("EIM como diagnóstico principal", "EIM em qualquer campo (princ. + secundários)"),
+  aih   = c(n_princ_pe, n_qualq_pe)) |>
+  ggplot(aes(reorder(sabor, aih), aih, fill = sabor)) +
+  geom_col(width = 0.55) +
+  geom_text(aes(label = fmt_n(aih)), hjust = -0.1, size = 3.4, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     expand = expansion(mult = c(0, 0.18))) +
+  scale_fill_manual(values = c("EIM como diagnóstico principal" = "#1B6F6A",
+                               "EIM em qualquer campo (princ. + secundários)" = "#7FA6D9"),
+                    guide = "none") +
+  labs(x = NULL, y = "AIH distintas — PE (2021–2025)",
+       title = "SIH em Pernambuco: dois sabores de captura — NÃO somar",
+       subtitle = "Qualquer campo inclui comorbidade/contexto; principal é o motivo da internação.") +
+  theme_eim()
+```
+
+::: {.callout-nota}
+**A permanência mediana ~0 dia** reflete o **hospital-dia de infusão** (MPS/Gaucher/Fabry): a
+maioria das AIH de EIM em PE é de terapia crônica de curta duração, não de descompensação
+grave. A gravidade aguda está na cauda longa e no uso de UTI, concentrado nos EIM letais
+precoces (ciclo da ureia, tirosinemia).
+:::
+
+## Óbitos (SIM) em Pernambuco — 2021–2023
+
+```{r kpis-sim}
+#| output: asis
+pct_cb_pe <- 100 * sum(sim_pe$eim_causa_basica, na.rm = TRUE) / nrow(sim_pe)
+idade_med_pe <- stats::median(sim_pe$idade_anos[sim_pe$eim_causa_basica], na.rm = TRUE)
+cat(kpi_row(list(
+  c(fmt_n(sum(sim_pe$eim_causa_basica, na.rm = TRUE)), "óbitos por EIM (causa básica)"),
+  c(paste0(fmt_1(pct_cb_pe), "%"), "dos óbitos c/ EIM têm EIM como causa básica"),
+  c(paste0(fmt_1(idade_med_pe), " anos"), "idade mediana ao óbito (causa básica)"),
+  c(fmt_n(sum(sim_pe$eim_causa_basica & sim_pe$obito_infantil, na.rm = TRUE)),
+    "óbitos infantis por EIM (<1 ano)")
+)))
+```
+
+Nos EIM a **mortalidade é o indicador mais robusto** — em PE, como no país, a EIM é quase
+sempre a **causa básica** do óbito (mata diretamente). Os subgrupos com mais óbitos por causa
+básica no estado:
+
+```{r subgrupos-sim}
+sim_pe |>
+  dplyr::filter(eim_causa_basica, !is.na(subgrupo)) |>
+  dplyr::count(subgrupo, name = "obitos") |>
+  dplyr::filter(obitos >= N_SUPRESSAO) |>
+  dplyr::arrange(dplyr::desc(obitos)) |>
+  dplyr::slice_head(n = 12) |>
+  dplyr::mutate(subgrupo = stringr::str_replace_all(subgrupo, "_", " ")) |>
+  ggplot(aes(reorder(subgrupo, obitos), obitos)) +
+  geom_col(fill = "#3E5C8A", width = 0.75) +
+  geom_text(aes(label = fmt_n(obitos)), hjust = -0.1, size = 2.9, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.16))) +
+  labs(x = NULL, y = "Óbitos com EIM como causa básica (2021–2023)",
+       title = "Subgrupos de EIM com mais óbitos (causa básica) — Pernambuco",
+       subtitle = "Mortalidade registrada; supressão N<5. Subgrupos com N<5 omitidos.") +
+  theme_eim()
+```
+
+```{r piramide-sim}
+#| fig-width: 11
+#| fig-height: 6
+sim_pe |>
+  dplyr::filter(eim_causa_basica) |>
+  piramide_etaria(
+    titulo = "Pirâmide etária × sexo dos óbitos por EIM (causa básica) — PE, 2021–2023",
+    subtitulo = "Carga nos extremos: letais precoces no <1 ano e acúmulo em adultos.",
+    unidade = "óbitos")
+```
+
+## Teste do pezinho em PE — destaque para a doença falciforme (D57)
+
+Pernambuco é Nordeste: região de **alta prevalência de doença falciforme** e de maior
+consanguinidade — contexto relevante para os EIM e para as condições rastreadas pelo pezinho.
+O painel do pezinho é analisado em **escopo isolado** e **nunca somado** às taxas de EIM.
+
+```{r pezinho-pe}
+falc_sia <- sum(pz_sia_pe$subgrupo == "doenca_falciforme", na.rm = TRUE)
+falc_sih <- pz_sih_pe |> dplyr::filter(subgrupo == "doenca_falciforme") |>
+  dplyr::summarise(a = dplyr::n_distinct(n_aih)) |> dplyr::pull(a)
+falc_sim <- pz_sim_pe |>
+  dplyr::filter(subgrupo == "doenca_falciforme", gap_causa_basica) |> nrow()
+
+tab_sia <- pz_sia_pe |> dplyr::count(subgrupo, name = "sia") |>
+  dplyr::mutate(sia = sup5(sia))
+tab_sih <- pz_sih_pe |> dplyr::filter(!is.na(subgrupo)) |>
+  dplyr::group_by(subgrupo) |>
+  dplyr::summarise(sih = dplyr::n_distinct(n_aih), .groups = "drop") |>
+  dplyr::mutate(sih = sup5(sih))
+tab_sim <- pz_sim_pe |> dplyr::filter(gap_causa_basica, !is.na(subgrupo)) |>
+  dplyr::count(subgrupo, name = "sim") |> dplyr::mutate(sim = sup5(sim))
+
+nomes_pz <- c(doenca_falciforme = "Doença falciforme (D57)",
+              talassemia = "Talassemias (D56)",
+              imunodeficiencia_comb = "IDP / SCID (D81)",
+              toxoplasmose_congenita = "Toxoplasmose congênita (P37.1)")
+
+dplyr::full_join(tab_sia, tab_sih, by = "subgrupo") |>
+  dplyr::full_join(tab_sim, by = "subgrupo") |>
+  dplyr::mutate(Doença = dplyr::coalesce(nomes_pz[subgrupo], subgrupo)) |>
+  dplyr::arrange(dplyr::desc(dplyr::coalesce(sia, 0L))) |>
+  dplyr::transmute(
+    Doença,
+    `SIA (registros)`  = dplyr::if_else(is.na(sia), "N<5", fmt_n(sia)),
+    `SIH (AIH princ.)` = dplyr::if_else(is.na(sih), "N<5", fmt_n(sih)),
+    `SIM (causa básica)` = dplyr::if_else(is.na(sim), "N<5", fmt_n(sim))) |>
+  tabela_eim(
+    titulo = "Painel do pezinho (condições não-EIM re-extraídas) — Pernambuco",
+    nota = "Escopo isolado (painel_pezinho); NUNCA somado às taxas de EIM. Supressão N<5. Detecção/uso, não prevalência.")
+```
+
+```{r kpis-falciforme}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(falc_sia), "registros SIA de doença falciforme (D57) — PE"),
+  c(fmt_n(falc_sih), "AIH com falciforme (D57) — PE"),
+  c(fmt_n(falc_sim), "óbitos por falciforme (causa básica) — PE")
+)))
+```
+
+::: {.callout-nota}
+**Doença falciforme domina o painel do pezinho em PE.** Com `r fmt_n(falc_sia)` registros SIA,
+`r fmt_n(falc_sih)` AIH e `r fmt_n(falc_sim)` óbitos por causa básica, a D57 é de longe a maior
+carga da triagem no estado — coerente com a **alta prevalência do traço/doença falciforme no
+Nordeste**. É uma condição **não-EIM**, rastreada pelo mesmo teste, mantida em escopo isolado e
+**nunca somada** às taxas de EIM desta página.
+:::
+
+## Recife — a capital
+
+Recife (código IBGE 6 dígitos **261160**) é a capital e sede da rede de referência estadual em
+EIM. Esta seção recorta os dados de PE **apenas ao município de Recife** (SIA `pa_munpcn`,
+SIH `munic_res`, SIM `codmunres` iniciando em 261160) para quantificar a concentração.
+
+```{r recife-setup}
+REC_6 <- "261160"
+sia_rec <- sia_pe |> dplyr::filter(pa_munpcn == REC_6)
+sih_rec <- sih_pe |> dplyr::filter(munic_res == REC_6)
+sim_rec <- sim_pe |> dplyr::filter(codmunres == REC_6)
+
+rec_sia_n   <- nrow(sia_rec)
+rec_aih_p   <- dplyr::n_distinct(sih_rec$n_aih[sih_rec$eim_principal])
+rec_obitos  <- sum(sim_rec$eim_causa_basica, na.rm = TRUE)
+
+pct_sia_rec <- 100 * rec_sia_n  / k_sia
+pct_sih_rec <- 100 * rec_aih_p  / n_princ_pe
+pct_sim_rec <- 100 * rec_obitos / k_obitos
+```
+
+```{r kpis-recife}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(rec_sia_n),  "registros SIA core (EIM) — Recife"),
+  c(fmt_n(rec_aih_p),  "AIH com EIM principal (SIH) — Recife"),
+  c(fmt_n(rec_obitos), "óbitos por EIM (causa básica, SIM) — Recife"),
+  c(paste0(fmt_1(pct_sia_rec), "%"), "dos registros SIA de PE ocorrem em Recife")
+)))
+```
+
+```{r part-recife}
+tibble::tibble(
+  base = c("SIA (registros core)", "SIH (AIH principal)", "SIM (óbitos causa básica)"),
+  pct  = c(pct_sia_rec, pct_sih_rec, pct_sim_rec)) |>
+  ggplot(aes(reorder(base, pct), pct)) +
+  geom_col(fill = "#1B6F6A", width = 0.6) +
+  geom_text(aes(label = paste0(fmt_1(pct), "%")), hjust = -0.1, size = 3.4, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(limits = c(0, 100), expand = expansion(mult = c(0, 0.12))) +
+  labs(x = NULL, y = "% do total de Pernambuco concentrado em Recife",
+       title = "Participação de Recife no total de PE, por base",
+       subtitle = "SIA (uso ambulatorial) concentra mais que SIH/SIM — coerente com centros de referência na capital.") +
+  theme_eim()
+```
+
+Recife concentra **`r fmt_1(pct_sia_rec)`%** dos registros SIA, **`r fmt_1(pct_sih_rec)`%** das
+AIH com EIM principal e **`r fmt_1(pct_sim_rec)`%** dos óbitos por causa básica do estado —
+participação bem maior no ambulatorial (uso contínuo, concentrado no serviço de referência) do
+que na mortalidade (que ocorre onde a pessoa mora/morre, mais distribuída pelo interior).
+
+```{r recife-tracadoras}
+sia_rec |>
+  dplyr::count(tracadora, name = "registros") |>
+  dplyr::filter(!is.na(tracadora), registros >= N_SUPRESSAO) |>
+  dplyr::arrange(dplyr::desc(registros)) |>
+  dplyr::slice_head(n = 10) |>
+  dplyr::mutate(tracadora = stringr::str_replace_all(tracadora, "_", " ")) |>
+  ggplot(aes(reorder(tracadora, registros), registros)) +
+  geom_col(fill = "#2E9E96", width = 0.75) +
+  geom_text(aes(label = fmt_n(registros)), hjust = -0.1, size = 2.9, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     expand = expansion(mult = c(0, 0.16))) +
+  labs(x = NULL, y = "Registros ambulatoriais SIA core (2021–2025)",
+       title = "Principais traçadoras de EIM em Recife (SIA core)",
+       subtitle = "Fibrose cística lidera com grande margem — acompanhamento crônico no centro de referência.") +
+  theme_eim()
+```
+
+```{r recife-sigtap}
+top_rec <- sia_rec |>
+  dplyr::group_by(pa_proc_id) |>
+  dplyr::summarise(registros = dplyr::n(),
+                   valor_apr = sum(pa_valapr, na.rm = TRUE), .groups = "drop") |>
+  dplyr::filter(registros >= N_SUPRESSAO) |>
+  dplyr::arrange(dplyr::desc(registros)) |>
+  dplyr::slice_head(n = 10) |>
+  dplyr::left_join(sig_nomes, by = "pa_proc_id") |>
+  dplyr::mutate(nome_proc = dplyr::if_else(is.na(nome_proc) | nome_proc == "",
+                                           "[VERIFICAR nome SIGTAP]", nome_proc))
+
+top_rec |>
+  dplyr::transmute(
+    `Cód. SIGTAP` = pa_proc_id,
+    Procedimento  = stringr::str_to_sentence(nome_proc),
+    Registros     = fmt_n(registros),
+    `Valor aprovado (R$)` = paste0("R$ ", fmt_n(round(valor_apr)))) |>
+  tabela_eim(
+    titulo = "Top 10 procedimentos SIGTAP no SIA-EIM (core) — Recife, 2021–2025",
+    nota = "Nomes via microdatasus::sigtab. Supressão N<5. Detecção/uso, não prevalência.")
+```
+
+::: {.callout-nota}
+**Recife superestima a carga "da cidade" — reflete a rede de referência estadual, não
+necessariamente a doença em quem mora na capital.** Como sede do **TFD** (Tratamento Fora de
+Domicílio) e dos centros de referência em EIM de Pernambuco, Recife recebe pacientes
+encaminhados do interior e de outros municípios da RM; o "município de residência" registrado
+no DATASUS às vezes já é o de referência/encaminhamento, não o de origem real do paciente. Esta
+é uma **hipótese de leitura**, não uma conclusão — não há, nesta base pública, como distinguir
+residente de Recife de paciente encaminhado com endereço atualizado na capital.
+:::
+
+## Ressalvas — leitura do recorte de Pernambuco
+
+::: {.callout-nota}
+- **Heterogeneidade.** "EIM" é um grupo heterogêneo; não interpretar um "total EIM de PE" como
+  entidade clínica. Cada base mede coisa distinta e **não se somam**.
+- **N pequeno por município.** Em doença rara, a maioria dos municípios de PE tem N<5 —
+  **suprimidos** (cinza no mapa, "N<5" nas tabelas). Contagem bruta sem denominador municipal:
+  ler como **onde se registra atendimento**, não onde os casos existem.
+- **Acesso, não incidência.** A concentração na RM do Recife reflete a **rede de referência**;
+  o município de residência pode já ser o de encaminhamento. Detecção/uso ≠ prevalência.
+- **Consanguinidade e falciforme no NE são hipóteses de contexto**, não conclusões deste
+  descritivo: os dados de PE refletem **acesso a centros de referência** e possível efeito de
+  maior consanguinidade regional — a serem testados com desenho específico, não inferidos daqui.
+- **SIM cobre só 2021–2023**; idade no SIA é mal preenchida; envelope (E78) é teto, não caso.
+:::

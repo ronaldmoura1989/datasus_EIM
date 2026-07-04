@@ -1,0 +1,18 @@
+---
+title: "Glossário"
+subtitle: "Termos clínicos e metodológicos do painel EIM · DATASUS"
+toc: true
+---
+
+Este glossário reúne dois blocos: um **clínico** (doenças, siglas, códigos CID-10 e padrões
+de herança das traçadoras) e um **metodológico** (camadas de captura, taxas, denominadores,
+privacidade e cuidados de leitura). Termos como **core/envelope**, **bracketing**, **MSUD**,
+**TRE** e **padronização** aparecem definidos aqui e são referenciados ao longo das páginas.
+
+# Glossário clínico — doenças e siglas
+
+{{< include ../ref/glossario_doencas.md >}}
+
+# Glossário metodológico
+
+{{< include ../ref/glossario_metodologico.md >}}

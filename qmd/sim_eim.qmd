@@ -1,0 +1,151 @@
+---
+title: "Mortalidade (SIM-DO)"
+subtitle: "Eixo central dos EIM · mortalidade padronizada e infantil · incidência ao nascimento por traçadora · 2021–2023"
+toc: false
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+sim <- D$sim
+n_qualq <- nrow(sim)
+n_cb    <- sum(sim$eim_causa_basica, na.rm = TRUE)
+pct_cb  <- 100 * n_cb / n_qualq
+```
+
+```{r kpis}
+#| output: asis
+idade_med <- stats::median(sim$idade_anos[sim$eim_causa_basica], na.rm = TRUE)
+obitos_inf <- sum(sim$eim_causa_basica & sim$obito_infantil, na.rm = TRUE)
+cat(kpi_row(list(
+  c(fmt_n(n_cb), "óbitos por EIM (causa básica)"),
+  c(paste0(fmt_1(pct_cb), "%"), "dos óbitos com EIM têm EIM como causa básica"),
+  c(paste0(fmt_1(idade_med), " anos"), "idade mediana ao óbito (causa básica)"),
+  c(fmt_n(obitos_inf), "óbitos infantis por EIM (<1 ano)")
+)))
+```
+
+Diferentemente de doenças de baixa letalidade, nos EIM a **mortalidade é o eixo central e
+o indicador mais robusto** deste painel. Em
+**`r fmt_1(pct_cb)`%** dos óbitos que mencionam um EIM, ele é a **causa básica** do óbito —
+ou seja, a doença **mata diretamente**, não aparece apenas como contribuinte. O SIM cobre
+**2021–2023** (DATASUS não publicou 2024+).
+
+::: {.callout-nota}
+**Mortalidade registrada, não prevalência.** A mortalidade padronizada por EIM é
+**relativamente estável (~1,66/100 mil)**. A variação por UF combina incidência, acesso a
+diagnóstico/tratamento e **qualidade de codificação** da declaração de óbito.
+:::
+
+## Onde o EIM aparece na Declaração de Óbito
+
+```{r posicao}
+sim |>
+  dplyr::mutate(posicao = dplyr::if_else(eim_causa_basica, "Causa básica",
+                                         "Outra linha (contribuinte)")) |>
+  dplyr::count(posicao, name = "obitos") |>
+  dplyr::mutate(`%` = fmt_1(100 * obitos / sum(obitos)),
+               obitos = fmt_n(obitos)) |>
+  tabela_eim(titulo = "Posição do EIM na DO (2021–2023)",
+             nota = "O EIM é quase sempre causa básica — mata diretamente, não aparece só como comorbidade contribuinte.")
+```
+
+## Mortalidade padronizada por EIM (2021–2023)
+
+```{r tx-mort}
+num_sim <- sim |> dplyr::filter(eim_causa_basica) |>
+  contar_estrato(col_uf = "uf_res")
+tx_ano <- taxas_padronizadas(num_sim, D$pop, grupos = "ano")
+
+tx_ano |>
+  ggplot(aes(ano, taxa_pad)) +
+  geom_ribbon(aes(ymin = ic_inf, ymax = ic_sup), fill = "#8FD3C7", alpha = 0.5) +
+  geom_line(color = "#1B6F6A", linewidth = 1.1) +
+  geom_point(color = "#1B6F6A", size = 2.4) +
+  geom_text(aes(label = fmt_2(taxa_pad)), vjust = -1.1, size = 3, color = "#0E2F38") +
+  scale_x_continuous(breaks = ANOS_SIM) +
+  labs(x = NULL, y = "por 100 mil (padronizada)",
+       title = "Mortalidade por EIM (causa básica), padronizada por idade e sexo",
+       subtitle = "Estável: ~1,69 → 1,65 → 1,66 (2021–2023). O denominador estável contrasta com a alta de detecção no SIA/SIH.") +
+  theme_eim()
+```
+
+## Pirâmide de óbitos — sexo × idade
+
+```{r piramide-sim}
+#| fig-width: 11
+#| fig-height: 6
+sim |>
+  dplyr::filter(eim_causa_basica) |>
+  piramide_etaria(
+    titulo = "Pirâmide etária × sexo dos óbitos por EIM (causa básica, 2021–2023)",
+    subtitulo = "Carga nos extremos: letais precoces no <1 ano e acúmulo em adultos.",
+    unidade = "óbitos")
+```
+
+## Mortalidade infantil por EIM / 100 mil nascidos vivos
+
+```{r mort-inf}
+mi <- sim |>
+  dplyr::filter(eim_causa_basica, obito_infantil) |>
+  dplyr::count(ano, name = "obitos") |>
+  dplyr::left_join(D$nv |> dplyr::filter(ano %in% ANOS_SIM) |>
+                     dplyr::group_by(ano) |> dplyr::summarise(nv = sum(nv), .groups = "drop"),
+                   by = "ano") |>
+  dplyr::mutate(por_100k = 1e5 * obitos / nv)
+
+ic <- epitools::pois.exact(mi$obitos, pt = mi$nv / 1e5)
+mi <- mi |> dplyr::mutate(ic_inf = ic$lower, ic_sup = ic$upper)
+
+mi |>
+  dplyr::transmute(Ano = ano,
+                   `Óbitos <1 ano` = fmt_n(obitos),
+                   `Nascidos vivos` = fmt_n(nv),
+                   `por 100k NV` = fmt_2(por_100k),
+                   `IC95%` = paste0(fmt_2(ic_inf), "–", fmt_2(ic_sup))) |>
+  tabela_eim(titulo = "Mortalidade infantil por EIM (causa básica, <1 ano) por 100 mil NV",
+             nota = "Denominador SINASC (nascidos vivos). Óbito infantil por EIM é indicador robusto (idade neonatal bem preenchida no SIM).")
+```
+
+## Incidência ao nascimento por traçadora — dissociação incidência × mortalidade
+
+```{r incid-tracadora}
+D$m_incid |>
+  dplyr::mutate(tracadora = stringr::str_replace_all(tracadora, "_", " ")) |>
+  dplyr::transmute(
+    Traçadora = tracadora,
+    `Óbitos <1a` = fmt_n(obitos_inf),
+    `Mort. inf./100k NV` = dplyr::if_else(is.na(mort_inf_100k_nv), "N<5 (suprimido)",
+                                          fmt_2(mort_inf_100k_nv)),
+    `IC95%` = mort_ic,
+    `Detecção 1º ano (SIH / SIA)` = paste0(fmt_n(aih_inf), " / ", fmt_n(reg_sia_inf)),
+    `Incid. lit. [VERIFICAR]` = fonte) |>
+  tabela_eim(titulo = "Incidência ao nascimento e mortalidade infantil por traçadora (pool 2021–2023)",
+             nota = "Mortalidade infantil = SIM causa básica <1 ano / 100 mil NV (SINASC), IC Poisson exato, supressão N<5. 'Detecção 1º ano' via SIA são registros, não crianças (idade SIA mal preenchida). Incidência da literatura [VERIFICAR].")
+```
+
+::: {.callout-nota}
+**Leitura — dois perfis dissociados.**
+
+- **Tratáveis rastreadas** (hipotireoidismo congênito, PKU, fibrose cística): **alta
+  detecção no 1º ano** de vida e **mortalidade infantil baixíssima** → triagem + tratamento
+  precoce **funcionando**.
+- **Letais precoces** (ciclo da ureia, **MSUD** — *Maple Syrup Urine Disease*, a doença da
+  urina em xarope de bordo, ver [Glossário](glossario.qmd)): o **óbito infantil é o desfecho** —
+  mesmo com detecção, a doença mata cedo.
+- **Biotinidase 0,91/100k NV é um TETO E88.9** (agrega outros distúrbios metabólicos
+  mortais, não biotinidase real — que, rastreada, quase não mata).
+
+A **dissociação incidência × mortalidade** é o diferencial deste painel: separa o que a
+triagem já resolve do que ainda mata.
+:::
+
+## Limitações
+
+::: {.callout-nota}
+- **SIM cobre só 2021–2023** (2024+ ainda não publicado).
+- Mortalidade infantil (SIM) é robusta; **"detecção 1º ano" via SIA são registros, não
+  crianças** (idade SIA mal preenchida) → indica **intensidade**, não incidência.
+- Valores de incidência da literatura `[VERIFICAR]`; supressão de N<5 nas taxas divulgadas.
+- Mortalidade **registrada**, não prevalência; grupo heterogêneo (não interpretar "total EIM").
+:::

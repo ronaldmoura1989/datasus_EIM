@@ -1,0 +1,213 @@
+---
+title: "Ambulatorial (SIA-PA)"
+subtitle: "Detecção ambulatorial de EIM · core vs envelope · traçadoras · taxas por UF · 2021–2025"
+toc: false
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+sia_core <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))
+pseudo  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"),
+                           show_col_types = FALSE)
+proc_top <- readr::read_csv(here::here("manifest/sia_procedimentos_top.csv"),
+                            show_col_types = FALSE)
+```
+
+```{r kpis}
+#| output: asis
+core_n     <- nrow(sia_core)
+env_n      <- D$sia_vol_agg |> dplyr::filter(camada == "envelope") |>
+  dplyr::summarise(r = sum(registros)) |> dplyr::pull(r)
+n_subg     <- dplyr::n_distinct(sia_core$subgrupo)
+valor_core <- sum(sia_core$pa_valapr, na.rm = TRUE)
+cat(kpi_row(list(
+  c(fmt_n(core_n), "registros core (EIM nomeados)"),
+  c(fmt_n(env_n),  "registros envelope (teto de subcodificação)"),
+  c(fmt_n(n_subg), "subgrupos EIM no core"),
+  c(paste0("R$ ", fmt_n(round(valor_core))), "valor aprovado (core)")
+)))
+```
+
+O SIA-PA capta o **acompanhamento ambulatorial crônico** dos EIM. Trabalhamos com duas
+camadas: o **core** (`r fmt_n(core_n)` registros, CID-10 nomeados de EIM — o núcleo de
+códigos que identificam um EIM de fato) e o **envelope** (`r fmt_n(env_n)` registros —
+sobretudo **E78 dislipidemia**, doença comum), que é ~20× o core e serve apenas como **teto
+de subcodificação (*bracketing*)** — **nunca** contado como caso de EIM. Os termos *core*,
+*envelope* e *bracketing* estão definidos no [Glossário](glossario.qmd).
+
+::: {.callout-nota}
+**Detecção/uso, não prevalência.** Cada registro é uma **linha de produção ambulatorial**,
+não uma pessoa (o SIA-PA público não tem identificador de paciente). O envelope é o **limite
+superior** do que a subcodificação poderia esconder, não uma estimativa de casos.
+:::
+
+## Core vs envelope — a escala do *bracketing*
+
+```{r core-env}
+D$sia_vol_agg |>
+  dplyr::filter(camada %in% c("core", "envelope", "limitrofe")) |>
+  dplyr::group_by(camada) |>
+  dplyr::summarise(registros = sum(registros), .groups = "drop") |>
+  dplyr::mutate(camada = factor(camada, levels = c("envelope","limitrofe","core"),
+                                labels = c("Envelope (E78 etc. — TETO)",
+                                           "Limítrofe", "Core (EIM nomeados)"))) |>
+  ggplot(aes(camada, registros, fill = camada)) +
+  geom_col(width = 0.65) +
+  geom_text(aes(label = fmt_n(registros)), hjust = -0.1, size = 3.2, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = ".", scale_cut = scales::cut_short_scale()),
+                     expand = expansion(mult = c(0, 0.18))) +
+  scale_fill_manual(values = c("Envelope (E78 etc. — TETO)" = "#8FD3C7",
+                               "Limítrofe" = "#7FA6D9",
+                               "Core (EIM nomeados)" = "#1B6F6A"), guide = "none") +
+  labs(x = NULL, y = "Registros ambulatoriais (SIA, 2021–2025)",
+       title = "Camadas do SIA: o envelope é ~20× o core",
+       subtitle = "Envelope = dislipidemia (E78) e correlatos: doença comum, tratada como bracketing, não caso.") +
+  theme_eim()
+```
+
+## Traçadoras no ambulatorial
+
+```{r tracadoras}
+D$m_tracadora |>
+  dplyr::arrange(dplyr::desc(SIA)) |>
+  dplyr::filter(SIA >= 500) |>
+  dplyr::mutate(tracadora = stringr::str_replace_all(tracadora, "_", " ")) |>
+  ggplot(aes(reorder(tracadora, SIA), SIA)) +
+  geom_col(fill = "#2E9E96", width = 0.75) +
+  geom_text(aes(label = fmt_n(SIA)), hjust = -0.1, size = 2.8, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  scale_y_continuous(labels = scales::label_number(big.mark = ".", scale_cut = scales::cut_short_scale()),
+                     expand = expansion(mult = c(0, 0.16))) +
+  labs(x = NULL, y = "Registros ambulatoriais (core, 2021–2025)",
+       title = "Traçadoras de EIM no SIA (registros ≥ 500)",
+       subtitle = "Fibrose cística domina o volume; hipotireoidismo congênito e PKU (rastreadas) em seguida.") +
+  theme_eim()
+```
+
+::: {.callout-nota}
+**Perfil de traçadoras difere por base** — não é ruído, é a **janela seletiva** por
+gravidade/sobrevivência (SIA = crônicos acompanhados). **Biotinidase** é codificada pelo MS
+em **E88.9** (balde inespecífico do envelope) e reportada à parte como proxy/TETO. Rótulos
+CID-10 de 4 caracteres de algumas traçadoras ainda `[VERIFICAR]`.
+:::
+
+## Estrutura etária e por sexo dos registros
+
+```{r piramide}
+#| fig-width: 11
+#| fig-height: 6
+piramide_etaria(
+  sia_core,
+  titulo = "Pirâmide etária × sexo dos registros ambulatoriais (SIA core)",
+  subtitulo = "Registros (não pessoas). Concentração pediátrica reflete triagem/acompanhamento de crônicos rastreados.",
+  unidade = "registros")
+```
+
+::: {.callout-nota}
+**Registros, não pessoas.** A pirâmide conta **linhas de produção ambulatorial**; a mesma
+criança acompanhada gera muitos registros/ano. A idade no SIA vem em **anos inteiros** e é
+mal preenchida — a barra `<1 mês` × `1–11 m` é **frágil** (ver limitações).
+:::
+
+## De registros a pseudo-pacientes — intervalo, não contagem
+
+O SIA-PA público **não tem identificador de paciente**. Para os subgrupos crônicos de alto
+volume, construímos um **pseudo-ID** por *record linkage* determinístico (blocking
+sexo × município, janela de ano de nascimento ±1, componentes conexos) e reportamos o número
+de pacientes como **intervalo [registros ; pseudo-pacientes]** com a **razão
+registros/paciente** (intensidade de uso). O método (*bracketing*, chave estrita↔frouxa)
+está no [Glossário](glossario.qmd).
+
+```{r pseudo-tab}
+pseudo |>
+  dplyr::transmute(
+    Subgrupo = stringr::str_replace_all(subgrupo, "_", " "),
+    Registros = fmt_n(registros),
+    `Pseudo-pac. (estrita)` = fmt_n(pseudo_pac_estrita),
+    `Pseudo-pac. (frouxa)`  = fmt_n(pseudo_pac_frouxa),
+    `Intervalo de pacientes` = paste0("[", fmt_n(pseudo_pac_frouxa), " ; ",
+                                      fmt_n(pseudo_pac_estrita), "]"),
+    `Reg./paciente` = fmt_2(razao),
+    `% chave completa` = fmt_1(pct_chave_completa)) |>
+  tabela_eim(
+    titulo = "Registros vs pseudo-pacientes por subgrupo crônico de alto volume (SIA core)",
+    nota = "Pseudo-ID é AGRUPADOR de registros compatíveis, não identificador de pessoas (LGPD; ver Glossário). Estrita = limite superior de pacientes; frouxa = inferior. Razão reg./paciente = intensidade de uso. Só agregados; supressão N<5.")
+```
+
+::: {.callout-nota}
+**Como ler o intervalo.** A fibrose cística tem ~5,3 registros por pseudo-paciente — muitos
+atendimentos por criança acompanhada, coerente com doença crônica de seguimento intensivo. A
+**cautela do EIM**: como a idade SIA está em anos inteiros, o `ano_nasc_proxy` tem **resolução
+ruim em <1 ano**, então o pseudo-ID é um limite **grosseiro** — intensidade de uso, **não**
+contagem de pessoas. O intervalo estrita↔frouxa é o indicador honesto; nunca um número pontual.
+:::
+
+## Procedimentos SIGTAP mais frequentes
+
+Cada registro carrega um **procedimento SIGTAP** (`pa_proc_id`). Os mais frequentes revelam o
+que o SUS de fato faz por esses pacientes: **medicamentos de alto custo** (alfadornase e
+pancreatina na fibrose cística; imiglucerase na Gaucher; tafamidis na amiloidose; fórmulas
+metabólicas na PKU), **consultas especializadas** e **exames diagnósticos** (dosagem de cloreto
+no suor — teste diagnóstico da fibrose cística).
+
+```{r sigtap-global}
+proc_top |>
+  dplyr::filter(tracadora == "TODAS") |>
+  dplyr::slice_head(n = 15) |>
+  dplyr::transmute(
+    `Cód. SIGTAP` = pa_proc_id,
+    Procedimento = stringr::str_to_sentence(nome_proc),
+    Registros = fmt_n(registros),
+    `Valor aprovado (R$)` = paste0("R$ ", fmt_n(round(valor_apr)))) |>
+  tabela_eim(
+    titulo = "Top 15 procedimentos SIGTAP no SIA-EIM (core, 2021–2025)",
+    nota = "Nomes via tabela SIGTAP (microdatasus::sigtab). Códigos sem correspondência marcados [VERIFICAR nome SIGTAP]. Dispensação de alto custo, consultas e exames dominam.")
+```
+
+## Tendência ambulatorial
+
+```{r serie}
+sia_core |>
+  dplyr::count(ano) |>
+  ggplot(aes(ano, n)) +
+  geom_col(fill = "#1B6F6A", width = 0.65) +
+  geom_text(aes(label = fmt_n(n)), vjust = -0.5, size = 3, color = "#0E2F38") +
+  scale_x_continuous(breaks = ANOS) +
+  scale_y_continuous(labels = scales::label_number(big.mark = "."),
+                     expand = expansion(mult = c(0, 0.12))) +
+  labs(x = NULL, y = "Registros core",
+       title = "Registros ambulatoriais de EIM (core) por ano",
+       subtitle = "Crescimento sustentado — expansão de detecção e acompanhamento, não incidência.") +
+  theme_eim()
+```
+
+## Taxa de detecção ambulatorial padronizada por UF
+
+```{r mapa}
+#| fig-width: 10
+#| fig-height: 7
+num_sia <- sia_core |>
+  dplyr::select(ano, uf_pcn, sexo, idade_anos) |>
+  contar_estrato(col_uf = "uf_pcn")
+tx_uf <- taxas_padronizadas(num_sia, D$pop, grupos = "uf")
+mapa_uf(dplyr::select(tx_uf, uf, taxa_pad), valor = "taxa_pad",
+        titulo = "Taxa de detecção ambulatorial de EIM (core), padronizada por idade e sexo",
+        legenda = "por 100 mil\n(pessoa-anos)")
+```
+
+A detecção ambulatorial varia fortemente por UF — padrão dominado por **oferta de serviços
+especializados, centros de referência e triagem**. A variação geográfica mede em grande
+parte **acesso**, não incidência da doença.
+
+## Limitações
+
+::: {.callout-nota}
+- **Idade no SIA é mal preenchida** (`pa_idade` frequentemente ausente/agregada) — a
+  padronização por idade usa o que há, e a estratificação etária no SIA é **frágil**;
+  preferir SIM/SINASC para inferência sobre idade.
+- **Registros ≠ pessoas** (sem identificador de paciente).
+- **Envelope é teto, não caso**; nunca somar ao core nem às outras bases.
+- Detecção/uso, **não prevalência**; variação por UF reflete acesso.
+:::

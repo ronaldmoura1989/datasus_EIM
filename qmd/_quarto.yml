@@ -1,0 +1,58 @@
+project:
+  type: website
+  output-dir: ../docs
+  execute-dir: project
+
+website:
+  title: "Erros Inatos do Metabolismo no SUS"
+  description: "Caracterização dos EIM (CID-10 E70–E90 + triagem neonatal) nos microdados do DATASUS — SIA, SIH, SIM e SINASC, 2021–2025."
+  site-url: ""
+  navbar:
+    background: "#1B6F6A"
+    foreground: "#FFFFFF"
+    left:
+      - href: index.qmd
+        text: Início
+      - href: sia_eim.qmd
+        text: Ambulatorial (SIA)
+      - href: sih_eim.qmd
+        text: Internações (SIH)
+      - href: sim_eim.qmd
+        text: Mortalidade (SIM)
+      - href: pezinho.qmd
+        text: Teste do pezinho
+      - href: pe_eim.qmd
+        text: Pernambuco
+      - href: discussao.qmd
+        text: Discussão e recomendações
+      - href: glossario.qmd
+        text: Glossário
+  page-footer:
+    center: "Microdados DATASUS (SIA-PA, SIH-RD, SIM-DO) · SINASC · Censo 2022/IBGE · CID-10 E70–E90 + triagem · 2021–2025 (SIM até 2023). Taxas de detecção/uso e mortalidade registrada, não de prevalência."
+
+format:
+  html:
+    theme: [cosmo, custom.scss]
+    toc: true
+    toc-title: "Nesta página"
+    code-fold: true
+    code-tools: false
+    embed-resources: true
+    page-layout: full
+    grid:
+      body-width: 1400px
+      margin-width: 0px
+      sidebar-width: 250px
+    fig-width: 8
+    fig-height: 4.8
+    fig-dpi: 150
+    tbl-cap-location: top
+
+lang: pt
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
+  freeze: false
