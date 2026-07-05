@@ -184,6 +184,55 @@ top_pe |>
     nota = "Nomes via microdatasus::sigtab. Supressão N<5. Detecção/uso, não prevalência.")
 ```
 
+## Quantos indivíduos há por trás dos registros? (pseudo-individualização)
+
+O SIA-PA público **não tem identificador de paciente (CNS)** — cada linha é um
+atendimento, não uma pessoa. Para estimar **quantos indivíduos** geram os registros de
+EIM em Pernambuco, construímos um **pseudo-ID** por *record linkage* determinístico
+(agrupando registros compatíveis por sexo × município × ano de nascimento aproximado,
+com resolução por componentes conexos). O resultado é reportado como **intervalo
+[registros ; indivíduos estimados]**, nunca como número exato (ver [Glossário](glossario.qmd#pseudo)).
+
+```{r pseudo-pe-setup}
+#| include: false
+pp_pe  <- readr::read_csv(here::here("manifest","sia_pseudo_pacientes_PE.csv"), show_col_types = FALSE)
+tot_pe <- dplyr::filter(pp_pe, subgrupo == "TOTAL (todos os subgrupos core)")
+```
+
+```{r pseudo-pe-kpi}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(tot_pe$registros), "registros SIA core (EIM) em PE"),
+  c(paste0(fmt_n(tot_pe$pseudo_frouxa), "–", fmt_n(tot_pe$pseudo_estrita)),
+    "indivíduos estimados (intervalo frouxa–estrita)"),
+  c(fmt_1(tot_pe$razao), "registros por indivíduo (intensidade de uso)")
+)))
+```
+
+```{r pseudo-pe-tab}
+pp_pe |>
+  dplyr::filter(subgrupo != "TOTAL (todos os subgrupos core)", !is.na(pseudo_intermediaria)) |>
+  dplyr::arrange(dplyr::desc(registros)) |>
+  dplyr::transmute(
+    Subgrupo = stringr::str_replace_all(subgrupo, "_", " "),
+    Registros = fmt_n(registros),
+    `Indivíduos (frouxa–estrita)` = paste0(fmt_n(pseudo_frouxa), "–", fmt_n(pseudo_estrita)),
+    `Reg./indivíduo` = fmt_1(razao)) |>
+  tabela_eim(
+    titulo = "Indivíduos estimados por subgrupo no SIA-EIM (core) — Pernambuco",
+    nota = "Pseudo-ID = agrupador de registros compatíveis, NÃO identificador de pessoas (LGPD: só agregados, supressão N<5). Intervalo, não ponto. Razão registros/indivíduo = intensidade de acompanhamento crônico. Cautela: idade no SIA em anos inteiros → resolução fraca em <1 ano.")
+```
+
+::: {.callout-nota}
+**Como ler.** São **~`r fmt_n(tot_pe$pseudo_frouxa)`–`r fmt_n(tot_pe$pseudo_estrita)`
+indivíduos estimados** por trás dos `r fmt_n(tot_pe$registros)` registros ambulatoriais de
+EIM em PE — cada pessoa gera, em média, **~`r fmt_1(tot_pe$razao)` atendimentos**
+(acompanhamento crônico: fibrose cística, infusões de TRE nas mucopolissacaridoses,
+dietoterapia na PKU). O pseudo-ID **subestima** pessoas quando duas pessoas distintas
+compartilham os quase-identificadores (colisão) e **superestima** quando a mesma pessoa
+migra de município — por isso o **intervalo**, não um número único.
+:::
+
 ## Internações (SIH) em Pernambuco
 
 ```{r kpis-sih}
@@ -465,6 +514,38 @@ Recife concentra **`r fmt_1(pct_sia_rec)`%** dos registros SIA, **`r fmt_1(pct_s
 AIH com EIM principal e **`r fmt_1(pct_sim_rec)`%** dos óbitos por causa básica do estado —
 participação bem maior no ambulatorial (uso contínuo, concentrado no serviço de referência) do
 que na mortalidade (que ocorre onde a pessoa mora/morre, mais distribuída pelo interior).
+
+### Quantos indivíduos em Recife? (pseudo-individualização)
+
+```{r pseudo-rec-setup}
+#| include: false
+pp_rec  <- readr::read_csv(here::here("manifest","sia_pseudo_pacientes_Recife.csv"), show_col_types = FALSE)
+tot_rec <- dplyr::filter(pp_rec, subgrupo == "TOTAL (todos os subgrupos core)")
+pct_ind_rec <- 100 * tot_rec$pseudo_intermediaria / tot_pe$pseudo_intermediaria
+```
+
+```{r pseudo-rec-kpi}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(tot_rec$registros), "registros SIA core (EIM) — Recife"),
+  c(paste0(fmt_n(tot_rec$pseudo_frouxa), "–", fmt_n(tot_rec$pseudo_estrita)),
+    "indivíduos estimados em Recife (intervalo)"),
+  c(fmt_1(tot_rec$razao), "registros por indivíduo — Recife"),
+  c(paste0(fmt_1(pct_ind_rec), "%"), "dos indivíduos estimados de PE são atendidos em Recife")
+)))
+```
+
+::: {.callout-nota}
+**Concentra registros mais do que indivíduos.** Recife tem **`r fmt_1(pct_sia_rec)`% dos
+registros** ambulatoriais de EIM de PE, mas apenas **~`r fmt_1(pct_ind_rec)`% dos indivíduos
+estimados** — e a **intensidade de uso é maior na capital** (**~`r fmt_1(tot_rec$razao)`
+registros/indivíduo** em Recife vs **~`r fmt_1(tot_pe$razao)`** no estado). É a assinatura da
+**rede de referência**: relativamente menos pacientes, cada um com muito mais atendimentos
+(infusões de TRE, seguimento crônico), inclusive pacientes **encaminhados do interior** via
+TFD que passam a ser atendidos — e por vezes registrados — na capital. Reforça que o dado de
+Recife mede **acesso/oferta**, não onde os casos "existem". Intervalo, não ponto; pseudo-ID é
+agrupador, não identificador (LGPD).
+:::
 
 ```{r recife-tracadoras}
 sia_rec |>

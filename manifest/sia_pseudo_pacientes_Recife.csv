@@ -1,0 +1,23 @@
+subgrupo,registros,pseudo_estrita,pseudo_intermediaria,pseudo_frouxa,razao
+fibrose_cistica,17930,1612,1587,1538,11.3
+mucopolissacaridose,3780,810,805,779,4.7
+aminoacidopatia_PKU,2806,232,221,207,12.7
+esfingolipidose_outras,1526,72,60,53,25.43
+amiloidose_familiar,1220,103,81,65,15.06
+hiperplasia_adrenal_cong,861,96,86,81,10.01
+metab_cobre,737,78,68,70,10.84
+hipotireoidismo_congenito,150,60,59,53,2.54
+glicogenose,118,18,15,13,7.87
+faod,65,18,15,14,4.33
+aminoacidopatia_MSUD,23,6,5,5,4.6
+glicoproteinose,15,8,8,8,1.88
+galactosemia,13,NA,NA,NA,4.33
+transporte_aminoacidos,7,5,5,5,1.4
+ciclo_ureia,6,NA,NA,NA,1.5
+aminoacidopatia_tirosina,4,NA,NA,NA,2
+deposito_lipidios,3,NA,NA,NA,3
+metab_glicina,3,NA,NA,NA,3
+porfiria_aguda,3,NA,NA,NA,1.5
+esfingolipidose_GM1,2,NA,NA,NA,2
+acuduria_organica,1,NA,NA,NA,1
+TOTAL (todos os subgrupos core),29273,3134,3030,2905,9.66
