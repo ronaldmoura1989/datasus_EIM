@@ -15,6 +15,13 @@
 
 # Parte A — Discussão clínico-genética dos resultados
 
+> ⚠️ **NÚMEROS DESATUALIZADOS — pendente de regeneração.** A definição de caso do SIM
+> mudou: `eim_causa_basica` usava a camada *ampliado* (core+limítrofe+**envelope**) e passou
+> a usar **core**, alinhando-se a SIA e SIH. A lookup também foi corrigida (E80.3/E80.4/E80.5
+> e E85.0/E85.2). **Todos os números de mortalidade abaixo precedem essas correções** e
+> superestimam a carga de EIM. Regenerar com o pipeline antes de citar.
+> Ver `ref/avaliacao_critica_externa.md`.
+
 ## A.1 A dissociação incidência × mortalidade infantil à luz da história natural
 
 O achado mais informativo do eixo de mortalidade (SIM como base central) é uma **dissociação

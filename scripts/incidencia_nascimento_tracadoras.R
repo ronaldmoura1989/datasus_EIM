@@ -18,7 +18,7 @@ suppressPackageStartupMessages(library(epitools))
 
 sim <- readRDS(here::here("data/consolidated/sim_eim_nacional.rds"))
 sih <- readRDS(here::here("data/consolidated/sih_eim_nacional.rds"))
-sia <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))
+sia <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds"))
 nv_ano <- carregar_nv() |> dplyr::group_by(ano) |>
   dplyr::summarise(nv = sum(nv), .groups = "drop")
 NV_TOTAL_SIM <- sum(dplyr::filter(nv_ano, ano %in% ANOS_SIM)$nv)   # NV do período do SIM
@@ -44,8 +44,12 @@ LIT <- tibble::tribble(
 )
 
 # ---- A) Mortalidade infantil por traçadora (SIM causa básica, <1 ano) ----
+# `eim_cb_ampliado` (não `eim_causa_basica`, que agora é core) — mesma regra da §2
+# do descritivo: a traçadora é contada pelo seu CID nomeado INDEPENDENTEMENTE da
+# camada. Sem isso a linha "Biotinidase (E88.9 TETO)" zeraria, perdendo justamente
+# o achado de que o MS codifica a biotinidase num balde inespecífico.
 inf_sim <- sim |>
-  dplyr::filter(eim_causa_basica, obito_infantil, !is.na(tracadora)) |>
+  dplyr::filter(eim_cb_ampliado, obito_infantil, !is.na(tracadora)) |>
   dplyr::count(tracadora, name = "obitos_inf")
 
 # ---- B) Detecção no 1º ano: SIH (AIH princ. <1 ano) e SIA (registros <1 ano) ----

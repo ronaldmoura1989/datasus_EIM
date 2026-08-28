@@ -49,7 +49,7 @@ contar_pacientes <- function(el, usar_raca, janela) {
 # -----------------------------------------------------------------------------
 # Carregar core + normalizar quase-identificadores (uma vez)
 # -----------------------------------------------------------------------------
-sia_core <- readRDS(here::here("data/consolidated/sia_eim_core.rds")) |>
+sia_core <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds")) |>
   dplyr::filter(camada == "core") |>
   dplyr::select(subgrupo, tracadora, sexo, idade_anos, pa_munpcn, pa_racacor,
                 competencia, ano, uf_pcn) |>

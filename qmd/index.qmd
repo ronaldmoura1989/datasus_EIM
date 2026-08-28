@@ -9,17 +9,27 @@ source("_common.R")
 ```
 
 ```{r kpis-calc}
+#| include: false
 sia_core_n <- D$sia |> dplyr::filter(camada == "core") |> dplyr::count() |>
   dplyr::collect() |> dplyr::pull(n)
 sih_princ  <- sum(D$sih$eim_principal, na.rm = TRUE)
 sih_qualq  <- sum(D$sih$eim_qualquer,  na.rm = TRUE)
-sim_cb     <- sum(D$sim$eim_causa_basica, na.rm = TRUE)
+sim_cb     <- sum(D$sim$eim_causa_basica, na.rm = TRUE)   # camada core (definição primária)
+sim_cb_max <- sum(D$sim$eim_cb_ampliado,  na.rm = TRUE)   # teto: core+limítrofe+envelope
 
 # Mortalidade infantil por EIM / 100 mil NV (pool 2021–2023, SIM causa básica <1 ano)
 obitos_inf <- sum(D$sim$eim_causa_basica & D$sim$obito_infantil, na.rm = TRUE)
 nv_pool    <- D$nv |> dplyr::filter(ano %in% ANOS_SIM) |> dplyr::summarise(nv = sum(nv)) |>
   dplyr::pull(nv)
 mort_inf_100k <- 1e5 * obitos_inf / nv_pool
+
+# Taxa de mortalidade padronizada NACIONAL — calculada, nunca escrita à mão (o
+# valor muda com a camada da definição de caso; ver ref/avaliacao_critica_externa.md).
+tx_nac <- D$sim |> dplyr::filter(eim_causa_basica) |>
+  contar_estrato(col_uf = "uf_res") |>
+  taxas_padronizadas(D$pop, grupos = "ano")
+tx_nac_ult <- tx_nac$taxa_pad[which.max(tx_nac$ano)]
+tx_nac_txt <- paste(fmt_2(tx_nac$taxa_pad[order(tx_nac$ano)]), collapse = " → ")
 ```
 
 Os **Erros Inatos do Metabolismo (EIM)** são um grupo **grande e heterogêneo** de doenças
@@ -40,7 +50,8 @@ cat(kpi_row(list(
   c(fmt_n(sia_core_n), "registros ambulatoriais (SIA, core)"),
   c(fmt_n(sih_princ),  "AIH com EIM principal (SIH)"),
   c(fmt_n(sih_qualq),  "AIH com EIM em qualquer campo (SIH)"),
-  c(fmt_n(sim_cb),     "óbitos por EIM (SIM, causa básica, 2021–2023)"),
+  c(paste0(fmt_n(sim_cb), "–", fmt_n(sim_cb_max)),
+                       "óbitos por EIM (SIM, causa básica: core–teto, 2021–2023)"),
   c(paste0(fmt_2(mort_inf_100k), "/100k NV"), "mortalidade infantil por EIM (2021–2023)")
 )))
 ```
@@ -100,11 +111,28 @@ ggplot(mapping = aes(ano)) +
         axis.title.y.right = element_text(color = "#3E5C8A"))
 ```
 
-Todas as três bases estão **em alta** no período. No ambulatorial (SIA) e nas internações
-(SIH) isso reflete sobretudo **aumento de detecção, expansão da triagem e incorporação de
-terapias de reposição enzimática**, não necessariamente mudança de incidência. A
-mortalidade (SIM, causa básica) é o eixo **mais estável e mais robusto** deste grupo (ver
-[Mortalidade](sim_eim.qmd)) — a inversão relevante em relação a doenças de baixa letalidade.
+As bases **divergem**, e essa divergência é o achado. O ambulatorial (SIA) e as internações
+(SIH) sobem no período — o que reflete sobretudo **aumento de detecção, expansão da triagem e
+incorporação de terapias de reposição enzimática**, não necessariamente mudança de incidência.
+A **mortalidade (SIM) fica estável** (`r tx_nac_txt`/100 mil padronizada em
+`r min(ANOS_SIM)`–`r max(ANOS_SIM)`; ver [Mortalidade](sim_eim.qmd)). Detecção que sobe com mortalidade estável é exatamente o padrão
+que se espera de expansão de rastreio, e não de aumento de incidência.
+
+::: {.callout-nota}
+**Cautelas desta série.**
+
+- **2021 é um ano-base ruim**: acesso ambulatorial deprimido pela pandemia e procedimentos
+  eletivos suspensos. Parte da alta de 2022–2025 é **recuperação**, não tendência. Separar
+  as duas exigiria série longa (2010–2025), que este recorte não cobre.
+- A melhora progressiva no preenchimento de **diagnóstico secundário** da AIH infla
+  sozinha o indicador "EIM em qualquer campo".
+- O SIM é a base de melhor **cobertura e completude** — o que **não** é o mesmo que melhor
+  **validade da definição de caso** (ver as limitações em [Mortalidade](sim_eim.qmd)).
+- As três séries **não são comensuráveis**: o SIA conta **registros de produção**, não
+  pessoas (~4,5–5,9 registros por pseudo-paciente, ver [Ambulatorial](sia_eim.qmd)),
+  enquanto SIH conta AIH e SIM conta pessoas. O eixo duplo do gráfico é uma conveniência
+  de escala, **não** uma equivalência.
+:::
 
 ## Onde a mortalidade por EIM é maior — taxa padronizada por UF
 
@@ -120,9 +148,11 @@ mapa_uf(dplyr::select(tx_uf, uf, taxa_pad), valor = "taxa_pad",
 ```
 
 A mortalidade por EIM como causa básica é **relativamente estável nacionalmente
-(~1,66/100 mil)**; a variação por UF combina **incidência, acesso a diagnóstico/tratamento
-e qualidade de codificação** da declaração de óbito — leia como mortalidade **registrada**,
-não risco populacional puro. Detalhes em [Mortalidade (SIM)](sim_eim.qmd).
+(`r fmt_2(tx_nac_ult)`/100 mil em `r max(ANOS_SIM)`)**; a variação por UF combina
+**incidência, acesso a diagnóstico/tratamento e qualidade de codificação** da declaração de
+óbito — leia como mortalidade **registrada**, não risco populacional puro. O mapa é por
+**UF de residência** e **não** tem suavização espacial: em evento raro, as UF de população
+pequena (AC, RR, AP) oscilam por ruído amostral. Detalhes em [Mortalidade (SIM)](sim_eim.qmd).
 
 ## Navegação
 

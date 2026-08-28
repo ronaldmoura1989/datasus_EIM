@@ -28,9 +28,24 @@ sim <- purrr::map_dfr(arqs, function(fp) {
 })
 
 # Classificação: EIM como CAUSA BÁSICA vs em QUALQUER campo de causa (multi-código)
+#
+# CAMADA (corrigido — ver ref/avaliacao_critica_externa.md §1): `eim_causa_basica`
+# usava modo "ampliado" (core+limítrofe+ENVELOPE) enquanto SIA e SIH usavam a
+# camada restrita. O KPI de mortalidade herdava, assim, E78 (dislipidemia), E79.0
+# (gota), E83.1 (hemocromatose), E85 adquirida, E88.x e E90 — exatamente os códigos
+# que a lookup declara "NUNCA caso confirmado" — e produzia idade mediana ao óbito
+# de 71 anos num grupo de doenças cuja letalidade é neonatal/lactente.
+#
+# Agora são TRÊS colunas explícitas, e a definição primária é a mesma das outras bases:
+#   eim_causa_basica  = camada CORE          → análise primária (comparável a SIH)
+#   eim_cb_ampliado   = core+limítrofe+env.  → TETO de subcodificação (bracketing)
+#   eim_qualquer      = ampliado, qualquer linha → teto multi-código
+# Quem precisar do teto (traçadora Biotinidase em E88.9, KPI em intervalo) deve usar
+# `eim_cb_ampliado` EXPLICITAMENTE — nunca reintroduzir o envelope no número primário.
 sim <- sim |>
   dplyr::mutate(
-    eim_causa_basica = eh_eim(causabas, "ampliado", "todos"),
+    eim_causa_basica = eh_eim(causabas, "restrito", "todos"),
+    eim_cb_ampliado  = eh_eim(causabas, "ampliado", "todos"),
     eim_qualquer     = detecta_eim_sim(dplyr::pick(dplyr::everything()),
                                        cols = COLS_CAUSA, modo = "ampliado", escopo = "todos")
   )
@@ -39,6 +54,10 @@ cls_cb <- classificar_eim(sim$causabas)
 cls_ql <- classe_eim_sim(sim[, intersect(COLS_CAUSA, names(sim)), drop = FALSE], modo = "ampliado")
 sim <- sim |>
   dplyr::mutate(
+    # CID de 4 caracteres e camada DA CAUSA BÁSICA — necessários para auditar a
+    # composição do numerador (distribuição por código na página do SIM).
+    cid_cb    = cls_cb$cid,
+    camada_cb = cls_cb$camada,
     subgrupo  = dplyr::coalesce(cls_cb$subgrupo, cls_ql$subgrupo),
     classe    = dplyr::coalesce(cls_cb$classe,   cls_ql$classe),
     tracadora = dplyr::coalesce(cls_cb$tracadora, cls_ql$tracadora),
@@ -66,10 +85,15 @@ sim <- sim |>
     fonte      = "datasus_sim_do"
   )
 
-cat("\n• causa básica vs qualquer campo:\n")
-print(sim |> dplyr::summarise(causa_basica = sum(eim_causa_basica, na.rm=TRUE),
+cat("\n• causa básica (core) vs teto ampliado vs qualquer campo:\n")
+print(sim |> dplyr::summarise(cb_core      = sum(eim_causa_basica, na.rm=TRUE),
+                              cb_ampliado  = sum(eim_cb_ampliado, na.rm=TRUE),
                               qualquer     = sum(eim_qualquer, na.rm=TRUE),
                               total = dplyr::n()))
+cat("• causa básica por CAMADA (auditoria do numerador):\n")
+print(as.data.frame(dplyr::count(sim, camada_cb, sort = TRUE)))
+cat("• top 25 CID de 4 dígitos na causa básica (auditoria de garbage codes):\n")
+print(head(as.data.frame(dplyr::count(sim, cid_cb, camada_cb, sort = TRUE)), 25))
 cat("• óbitos por subgrupo (top):\n"); print(head(as.data.frame(dplyr::count(sim, subgrupo, sort=TRUE)), 20))
 cat("• óbitos infantis (<1 ano) por ano:\n")
 print(sim |> dplyr::group_by(ano) |> dplyr::summarise(obitos = dplyr::n(),

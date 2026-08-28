@@ -7,7 +7,12 @@ toc: false
 ```{r setup}
 #| include: false
 source("_common.R")
-sia_core <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))
+# O rds consolidado guarda core + limítrofe (daí o nome). A camada CORE é a
+# definição primária — filtrar aqui, senão o KPI soma a limítrofe e diverge do
+# número da home (ver ref/avaliacao_critica_externa.md §6a).
+sia_cl   <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds"))
+sia_core <- dplyr::filter(sia_cl, camada == "core")
+lim_n    <- sum(sia_cl$camada == "limitrofe", na.rm = TRUE)
 pseudo  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"),
                            show_col_types = FALSE)
 proc_top <- readr::read_csv(here::here("manifest/sia_procedimentos_top.csv"),
@@ -23,18 +28,24 @@ n_subg     <- dplyr::n_distinct(sia_core$subgrupo)
 valor_core <- sum(sia_core$pa_valapr, na.rm = TRUE)
 cat(kpi_row(list(
   c(fmt_n(core_n), "registros core (EIM nomeados)"),
+  c(fmt_n(lim_n),  "registros limítrofe (inespecíficos)"),
   c(fmt_n(env_n),  "registros envelope (teto de subcodificação)"),
   c(fmt_n(n_subg), "subgrupos EIM no core"),
   c(paste0("R$ ", fmt_n(round(valor_core))), "valor aprovado (core)")
 )))
 ```
 
-O SIA-PA capta o **acompanhamento ambulatorial crônico** dos EIM. Trabalhamos com duas
-camadas: o **core** (`r fmt_n(core_n)` registros, CID-10 nomeados de EIM — o núcleo de
-códigos que identificam um EIM de fato) e o **envelope** (`r fmt_n(env_n)` registros —
-sobretudo **E78 dislipidemia**, doença comum), que é ~20× o core e serve apenas como **teto
-de subcodificação (*bracketing*)** — **nunca** contado como caso de EIM. Os termos *core*,
-*envelope* e *bracketing* estão definidos no [Glossário](glossario.qmd).
+O SIA-PA capta o **acompanhamento ambulatorial crônico** dos EIM. Trabalhamos com **três
+camadas**: o **core** (`r fmt_n(core_n)` registros, CID-10 nomeados de EIM — o núcleo de
+códigos que identificam um EIM de fato), a **limítrofe** (`r fmt_n(lim_n)` registros —
+códigos de EIM porém inespecíficos, do tipo "não especificado") e o **envelope**
+(`r fmt_n(env_n)` registros — sobretudo **E78 dislipidemia**, doença comum), que é ~20× o
+core e serve apenas como **teto de subcodificação (*bracketing*)** — **nunca** contado como
+caso de EIM. Os termos *core*, *envelope* e *bracketing* estão definidos no
+[Glossário](glossario.qmd).
+
+O número de destaque do SIA é, portanto, um **intervalo**:
+`r fmt_n(core_n)` (core) **a** `r fmt_n(core_n + lim_n + env_n)` (core + limítrofe + envelope).
 
 ::: {.callout-nota}
 **Detecção/uso, não prevalência.** Cada registro é uma **linha de produção ambulatorial**,
@@ -89,8 +100,9 @@ D$m_tracadora |>
 ::: {.callout-nota}
 **Perfil de traçadoras difere por base** — não é ruído, é a **janela seletiva** por
 gravidade/sobrevivência (SIA = crônicos acompanhados). **Biotinidase** é codificada pelo MS
-em **E88.9** (balde inespecífico do envelope) e reportada à parte como proxy/TETO. Rótulos
-CID-10 de 4 caracteres de algumas traçadoras ainda `[VERIFICAR]`.
+em **E88.9** (balde inespecífico do envelope) e reportada à parte como proxy/TETO. Os
+rótulos CID-10 de 4 caracteres foram **auditados** contra a estrutura da CID-10
+(`scripts/eim_lookup.R`); resta confirmar apenas E88.4 na tabela oficial DATASUS V2008.
 :::
 
 ## Estrutura etária e por sexo dos registros

@@ -84,7 +84,7 @@ resolver_nome <- function(df) {
 # -----------------------------------------------------------------------------
 # 2. SIA core
 # -----------------------------------------------------------------------------
-sia <- readRDS(here::here("data/consolidated/sia_eim_core.rds")) |>
+sia <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds")) |>
   dplyr::filter(camada == "core") |>
   dplyr::select(pa_proc_id, tracadora, subgrupo, pa_qtdapr, pa_valapr)
 

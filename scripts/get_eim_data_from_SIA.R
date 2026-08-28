@@ -10,7 +10,7 @@
 #   - mantém REGISTROS COMPLETOS só de camada core+limítrofe (raros → cabem em RAM);
 #   - agrega o ENVELOPE a CONTAGENS (uf×ano×tri×subgrupo×sexo×faixa + volume/valor):
 #     o envelope é teto de subcodificação (bracketing), não precisa de microdados.
-# Saídas: data/consolidated/sia_eim_core.rds (core+limítrofe, completo)
+# Saídas: data/consolidated/sia_eim_core_limitrofe.rds (core+limítrofe, completo)
 #         data/parquet/sia_eim/ (core+limítrofe particionado ano+uf)
 #         data/consolidated/sia_eim_envelope_agg.rds (envelope agregado)
 #         data/consolidated/sia_eim_volume_agg.rds (volume/valor por estrato, TODAS camadas)
@@ -97,7 +97,7 @@ cat("• registros por ano (core+limítrofe):\n"); print(dplyr::count(core, ano,
 core |> dplyr::mutate(uf = uf_arquivo) |>
   arrow::write_dataset(here::here("data/parquet/sia_eim"),
                        partitioning = c("ano","uf"), format="parquet")
-saveRDS(core, here::here("data/consolidated/sia_eim_core.rds"))
+saveRDS(core, here::here("data/consolidated/sia_eim_core_limitrofe.rds"))
 saveRDS(env,  here::here("data/consolidated/sia_eim_envelope_agg.rds"))
 saveRDS(vol,  here::here("data/consolidated/sia_eim_volume_agg.rds"))
 message(sprintf("\n✓ SIA-EIM: %d core+limítrofe (Parquet+rds) + envelope/volume agregados.",

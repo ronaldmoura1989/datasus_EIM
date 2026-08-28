@@ -41,7 +41,7 @@ SUBGRUPOS_ALVO <- c(
 # -----------------------------------------------------------------------------
 # 1. Carregar core + normalizar quase-identificadores
 # -----------------------------------------------------------------------------
-sia_core <- readRDS(here::here("data/consolidated/sia_eim_core.rds")) |>
+sia_core <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds")) |>
   dplyr::filter(camada == "core", subgrupo %in% SUBGRUPOS_ALVO) |>
   dplyr::select(subgrupo, tracadora, sexo, idade_anos, pa_munpcn, pa_racacor,
                 competencia, ano)

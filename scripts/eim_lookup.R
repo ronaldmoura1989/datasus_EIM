@@ -15,8 +15,15 @@
 #               gota, hemocromatose, intolerância à lactose, "outros/SOE") →
 #               TETO de subcodificação (bracketing), NUNCA caso confirmado.
 #
-# ⚠️ [VERIFICAR rótulo]: o portal DATASUS CID10 V2008 esteve inacessível na redação;
-#    os rótulos de 4 caracteres provêm de conhecimento clínico + validação cruzada.
+# AUDITORIA DE RÓTULOS (ver ref/avaliacao_critica_externa.md §6b): os 4os caracteres
+#    foram conferidos contra a estrutura da CID-10. Correções aplicadas:
+#      · E80.3 NÃO é bilirrubina (é catalase/peroxidase); Gilbert = E80.4 (comum →
+#        envelope), Crigler-Najjar = E80.5 (raro grave → core). Antes ambos caíam
+#        no fallback E80 como "limítrofe".
+#      · E85.0 e E85.2 são HEREDOFAMILIARES (→ core); antes caíam no fallback E85
+#        rotulado "amiloidose adquirida". E85.3/.4/.8/.9 → envelope.
+#    Pendências que permanecem [VERIFICAR] contra a tabela oficial DATASUS V2008:
+#      · E88.4 (mitocondrial) — provavelmente inexistente na V2008.
 #    Os CIDs marcados `pcdt_ms = TRUE` foram CONFIRMADOS na "Lista de Doenças Raras
 #    no âmbito do SUS" (MS/CGRAR) — ver ref/crosswalk_lista_raras_MS.md.
 #
@@ -47,13 +54,13 @@ EIM_LOOKUP <- tibble::tribble(
   # ---- Aminoacidopatias aromáticas (E70) ------------------------------------
   "E700",  "aminoacidopatia_PKU",          "aminoacidopatia",  "core",      "PKU",               "AR",     TRUE,     TRUE,     "nucleo_eim",       "Fenilcetonúria clássica (MS: E70.0). Fórmula isenta de Phe.",
   "E701",  "aminoacidopatia_hiperfenil",   "aminoacidopatia",  "core",      "PKU",               "AR",     TRUE,     FALSE,    "nucleo_eim",       "Outras hiperfenilalaninemias / def. BH4.",
-  "E702",  "aminoacidopatia_tirosina",     "aminoacidopatia",  "core",      "Tirosinemia",       "AR",     FALSE,    FALSE,    "nucleo_eim",       "Tirosinemia I (nitisinona/NTBC). [VERIFICAR 4o char]",
+  "E702",  "aminoacidopatia_tirosina",     "aminoacidopatia",  "core",      "Tirosinemia",       "AR",     FALSE,    FALSE,    "nucleo_eim",       "E70.2 = distúrbios do metab. da tirosina: tirosinemia I (nitisinona/NTBC) + alcaptonúria. AUDITADO.",
   "E703",  "albinismo",                    "outros",           "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Albinismo — não é EIM metabólico clássico.",
   "E70",   "aminoacidopatia_aromaticos",   "aminoacidopatia",  "limitrofe", NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Fallback E70 (E708/E709 não especificados).",
   # ---- BCAA, acidúrias orgânicas, FAOD (E71) --------------------------------
   "E710",  "aminoacidopatia_MSUD",         "aminoacidopatia",  "core",      "MSUD",              "AR",     TRUE,     FALSE,    "nucleo_eim",       "Doença da urina do xarope de bordo (leucinose).",
-  "E711",  "acuduria_organica",            "acuduria_organica","core",      NA,                  "AR",     TRUE,     FALSE,    "nucleo_eim",       "Acidúrias orgânicas de BCAA (propiônica/metilmalônica/isovalérica). [VERIFICAR]",
-  "E713",  "faod",                         "faod",             "core",      NA,                  "AR",     TRUE,     FALSE,    "nucleo_eim",       "Distúrbios da oxidação de ácidos graxos, incl. carnitina/CPT (E71.4 NÃO existe na CID-10 → cai aqui).",
+  "E711",  "acuduria_organica",            "acuduria_organica","core",      NA,                  "AR",     TRUE,     FALSE,    "nucleo_eim",       "E71.1 = outros distúrbios do metab. de BCAA: acidúrias propiônica/metilmalônica/isovalérica. AUDITADO.",
+  "E713",  "faod",                         "faod",             "core",      NA,                  "AR",     TRUE,     FALSE,    "nucleo_eim",       "E71.3 = distúrbios do metab. de ácidos graxos: FAOD/carnitina/CPT — mas AGREGA TAMBÉM a adrenoleucodistrofia X (peroxissomal, XL), logo `heranca=AR` vale para a maioria, não para todos. E71.4 não existe na CID-10. AUDITADO.",
   "E71",   "aminoacidopatia_BCAA_outros",  "aminoacidopatia",  "limitrofe", NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Fallback E71 (E712/E715/E718/E719).",
   # ---- Outros aminoácidos + ciclo da ureia (E72) ----------------------------
   "E720",  "transporte_aminoacidos",       "aminoacidopatia",  "core",      NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Cistinúria, Hartnup, Lowe.",
@@ -94,26 +101,39 @@ EIM_LOOKUP <- tibble::tribble(
   "E791",  "lesch_nyhan",                  "purina_pirimidina","core",      "Lesch_Nyhan",       "XL",     FALSE,    FALSE,    "nucleo_eim",       "Síndrome de Lesch-Nyhan (HPRT1) — LIGADA AO X.",
   "E79",   "purina_pirimidina_outros",     "purina_pirimidina","limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Fallback E79 (def. ADA/PNP, xantinúria em E798/E799).",
   # ---- Porfirias / bilirrubina (E80) ----------------------------------------
-  "E800",  "porfiria",                     "porfiria",         "core",      NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Porfiria eritropoética congênita.",
+  # AUDITADO contra a CID-10 (E80.0–E80.7, sem .8/.9). Correção: E80.3 é
+  # catalase/peroxidase, NÃO bilirrubina; Gilbert é E80.4 (comum → envelope) e
+  # Crigler-Najjar é E80.5 (raro grave → core). Antes ambos caíam no fallback E80.
+  "E800",  "porfiria",                     "porfiria",         "core",      NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Porfiria eritropoética hereditária (congênita/protoporfiria).",
   "E801",  "porfiria_cutanea_tardia",      "porfiria",         "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "PCT — predominantemente adquirida (HCV/álcool).",
-  "E802",  "porfiria_aguda",               "porfiria",         "core",      NA,                  "AD",     FALSE,    FALSE,    "nucleo_eim",       "Porfirias agudas (intermitente/variegata/coproporfiria).",
-  "E803",  "metab_bilirrubina",            "bilirrubina",      "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Gilbert (comum) / Crigler-Najjar (raro). [VERIFICAR 4o char]",
-  "E80",   "porfiria_bilirrubina_outros",  "porfiria",         "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Fallback E80 (E804/E806/E807).",
+  "E802",  "porfiria_aguda",               "porfiria",         "core",      NA,                  "AD",     FALSE,    FALSE,    "nucleo_eim",       "Outras porfirias (aguda intermitente/variegata/coproporfiria).",
+  "E803",  "defeito_catalase",             "outros",           "core",      NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Defeitos da catalase/peroxidase (acatalasemia, Takahara). EIM real, benigno.",
+  "E804",  "sindrome_gilbert",             "bilirrubina",      "envelope",  NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: sd. de Gilbert — benigna e COMUM (~5% da população). Nunca caso raro.",
+  "E805",  "crigler_najjar",               "bilirrubina",      "core",      NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Sd. de Crigler-Najjar (UGT1A1) — AR grave, kernicterus neonatal.",
+  "E806",  "metab_bilirrubina_outros",     "bilirrubina",      "limitrofe", NA,                  "AR",     FALSE,    FALSE,    "nucleo_eim",       "Outros distúrbios da bilirrubina (Dubin-Johnson, Rotor) — agregador.",
+  "E80",   "porfiria_bilirrubina_ne",      "porfiria",         "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Fallback E80 (E80.7 — bilirrubina não especificada).",
   # ---- Metais (E83) — Wilson dentro, hemocromatose fora ---------------------
   "E830",  "metab_cobre",                  "metais",           "core",      "Wilson",            "AR",     FALSE,    FALSE,    "nucleo_eim",       "Doença de Wilson (ATP7B) + Menkes (ATP7A, XL). EIM tardio tratável (quelantes).",
   "E831",  "metab_ferro",                  "metais",           "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: hemocromatose HFE comum, penetrância baixa → fora do núcleo.",
   "E83",   "metab_minerais_outros",        "metais",           "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Fallback E83 (zinco E832, fósforo E833, cálcio E835, SOE).",
   # ---- Fibrose cística (E84) — subgrupo ISOLADO -----------------------------
   "E84",   "fibrose_cistica",              "fibrose_cistica",  "core",      "Fibrose_cistica",   "AR",     TRUE,     TRUE,     "nucleo_eim",       "Fibrose cística (MS: E84). Benchmark de EIM bem codificado. SEMPRE reportar isolada.",
-  # ---- Amiloidose (E85) — familiar (TTR) dentro -----------------------------
+  # ---- Amiloidose (E85) — heredofamiliares (E85.0/.1/.2) dentro -------------
+  # AUDITADO: E85.0/.1/.2 são HEREDOFAMILIARES (core); E85.3/.4/.8/.9 são
+  # adquiridas (AA, AL, senil) → envelope. Antes, E85.0 e E85.2 caíam no fallback
+  # rotulado "adquirida" e ficavam fora do core indevidamente.
+  "E850",  "amiloidose_familiar",          "amiloidose",       "core",      NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Amiloidose heredofamiliar não neuropática (inclui febre familiar do Mediterrâneo).",
   "E851",  "amiloidose_familiar",          "amiloidose",       "core",      "PAF_TTR",           "AD",     FALSE,    TRUE,     "nucleo_eim",       "Polineuropatia amiloidótica familiar (TTR) (MS: E85.1). EIM tardio.",
-  "E85",   "amiloidose_outras",            "amiloidose",       "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Fallback E85 (amiloidose adquirida — não-EIM).",
+  "E852",  "amiloidose_familiar",          "amiloidose",       "core",      NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Amiloidose heredofamiliar não especificada.",
+  "E853",  "amiloidose_adquirida",         "amiloidose",       "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: amiloidose sistêmica secundária (AA) — adquirida, não-EIM.",
+  "E854",  "amiloidose_adquirida",         "amiloidose",       "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: amiloidose limitada a órgão — adquirida, não-EIM.",
+  "E85",   "amiloidose_ne",                "amiloidose",       "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: fallback E85 (E85.8/E85.9 — AL/senil, adquiridas).",
   # ---- E88 — "outros distúrbios metabólicos" (ENVELOPE + biotinidase) -------
-  "E880",  "metab_proteinas_plasma",       "outros",           "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "Def. alfa-1-antitripsina pode cair aqui. [VERIFICAR]",
-  "E884",  "mitocondrial",                 "mitocondrial",     "limitrofe", NA,                  "mtDNA",  FALSE,    FALSE,    "nucleo_eim",       "Algumas mitocondriais/acidose láctica. [VERIFICAR — muito subestimado]",
+  "E880",  "metab_proteinas_plasma",       "outros",           "limitrofe", NA,                  "mista",  FALSE,    FALSE,    "nucleo_eim",       "E88.0 = distúrbios do metab. das proteínas plasmáticas NCOP — def. de alfa-1-antitripsina cai aqui. AUDITADO.",
+  "E884",  "mitocondrial",                 "mitocondrial",     "limitrofe", NA,                  "mtDNA",  FALSE,    FALSE,    "nucleo_eim",       "E88.4 (distúrbios do metab. mitocondrial) foi acrescentado em ATUALIZAÇÃO POSTERIOR da CID-10 e provavelmente NÃO existe na V2008 usada pelo DATASUS → linha possivelmente INERTE. Mitocondriais caem de fato em E88.8/E88.9 (envelope). [VERIFICAR na tabela oficial antes de remover]",
   "E889",  "def_biotinidase_envelope",     "outros",           "envelope",  "Biotinidase",       "AR",     TRUE,     TRUE,     "nucleo_eim",       "MS coloca DEF. BIOTINIDASE em E88.9 (envelope!). Triagem neonatal. Só isolável por contexto.",
   "E88",   "metab_outros_SOE",             "outros",           "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE máximo: outros/SOE (agrega mitocondriais/CDG não classificados).",
-  "E90",   "metab_manifest_alhures",       "outros",           "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: distúrbios metabólicos em doenças classificadas alhures (código asterisco).",
+  "E90",   "metab_manifest_alhures",       "outros",           "envelope",  NA,                  NA,       FALSE,    FALSE,    "nucleo_eim",       "ENVELOPE: distúrbios metabólicos em doenças classificadas alhures. É código ASTERISCO — por regra da CID-10 nunca é causa básica no SIM (só manifestação).",
 
   # ==== EIM / doenças de triagem FORA do bloco E70–E90 =======================
   # (rastrear em diagsec* do SIH e nas linhas do SIM; reportar como subgrupos
@@ -123,7 +143,7 @@ EIM_LOOKUP <- tibble::tribble(
 
   # ==== Raras NÃO-EIM da lista do MS — só CONTEXTO de rede de doenças raras ===
   # (NÃO entram em nenhuma taxa de EIM; carregadas para cruzamento/benchmark)
-  "G120",  "atrofia_muscular_espinhal",    "contexto_raras",   "limitrofe", "AME",               "AR",     FALSE,    TRUE,     "contexto_raras",   "AME (MS: G12.0). Rara não-EIM; contexto.",
+  "G120",  "atrofia_muscular_espinhal",    "contexto_raras",   "limitrofe", "AME",               "AR",     FALSE,    TRUE,     "contexto_raras",   "AME (MS: G12.0) — capta só o tipo I (Werdnig-Hoffmann); AME II/III são G12.1 e ficam FORA. Rara não-EIM; contexto.",
   "D66",   "hemofilia_A",                  "contexto_raras",   "limitrofe", "Hemofilia_A",       "XL",     FALSE,    TRUE,     "contexto_raras",   "Hemofilia A (MS: D66). Contexto.",
   "D67",   "hemofilia_B",                  "contexto_raras",   "limitrofe", "Hemofilia_B",       "XL",     FALSE,    TRUE,     "contexto_raras",   "Hemofilia B (MS: D67). Contexto.",
 

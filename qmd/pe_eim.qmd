@@ -9,7 +9,7 @@ toc: false
 source("_common.R")
 
 # --- SIA core, recorte PE (uf_pcn == "PE") ------------------------------------
-sia_core <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))
+sia_core <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds"))
 sia_pe   <- sia_core |> dplyr::filter(uf_pcn == "PE", camada == "core")
 
 # --- SIH nacional, recorte PE (uf_res == "PE") --------------------------------
