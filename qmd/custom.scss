@@ -34,3 +34,10 @@ h1, h2, h3 { color: $verde-escuro; }
   border-left: 4px solid $verde-medio; background: rgba(143,211,199,.20);
   padding: .6rem .9rem; border-radius: 6px; font-size: .92rem;
 }
+
+// Cautela metodológica de peso (viés de definição de caso, contaminação de camada):
+// mesma família visual da nota, em índigo, para destacar sem alarmar.
+.callout-alerta {
+  border-left: 4px solid $indigo-medio; background: rgba(62,92,138,.12);
+  padding: .6rem .9rem; border-radius: 6px; font-size: .92rem;
+}

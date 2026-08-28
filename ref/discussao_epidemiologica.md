@@ -15,6 +15,13 @@
 
 # PARTE A — Discussão dos resultados
 
+> ⚠️ **NÚMEROS DESATUALIZADOS — pendente de regeneração.** A definição de caso do SIM
+> mudou: `eim_causa_basica` usava a camada *ampliado* (core+limítrofe+**envelope**) e passou
+> a usar **core**, alinhando-se a SIA e SIH. A lookup também foi corrigida (E80.3/E80.4/E80.5
+> e E85.0/E85.2). **Todos os números de mortalidade abaixo precedem essas correções** e
+> superestimam a carga de EIM. Regenerar com o pipeline antes de citar.
+> Ver `ref/avaliacao_critica_externa.md`.
+
 ## A.1 Carga e tendência de uso de serviço: por que a internação sobe e a mortalidade fica estável
 
 O achado mais nítido da série é uma **dissociação temporal entre uso de serviço e óbito**.

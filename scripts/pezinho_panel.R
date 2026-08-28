@@ -29,7 +29,7 @@ norm4 <- function(v) stringr::str_sub(stringr::str_trim(toupper(as.character(v))
 conta_pref <- function(vec, pref) sum(stringr::str_starts(norm4(vec), pref), na.rm=TRUE)
 
 # ---- Fontes por base: EIM-coberto + GAPS (campo PRINCIPAL) ----
-sia_eim <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))
+sia_eim <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds"))
 sih_eim <- readRDS(here::here("data/consolidated/sih_eim_nacional.rds"))
 sim_eim <- readRDS(here::here("data/consolidated/sim_eim_nacional.rds"))
 pz_sia  <- readRDS(here::here("data/consolidated/pezinho_sia.rds"))

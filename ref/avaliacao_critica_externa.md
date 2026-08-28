@@ -267,3 +267,43 @@ para o mesmo KPI em duas páginas.
 5. Declarar completude de 2025 e "UF de residência" nos mapas nacionais.
 6. Empirical Bayes nos mapas; triangulação em base 100; bracketing nos KPIs da home.
 7. Razão mortalidade/detecção por UF (viável já); cobertura de triagem (exige nova extração por `pa_proc_id`).
+
+---
+
+## Estado das correções (aplicadas em código)
+
+As prioridades 1–4 foram implementadas. **O site em `docs/` ainda carrega os números
+antigos** — o ambiente de desenvolvimento não tem `data/`, R nem Quarto, então o pipeline
+precisa ser re-executado na máquina que tem os microdados (passos no README).
+
+| Prioridade | O que mudou | Onde |
+|---|---|---|
+| 1 | `eim_causa_basica` = camada **core** (era `"ampliado"`); novas colunas `eim_cb_ampliado` (teto), `cid_cb` e `camada_cb` para auditoria | `scripts/get_eim_data_from_SIM.R` |
+| 1 | Nova seção **"Composição do numerador"**: óbitos por camada + top 25 CID de 4 dígitos com idade mediana ao óbito por código | `qmd/sim_eim.qmd` |
+| 1 | KPI do SIM vira **intervalo core–teto**; idade mediana ao óbito publicada nas duas camadas (o contraste é o termômetro da contaminação) | `qmd/index.qmd`, `qmd/sim_eim.qmd` |
+| 2 | `sia_eim_core.rds` → **`sia_eim_core_limitrofe.rds`** (o arquivo sempre conteve as duas camadas) e `sia_eim.qmd` passa a filtrar `camada == "core"` | 9 arquivos |
+| 3 | "Todas as três bases em alta" → texto que descreve a **divergência** SIA/SIH ↑ vs SIM estável; "eixo mais estável e mais robusto" → **cobertura ≠ validade**; adicionadas as cautelas de 2021 como ano-base pandêmico e de não-comensurabilidade das séries | `qmd/index.qmd` |
+| 3 | A inferência circular dos 95,8% foi **substituída** por um bloco que explica os dois vieses e por que o percentual descreve a lookup, não a letalidade | `qmd/sim_eim.qmd` |
+| 4 | **E80.3** = catalase/peroxidase (era rotulado bilirrubina); **E80.4** Gilbert → envelope; **E80.5** Crigler-Najjar → core; **E80.6** agregador → limítrofe | `scripts/eim_lookup.R` |
+| 4 | **E85.0/E85.2** heredofamiliares → core; **E85.3/E85.4** e o fallback E85 → envelope (adquiridas) | `scripts/eim_lookup.R` |
+| 4 | Auditoria dos demais 4os caracteres: resolvidos os `[VERIFICAR]` de E70.2, E71.1, E71.3 e E88.0; anotado que **E88.4 provavelmente não existe** na CID-10 V2008 do DATASUS (linha possivelmente inerte); anotado que **G12.0 capta só AME tipo I** e que **E90 é código asterisco** (nunca causa básica) | `scripts/eim_lookup.R` |
+
+**Decisões de projeto tomadas na implementação:**
+
+- **As traçadoras continuam contadas pelo CID nomeado, independentemente da camada** — regra
+  que já estava documentada na §2 do `RESULTADOS_PRELIMINARES.md`. Por isso
+  `descritivo_cross_base.R` e `incidencia_nascimento_tracadoras.R` passaram a usar
+  `eim_cb_ampliado` **explicitamente** nessas seções: sem isso a linha "Biotinidase
+  (E88.9 TETO)" zeraria, perdendo justamente o achado de que o MS codifica a biotinidase
+  num balde inespecífico.
+- **Nenhuma taxa é escrita à mão.** As ocorrências de `~1,66/100 mil` e `1,69 → 1,65 → 1,66`
+  em `index.qmd`, `sim_eim.qmd` e `discussao.qmd` viraram R inline. Era exatamente esse
+  hábito que permitiu a home contradizer a página do SIM.
+- **Guarda de contrato** em `qmd/_common.R`: um `quarto render` sobre consolidados antigos
+  aborta com mensagem explícita, em vez de falhar no meio de um chunk.
+- `RESULTADOS_PRELIMINARES.md`, `ref/discussao_epidemiologica.md` e `ref/discussao_genetica.md`
+  levam banner de **números desatualizados** — não foi possível recalculá-los aqui.
+
+**Pendente** (prioridades 5–7, não implementadas): declarar completude de 2025;
+Empirical Bayes nos mapas; triangulação em base 100; razão mortalidade/detecção por UF;
+cobertura de triagem (exige nova extração do SIA por `pa_proc_id`).

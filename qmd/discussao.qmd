@@ -7,6 +7,32 @@ toc: false
 ```{r setup}
 #| include: false
 source("_common.R")
+
+# Números-síntese CALCULADOS (nunca escritos à mão): mudam com a camada da
+# definição de caso — ver ref/avaliacao_critica_externa.md §1.
+tx_sim <- D$sim |> dplyr::filter(eim_causa_basica) |>
+  contar_estrato(col_uf = "uf_res") |>
+  taxas_padronizadas(D$pop, grupos = "ano")
+tx_sim_txt <- paste(fmt_2(tx_sim$taxa_pad[order(tx_sim$ano)]), collapse = " → ")
+
+mi_sim <- D$sim |> dplyr::filter(eim_causa_basica, obito_infantil) |>
+  dplyr::count(ano, name = "obitos") |>
+  dplyr::left_join(D$nv |> dplyr::filter(ano %in% ANOS_SIM) |> dplyr::group_by(ano) |>
+                     dplyr::summarise(nv = sum(nv), .groups = "drop"), by = "ano") |>
+  dplyr::mutate(por_100k = 1e5 * obitos / nv)
+mi_faixa  <- paste0(fmt_2(min(mi_sim$por_100k)), "–", fmt_2(max(mi_sim$por_100k)))
+mi_obitos <- paste0(fmt_n(min(mi_sim$obitos)), "–", fmt_n(max(mi_sim$obitos)))
+
+# Concentração no Recife (código IBGE 6 díg. 261160) — ver pe_eim.qmd §Recife.
+REC_6 <- "261160"
+pe_sia_n  <- D$sia |> dplyr::filter(camada == "core", uf_pcn == "PE") |>
+  dplyr::select(pa_munpcn) |> dplyr::collect()
+pct_rec_sia <- 100 * sum(substr(pe_sia_n$pa_munpcn, 1, 6) == REC_6, na.rm = TRUE) /
+  nrow(pe_sia_n)
+pe_sim <- D$sim |> dplyr::filter(eim_causa_basica, uf_res == "PE")
+pct_rec_obi <- 100 * sum(substr(pe_sim$codmunres, 1, 6) == REC_6, na.rm = TRUE) / nrow(pe_sim)
+rec_txt <- paste0("~", fmt_1(pct_rec_sia), "% do ambulatorial de PE, mas ~",
+                  fmt_1(pct_rec_obi), "% dos óbitos")
 ```
 
 Esta seção reúne **duas leituras independentes** dos resultados do painel — uma de
@@ -28,11 +54,10 @@ primária. Ver o [Glossário](glossario.qmd) para os termos técnicos.
 ## O que os dados mostram — em uma frase
 
 A **internação por EIM sobe ~+9%/ano** (2,17 → 2,83/100 mil hab) enquanto a **mortalidade
-padronizada fica estável** (~1,66/100 mil) — padrão **compatível com expansão de triagem e
-de terapia** (não com aumento de incidência); a **mortalidade infantil por EIM** (~3,2–3,7/
-100 mil NV, ~82–100 óbitos/ano) concentra-se nos **letais precoces** cuja triagem ainda está
-em implantação; a rede é **centralizada** (Recife concentra ~77% do ambulatorial de PE, mas
-~12,5% dos óbitos); e a **codificação é, ela própria, um achado** (biotinidase invisível no
+padronizada fica estável** (`r tx_sim_txt`/100 mil) — padrão **compatível com expansão de
+triagem e de terapia** (não com aumento de incidência); a **mortalidade infantil por EIM**
+(`r mi_faixa`/100 mil NV, `r mi_obitos` óbitos/ano) concentra-se nos **letais precoces**
+cuja triagem ainda está em implantação; a rede é **centralizada** (Recife concentra `r rec_txt`); e a **codificação é, ela própria, um achado** (biotinidase invisível no
 balde E88.9; Gaucher/Fabry/Niemann-Pick fundidos em E75.2).
 
 ## Recomendações prioritárias para o poder público (síntese)
@@ -45,8 +70,8 @@ recs <- tibble::tribble(
   ~`Prioridade`, ~`Recomendação`, ~`Achado que a motiva`, ~`Indicador de acompanhamento`,
   "Alta", "Ampliar e monitorar a triagem neonatal (Lei 14.154) por UF, priorizando tratabilidade × letalidade — e acoplar protocolo de emergência metabólica aos letais precoces (MSUD, ciclo da ureia)", "Dissociação incidência × mortalidade infantil: tratáveis rastreadas quase não matam; letais precoces morrem mesmo detectados (janela terapêutica estreita)", "Cobertura efetiva (% de NV triados por doença/etapa por UF); tempo coleta→resultado→referência",
   "Alta", "Fechar o ciclo da triagem: laboratório confirmatório (espectrometria/enzimático/molecular) + geneticista clínico", "Triagem positiva é suspeita, não diagnóstico; a CID-10 não chega à doença molecular", "% de triagens positivas com confirmação; % com diagnóstico molecular específico",
-  "Alta", "Vigiar a mortalidade infantil por EIM como indicador-sentinela nos Comitês de Óbito, com investigação nominal", "~82–100 óbitos infantis/ano, concentrados na Etapa 2 ainda em implantação — cada óbito = oportunidade perdida de rastreio", "Coeficiente/100 mil NV por UF; % dos óbitos infantis que haviam sido triados",
-  "Alta", "Regionalizar a rede de referência, levar telegenética ao interior e qualificar o fluxo de TFD", "Recife concentra ~77% do ambulatorial mas ~12,5% dos óbitos — vazio assistencial no interior; óbito ocorre antes de chegar à referência", "Razão detecção/óbitos por macrorregião; vazios de pontos de coleta; nº geneticistas/100 mil hab",
+  "Alta", "Vigiar a mortalidade infantil por EIM como indicador-sentinela nos Comitês de Óbito, com investigação nominal", paste0(mi_obitos, " óbitos infantis/ano, concentrados na Etapa 2 ainda em implantação — cada óbito = oportunidade perdida de rastreio"), "Coeficiente/100 mil NV por UF; % dos óbitos infantis que haviam sido triados",
+  "Alta", "Regionalizar a rede de referência, levar telegenética ao interior e qualificar o fluxo de TFD", paste0("Recife concentra ", rec_txt, " — vazio assistencial no interior; óbito ocorre antes de chegar à referência"), "Razão detecção/óbitos por macrorregião; vazios de pontos de coleta; nº geneticistas/100 mil hab",
   "Alta (pré-condição)", "Qualificar a codificação: CID específico (tirar biotinidase de E88.9), vínculo procedimento-APAC↔doença, Orphacode", "Biotinidase invisível em E88.9; E75.2/E74.0 fundem lisossômicas; E71.4 zerado; envelope ~20× o core", "Razão core:inespecífico (E88.x) como índice de qualidade; % de TRE com doença identificável",
   "Alta", "Gerir o alto custo (TRE, moduladores de CFTR/Trikafta, fórmulas) e antecipar a judicialização; garantir dispensação regular por PCDT", "MPS com peso hospitalar de infusão; gasto medido é piso (parte via judicial/compra central); FC pressiona com moduladores de CFTR", "Gasto por caso desagregado via APAC-enzima; % atendido por via administrativa vs judicial; projeção de demanda",
   "Média", "Estruturar aconselhamento genético e triagem de portadores em regiões de alta consanguinidade (NE)", "Maioria dos EIM é autossômica recessiva; consanguinidade/efeito fundador no NE eleva a incidência real (hipótese)", "Nº de famílias com caso-índice que receberam aconselhamento; cobertura pré-concepcional",

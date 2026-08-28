@@ -1,5 +1,12 @@
 # EIM no DATASUS — Resultados preliminares (primeiro descritivo cross-base)
 
+> ⚠️ **NÚMEROS DESATUALIZADOS — pendente de regeneração.** A definição de caso do SIM
+> mudou: `eim_causa_basica` usava a camada *ampliado* (core+limítrofe+**envelope**) e passou
+> a usar **core**, alinhando-se a SIA e SIH. A lookup também foi corrigida (E80.3/E80.4/E80.5
+> e E85.0/E85.2). **Todos os números de mortalidade abaixo precedem essas correções** e
+> superestimam a carga de EIM. Regenerar com o pipeline antes de citar.
+> Ver `ref/avaliacao_critica_externa.md`.
+
 > Gerado por `scripts/descritivo_cross_base.R` sobre os dados consolidados.
 > Janela: SIA/SIH **2021–2025**, SIM **2021–2023** (DATASUS não publicou SIM 2024+).
 > **Taxas de detecção/uso e mortalidade registrada — NÃO prevalência.** As três bases

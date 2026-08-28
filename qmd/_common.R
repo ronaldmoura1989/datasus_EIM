@@ -46,6 +46,26 @@ D <- local({
 })
 
 # -----------------------------------------------------------------------------
+# Guarda de contrato: as páginas dependem de colunas criadas na consolidação.
+# Sem isto, um render feito sobre consolidados ANTIGOS falha com erro obscuro
+# ("object 'eim_cb_ampliado' not found") no meio de um chunk.
+# -----------------------------------------------------------------------------
+local({
+  exigir <- function(df, cols, script) {
+    faltam <- setdiff(cols, names(df))
+    if (length(faltam))
+      stop(sprintf(paste0("Consolidado desatualizado: faltam a(s) coluna(s) %s.\n",
+                          "  Rode `Rscript %s` antes de renderizar o site.\n",
+                          "  (a definição de caso do SIM passou a ser a camada CORE — ",
+                          "ver ref/avaliacao_critica_externa.md)"),
+                   paste(faltam, collapse = ", "), script), call. = FALSE)
+  }
+  exigir(D$sim, c("eim_causa_basica", "eim_cb_ampliado", "cid_cb", "camada_cb"),
+         "scripts/get_eim_data_from_SIM.R")
+  exigir(D$sih, c("eim_principal", "eim_qualquer"), "scripts/get_eim_data_from_SIH.R")
+})
+
+# -----------------------------------------------------------------------------
 # Tema visual e escalas (paleta PAL_EIM — verde-azulado → índigo; 00_setup.R §1)
 # -----------------------------------------------------------------------------
 theme_eim <- function(base_size = 12) {

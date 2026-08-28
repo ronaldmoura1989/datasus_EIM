@@ -8,6 +8,33 @@ projeto de Hidradenite Supurativa (`../../portfolio/data_sus/datasus_HS/`).
 - **Definição de caso (CID→classe):** [scripts/eim_lookup.R](scripts/eim_lookup.R)
 - **Lista oficial de raras (crosswalk):** [ref/crosswalk_lista_raras_MS.md](ref/crosswalk_lista_raras_MS.md)
 
+## ⚠️ Estado atual: pipeline corrigido, site pendente de re-render
+
+Correções aplicadas ao **código** (ver `ref/avaliacao_critica_externa.md`):
+
+| # | Correção | Arquivo |
+|---|---|---|
+| 1 | `eim_causa_basica` passa de `"ampliado"` (core+limítrofe+**envelope**) para **core**, alinhando o SIM a SIA/SIH; `eim_cb_ampliado` guarda o teto | `scripts/get_eim_data_from_SIM.R` |
+| 2 | `sia_eim_core.rds` → `sia_eim_core_limitrofe.rds` (o arquivo sempre conteve core+limítrofe) e a página do SIA passa a filtrar `camada == "core"` | `scripts/get_eim_data_from_SIA.R`, `qmd/sia_eim.qmd` |
+| 3 | Home: remove "todas as três bases em alta" (falso p/ SIM) e "eixo mais estável e mais robusto"; taxas passam a ser **calculadas**, nunca escritas à mão | `qmd/index.qmd`, `qmd/sim_eim.qmd`, `qmd/discussao.qmd` |
+| 4 | Lookup auditada contra a CID-10: E80.3 é catalase/peroxidase (Gilbert = E80.4 → envelope; Crigler-Najjar = E80.5 → core); E85.0/E85.2 são heredofamiliares → core | `scripts/eim_lookup.R` |
+| + | Nova seção "composição do numerador" (por camada e por CID de 4 dígitos) na página do SIM | `qmd/sim_eim.qmd` |
+
+**O site em `docs/` ainda mostra os números antigos.** Para regenerar, na máquina que
+tem `data/`:
+
+```bash
+Rscript scripts/get_eim_data_from_SIA.R      # regrava o rds com o novo nome
+Rscript scripts/get_eim_data_from_SIM.R      # cria eim_cb_ampliado / cid_cb / camada_cb
+Rscript scripts/descritivo_cross_base.R      # RESULTADOS_PRELIMINARES.md
+Rscript scripts/incidencia_nascimento_tracadoras.R
+quarto render qmd --output-dir ../docs
+```
+
+`qmd/_common.R` tem uma guarda que **aborta o render com mensagem explícita** se os
+consolidados ainda forem os antigos, em vez de falhar no meio de um chunk.
+
+
 ## Diferenças estruturais vs HS
 1. Alvo = **grupo de centenas de CIDs** (E70–E90 + correlatos) → captura via **lookup**,
    não CID único.

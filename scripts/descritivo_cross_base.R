@@ -9,7 +9,7 @@
 source(here::here("scripts", "00_setup.R"))
 source(here::here("scripts", "calcular_taxas.R"))
 
-sia  <- readRDS(here::here("data/consolidated/sia_eim_core.rds"))        # core+limítrofe
+sia  <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds"))        # core+limítrofe
 sia_env <- readRDS(here::here("data/consolidated/sia_eim_envelope_agg.rds"))
 sih  <- readRDS(here::here("data/consolidated/sih_eim_nacional.rds"))
 sim  <- readRDS(here::here("data/consolidated/sim_eim_nacional.rds"))
@@ -25,7 +25,8 @@ tab_camada <- dplyr::bind_rows(
   tibble::tibble(base="SIA (registros, envelope)", n=sum(sia_env$n)),
   sih |> dplyr::filter(eim_principal) |> dplyr::summarise(base="SIH (AIH, EIM principal core)", n=sum(camada=="core", na.rm=TRUE)),
   sih |> dplyr::summarise(base="SIH (AIH, EIM qualquer campo)", n=sum(eim_qualquer, na.rm=TRUE)),
-  sim |> dplyr::filter(eim_causa_basica) |> dplyr::summarise(base="SIM (óbitos, causa básica)", n=dplyr::n()),
+  sim |> dplyr::filter(eim_causa_basica) |> dplyr::summarise(base="SIM (óbitos, causa básica CORE)", n=dplyr::n()),
+  sim |> dplyr::summarise(base="SIM (óbitos, causa básica AMPLIADO = TETO)", n=sum(eim_cb_ampliado, na.rm=TRUE)),
   sim |> dplyr::summarise(base="SIM (óbitos, qualquer linha)", n=sum(eim_qualquer, na.rm=TRUE))
 )
 print(as.data.frame(tab_camada))
@@ -48,7 +49,10 @@ sia_trac <- dplyr::bind_rows(
 trac <- list(
   SIA       = sia_trac,
   SIH_princ = conta_trac(sih),                              # tracadora de diag_princ
-  SIM_cb    = conta_trac(dplyr::filter(sim, eim_causa_basica))
+  # `eim_cb_ampliado` (e não `eim_causa_basica`, que agora é core) porque a regra
+  # desta seção é contar a traçadora pelo CID nomeado INDEPENDENTEMENTE da camada —
+  # sem isso a Biotinidase (E88.9, envelope) zeraria nesta coluna.
+  SIM_cb    = conta_trac(dplyr::filter(sim, eim_cb_ampliado))
 ) |> purrr::imap(~ dplyr::rename(.x, !!.y := n)) |>
   purrr::reduce(dplyr::full_join, by = "tracadora")
 trac[is.na(trac)] <- 0

@@ -8,55 +8,141 @@ toc: false
 #| include: false
 source("_common.R")
 sim <- D$sim
-n_qualq <- nrow(sim)
-n_cb    <- sum(sim$eim_causa_basica, na.rm = TRUE)
-pct_cb  <- 100 * n_cb / n_qualq
+n_qualq  <- nrow(sim)
+n_cb     <- sum(sim$eim_causa_basica, na.rm = TRUE)   # camada CORE (definição primária)
+n_cb_max <- sum(sim$eim_cb_ampliado,  na.rm = TRUE)   # teto core+limítrofe+envelope
+pct_cb   <- 100 * n_cb / n_qualq
+
+# Taxa padronizada por ano — calculada uma vez, reusada no texto e no gráfico.
+# NUNCA escrever estes valores à mão: eles mudam com a camada da definição de caso.
+num_sim <- sim |> dplyr::filter(eim_causa_basica) |> contar_estrato(col_uf = "uf_res")
+tx_ano  <- taxas_padronizadas(num_sim, D$pop, grupos = "ano")
+tx_txt  <- paste(fmt_2(tx_ano$taxa_pad[order(tx_ano$ano)]), collapse = " → ")
 ```
 
 ```{r kpis}
 #| output: asis
-idade_med <- stats::median(sim$idade_anos[sim$eim_causa_basica], na.rm = TRUE)
+idade_med     <- stats::median(sim$idade_anos[sim$eim_causa_basica], na.rm = TRUE)
+idade_med_max <- stats::median(sim$idade_anos[sim$eim_cb_ampliado],  na.rm = TRUE)
 obitos_inf <- sum(sim$eim_causa_basica & sim$obito_infantil, na.rm = TRUE)
 cat(kpi_row(list(
-  c(fmt_n(n_cb), "óbitos por EIM (causa básica)"),
-  c(paste0(fmt_1(pct_cb), "%"), "dos óbitos com EIM têm EIM como causa básica"),
-  c(paste0(fmt_1(idade_med), " anos"), "idade mediana ao óbito (causa básica)"),
+  c(fmt_n(n_cb),     "óbitos por EIM (causa básica, core)"),
+  c(fmt_n(n_cb_max), "teto core+limítrofe+envelope (bracketing)"),
+  c(paste0(fmt_1(idade_med), " anos"), "idade mediana ao óbito (core)"),
+  c(paste0(fmt_1(idade_med_max), " anos"), "idade mediana ao óbito (teto)"),
   c(fmt_n(obitos_inf), "óbitos infantis por EIM (<1 ano)")
 )))
 ```
 
-Diferentemente de doenças de baixa letalidade, nos EIM a **mortalidade é o eixo central e
-o indicador mais robusto** deste painel. Em
-**`r fmt_1(pct_cb)`%** dos óbitos que mencionam um EIM, ele é a **causa básica** do óbito —
-ou seja, a doença **mata diretamente**, não aparece apenas como contribuinte. O SIM cobre
+Nos EIM a mortalidade é um eixo central do painel: são doenças de **alta letalidade
+precoce**, e o SIM é a base do DATASUS com **melhor cobertura e completude**. O SIM cobre
 **2021–2023** (DATASUS não publicou 2024+).
+
+::: {.callout-alerta}
+**Cobertura boa não é o mesmo que definição de caso válida.** Em doença rara, a causa básica
+sofre os **dois** vieses ao mesmo tempo:
+
+- **Subnotificação** — o EIM verdadeiro é declarado como sepse, insuficiência respiratória ou
+  encefalopatia, e o código E sequer aparece na DO. Esse óbito é **invisível a este painel**:
+  não entra no numerador nem no denominador.
+- **Sobrenotificação** — códigos inespecíficos do capítulo E (E88.9 "distúrbio metabólico não
+  especificado", E78, E85 adquirida) são usados em óbito de adulto/idoso sem relação com EIM.
+
+Por isso **não** se deve ler "`r fmt_1(pct_cb)`% dos óbitos que mencionam EIM têm EIM como
+causa básica" como prova de que a doença *mata diretamente*: o denominador é o conjunto que o
+**próprio filtro** capturou, e o filtro varre `causabas` + linhas. Um EIM que nunca recebeu
+código E não vira "contribuinte" — vira zero. Esse percentual descreve a **estrutura da
+lookup**, não a letalidade da doença.
+
+A leitura honesta é o **intervalo** `r fmt_n(n_cb)`–`r fmt_n(n_cb_max)` óbitos
+(core → teto com limítrofe e envelope), e a diferença entre as **idades medianas ao óbito**
+das duas camadas (`r fmt_1(idade_med)` vs `r fmt_1(idade_med_max)` anos) é o melhor
+termômetro de quanta contaminação de adulto o teto carrega.
+:::
 
 ::: {.callout-nota}
 **Mortalidade registrada, não prevalência.** A mortalidade padronizada por EIM é
-**relativamente estável (~1,66/100 mil)**. A variação por UF combina incidência, acesso a
-diagnóstico/tratamento e **qualidade de codificação** da declaração de óbito.
+**relativamente estável (`r tx_txt`/100 mil em `r min(ANOS_SIM)`–`r max(ANOS_SIM)`)**. A
+variação por UF combina incidência, acesso a diagnóstico/tratamento e **qualidade de
+codificação** da declaração de óbito.
 :::
 
 ## Onde o EIM aparece na Declaração de Óbito
 
 ```{r posicao}
 sim |>
-  dplyr::mutate(posicao = dplyr::if_else(eim_causa_basica, "Causa básica",
-                                         "Outra linha (contribuinte)")) |>
+  dplyr::mutate(posicao = dplyr::case_when(
+    eim_causa_basica ~ "Causa básica — camada core",
+    eim_cb_ampliado  ~ "Causa básica — limítrofe/envelope (teto)",
+    TRUE             ~ "Só em outra linha (contribuinte)")) |>
   dplyr::count(posicao, name = "obitos") |>
   dplyr::mutate(`%` = fmt_1(100 * obitos / sum(obitos)),
                obitos = fmt_n(obitos)) |>
   tabela_eim(titulo = "Posição do EIM na DO (2021–2023)",
-             nota = "O EIM é quase sempre causa básica — mata diretamente, não aparece só como comorbidade contribuinte.")
+             nota = "Descreve a estrutura da captura, NÃO a letalidade: o denominador é o conjunto que o próprio filtro capturou (causabas + linhas). Um EIM declarado como sepse, sem nenhum código E na DO, não aparece como 'contribuinte' — é invisível a esta tabela.")
 ```
+
+## Composição do numerador — por camada e por CID de 4 dígitos
+
+Numa definição de caso feita de **prefixos**, o número final é tão bom quanto os códigos que
+entram nele. Esta seção abre o numerador para auditoria: **nenhum número deste painel deve ser
+citado sem olhar antes esta tabela.**
+
+```{r camada-cb}
+sim |>
+  dplyr::filter(eim_cb_ampliado) |>
+  dplyr::count(camada_cb, name = "obitos") |>
+  dplyr::mutate(
+    Camada = dplyr::recode(camada_cb,
+      core      = "Core — EIM inequívoco (definição primária)",
+      limitrofe = "Limítrofe — EIM porém inespecífico",
+      envelope  = "Envelope — abriga condição comum não-EIM (TETO)"),
+    `%` = fmt_1(100 * obitos / sum(obitos)),
+    obitos = fmt_n(obitos)) |>
+  dplyr::select(Camada, Óbitos = obitos, `%`) |>
+  tabela_eim(
+    titulo = "Óbitos com EIM na causa básica, por camada da definição de caso (2021–2023)",
+    nota = "Só a linha 'core' entra nos números primários do painel. As camadas limítrofe e envelope compõem o TETO de subcodificação (bracketing) e nunca são contadas como caso.")
+```
+
+```{r cid4-cb}
+sim |>
+  dplyr::filter(eim_cb_ampliado, !is.na(cid_cb)) |>
+  dplyr::count(cid_cb, camada_cb, name = "obitos") |>
+  dplyr::arrange(dplyr::desc(obitos)) |>
+  dplyr::slice_head(n = 25) |>
+  dplyr::left_join(
+    sim |> dplyr::filter(eim_cb_ampliado, !is.na(cid_cb)) |>
+      dplyr::group_by(cid_cb) |>
+      dplyr::summarise(idade_med = stats::median(idade_anos, na.rm = TRUE),
+                       .groups = "drop"),
+    by = "cid_cb") |>
+  dplyr::transmute(
+    `CID-10` = cid_cb,
+    Camada   = camada_cb,
+    Óbitos   = fmt_n(obitos),
+    `%`      = fmt_1(100 * obitos / sum(sim$eim_cb_ampliado, na.rm = TRUE)),
+    `Idade mediana ao óbito` = dplyr::if_else(is.na(idade_med), "—",
+                                             paste0(fmt_1(idade_med), " anos"))) |>
+  tabela_eim(
+    titulo = "Top 25 códigos CID-10 de 4 dígitos na causa básica (todas as camadas, 2021–2023)",
+    nota = "Idade mediana alta (≥60 anos) num código de camada envelope/limítrofe é a assinatura de garbage code em declaração de óbito de idoso — não de EIM. É por isso que só a camada core entra no número primário.")
+```
+
+::: {.callout-alerta}
+**Como usar esta tabela.** Um EIM é doença de **letalidade concentrada no período
+neonatal/lactente**. Portanto: código com **idade mediana ao óbito ≥ 60 anos e volume alto** é
+suspeito de ser código inespecífico usado em óbito de idoso, não caso de EIM. Os candidatos
+conhecidos dentro de E70–E90 são **E88.9** (distúrbio metabólico não especificado), **E78**
+(dislipidemia), **E85.3/E85.8/E85.9** (amiloidose adquirida), **E83.1** (hemocromatose) e
+**E79.0** (gota) — todos classificados como *envelope* na lookup, e todos **fora** do número
+primário. Os *garbage codes* clássicos **E86** (depleção de volume) e **E87** (distúrbios
+hidroeletrolíticos) **não** integram a definição de caso deste painel em nenhuma camada.
+:::
 
 ## Mortalidade padronizada por EIM (2021–2023)
 
 ```{r tx-mort}
-num_sim <- sim |> dplyr::filter(eim_causa_basica) |>
-  contar_estrato(col_uf = "uf_res")
-tx_ano <- taxas_padronizadas(num_sim, D$pop, grupos = "ano")
-
 tx_ano |>
   ggplot(aes(ano, taxa_pad)) +
   geom_ribbon(aes(ymin = ic_inf, ymax = ic_sup), fill = "#8FD3C7", alpha = 0.5) +
@@ -66,7 +152,8 @@ tx_ano |>
   scale_x_continuous(breaks = ANOS_SIM) +
   labs(x = NULL, y = "por 100 mil (padronizada)",
        title = "Mortalidade por EIM (causa básica), padronizada por idade e sexo",
-       subtitle = "Estável: ~1,69 → 1,65 → 1,66 (2021–2023). O denominador estável contrasta com a alta de detecção no SIA/SIH.") +
+       subtitle = paste0("Padronizada: ", tx_txt, " (", min(ANOS_SIM), "–", max(ANOS_SIM),
+                         "). A estabilidade contrasta com a alta de detecção no SIA/SIH.")) +
   theme_eim()
 ```
 
@@ -79,7 +166,7 @@ sim |>
   dplyr::filter(eim_causa_basica) |>
   piramide_etaria(
     titulo = "Pirâmide etária × sexo dos óbitos por EIM (causa básica, 2021–2023)",
-    subtitulo = "Carga nos extremos: letais precoces no <1 ano e acúmulo em adultos.",
+    subtitulo = "Camada core. Compare com a idade mediana do teto ampliado nos KPIs: a diferença mede a contaminação por código inespecífico de adulto.",
     unidade = "óbitos")
 ```
 
@@ -144,6 +231,12 @@ triagem já resolve do que ainda mata.
 
 ::: {.callout-nota}
 - **SIM cobre só 2021–2023** (2024+ ainda não publicado).
+- **Definição de caso = camada core** (corrigido; antes o KPI usava o modo "ampliado", que
+  incluía a camada envelope e não era comparável com SIA/SIH). O teto ampliado continua
+  publicado ao lado, como *bracketing*. Ver a composição do numerador acima e
+  `ref/avaliacao_critica_externa.md`.
+- **Sem suavização espacial** nos mapas por UF: em evento raro, UF de população pequena
+  (AC, RR, AP) oscilam por ruído. Ler os extremos com cautela.
 - Mortalidade infantil (SIM) é robusta; **"detecção 1º ano" via SIA são registros, não
   crianças** (idade SIA mal preenchida) → indica **intensidade**, não incidência.
 - Valores de incidência da literatura `[VERIFICAR]`; supressão de N<5 nas taxas divulgadas.
