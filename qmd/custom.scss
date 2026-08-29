@@ -30,6 +30,15 @@ h1, h2, h3 { color: $verde-escuro; }
 .kpi-card .v { font-size: 1.9rem; font-weight: 700; color: $verde-escuro; line-height: 1.1; }
 .kpi-card .l { font-size: .82rem; color: $petroleo; margin-top: .25rem; }
 
+// Linha discreta de metadados da home: data do render + link das notas de lançamento.
+.meta-atualizacao {
+  display: inline-block; font-size: .85rem; color: $petroleo;
+  margin: 0 0 1.2rem 0; padding: .35rem .8rem;
+  border-left: 3px solid $verde-claro; background: rgba(143,211,199,.14);
+  border-radius: 4px;
+}
+.meta-atualizacao p { margin: 0; }
+
 .callout-nota {
   border-left: 4px solid $verde-medio; background: rgba(143,211,199,.20);
   padding: .6rem .9rem; border-radius: 6px; font-size: .92rem;

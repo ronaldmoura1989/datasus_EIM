@@ -33,7 +33,7 @@ sih <- dplyr::bind_rows(lst); rm(lst); gc(verbose = FALSE)
 cols_diag <- detectar_cols_diag(sih)                 # diag_princ + diag_secun + diagsec1..9
 message("Colunas de diagnóstico detectadas: ", paste(cols_diag, collapse = ", "))
 
-cls <- classificar_eim(sih$diag_princ)               # classe pelo diagnóstico PRINCIPAL
+cls <- classificar_eim_analitico(sih$diag_princ)      # classe pelo diagnóstico PRINCIPAL, escopo restrito
 sih <- sih |>
   coagir_tipos(monetarias = c("val_tot","val_sh","val_sp","val_uti"),
                datas = c("dt_inter","dt_saida")) |>
@@ -63,10 +63,25 @@ sih <- sih |>
     fonte      = "datasus_sih_rd"
   )
 
+# Camada mais específica (core > limítrofe > envelope) encontrada em QUALQUER
+# campo de diagnóstico — o KPI "AIH com EIM em qualquer campo" (sabor b) não
+# distingue core de envelope/fora-do-capítulo-E; sem essa coluna, a home só
+# pode publicar o tamanho do recorte bruto, não um achado (ref. N3/E4 auditoria).
+.PRIORIDADE_CAMADA <- c(core = 1L, limitrofe = 2L, envelope = 3L)
+camadas_por_campo <- purrr::map(cols_diag, ~ classificar_eim_analitico(sih[[.x]])$camada)
+sih$camada_qualquer <- purrr::pmap_chr(camadas_por_campo, function(...) {
+  v <- unlist(list(...)); v <- v[!is.na(v)]
+  if (!length(v)) return(NA_character_)
+  v[which.min(.PRIORIDADE_CAMADA[v])]   # a camada de MENOR prioridade numérica (core=1) vence
+})
+
 cat("\n• sabor principal vs qualquer campo:\n")
 print(sih |> dplyr::summarise(principal = sum(eim_principal, na.rm=TRUE),
                               qualquer  = sum(eim_qualquer,  na.rm=TRUE),
                               aih_distintas = dplyr::n_distinct(n_aih)))
+cat("• KPI 'qualquer campo' por CAMADA mais específica encontrada (honestidade do\n")
+cat("  rótulo — só 'core' é achado; o resto é teto de subcodificação/fora do núcleo):\n")
+print(janitor::tabyl(sih, camada_qualquer))
 cat("• subgrupos (principal, top):\n"); print(head(as.data.frame(dplyr::count(sih, subgrupo, sort=TRUE)), 20))
 cat("• internações por ano:\n"); print(dplyr::count(sih, ano, name = "aih"))
 

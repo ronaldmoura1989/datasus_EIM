@@ -26,12 +26,17 @@ if (!length(arqs)) stop("Nenhum filtrado SIA em ", DIR_SIA, " — rodar rsync pr
 MON <- c("pa_valpro","pa_valapr","pa_vl_cf","pa_vl_cl","pa_vl_inc")
 
 enriquecer <- function(x, uf, ano, tri) {
-  cls <- classificar_eim(x$pa_cidpri)
+  # Classifica pelo PRIMEIRO CID EIM válido (principal → secundário → causa
+  # associada), restrito ao escopo analítico do EIM. Um registro capturado só
+  # por cidsec/cidcas (cidpri não-EIM) herda a camada de quem o capturou, em
+  # vez de ficar com camada=NA e sumir das contagens (ref. N7 da auditoria).
+  cls <- classificar_eim_multi(x$pa_cidpri, x$pa_cidsec, x$pa_cidcas)
   x |>
     coagir_tipos(monetarias = MON) |>
     dplyr::mutate(
       uf_arquivo = uf, ano = ano, trimestre = tri,
       cid_principal = stringr::str_sub(toupper(pa_cidpri), 1, 4),
+      cid_capturado = cls$cid, campo_captura = cls$campo_captura,
       subgrupo = cls$subgrupo, classe = cls$classe, camada = cls$camada,
       tracadora = cls$tracadora, heranca = cls$heranca, escopo = cls$escopo,
       eim_qualquer = eh_eim(pa_cidpri,"ampliado","todos") |
@@ -89,6 +94,15 @@ rm(core_lst, env_lst, vol_lst); gc(verbose=FALSE)
 cat(sprintf("\n• core+limítrofe: %d registros | envelope: %d (agregado) registros\n",
             nrow(core), sum(env$n)))
 cat("• camada (core+limítrofe):\n"); print(janitor::tabyl(core, camada))
+cat("• camada=NA (capturado por eim_qualquer mas sem CID EIM em escopo analítico\n")
+cat("  em nenhum dos 3 campos — não deveria ocorrer; auditar se >0):\n")
+print(sum(is.na(core$camada)))
+cat("• ESCOPO do core (nucleo_eim = E70–E90 stricto sensu; fora_capitulo_E = triagem\n")
+cat("  fora do capítulo E, ex. hipotireoidismo congênito/HAC — reportar como KPI\n")
+cat("  separado, não somar ao 'EIM (E70–E90)' sem rótulo — ref. N3/E4 da auditoria):\n")
+print(janitor::tabyl(dplyr::filter(core, camada == "core"), escopo))
+cat("• campo que capturou o registro (1=principal, 2=secundário, 3=causa associada):\n")
+print(janitor::tabyl(core, campo_captura))
 cat("• subgrupos core+limítrofe (top):\n")
 print(head(as.data.frame(dplyr::count(core, subgrupo, sort=TRUE)), 20))
 cat("• registros por ano (core+limítrofe):\n"); print(dplyr::count(core, ano, name="registros"))

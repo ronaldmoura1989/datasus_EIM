@@ -48,6 +48,11 @@ LIT <- tibble::tribble(
 # do descritivo: a traçadora é contada pelo seu CID nomeado INDEPENDENTEMENTE da
 # camada. Sem isso a linha "Biotinidase (E88.9 TETO)" zeraria, perdendo justamente
 # o achado de que o MS codifica a biotinidase num balde inespecífico.
+# ATENÇÃO (ref/avaliacao_critica_externa.md, achado E3 da auditoria de 2026-08-28):
+# este número usa a camada AMPLIADA, diferente do KPI "mortalidade infantil" da
+# home/sim_eim.qmd (que usa `eim_causa_basica`, camada core). As duas contagens
+# NÃO são o mesmo indicador — a legenda impressa abaixo e a coluna correspondente
+# no CSV deixam isso explícito para não serem lidas como reconciliáveis.
 inf_sim <- sim |>
   dplyr::filter(eim_cb_ampliado, obito_infantil, !is.na(tracadora)) |>
   dplyr::count(tracadora, name = "obitos_inf")
@@ -68,6 +73,14 @@ ic_pois <- function(x, pt, por = 1e5) {           # taxa + IC Poisson exato /100
   tibble::tibble(taxa = r$rate, ic_inf = r$lower, ic_sup = r$upper)
 }
 
+# Traçadoras cujo pipeline de captura EIM NUNCA as inclui (escopo="painel_pezinho":
+# D57/D56/D81/P371 — pipeline próprio, ref. get_pezinho_gaps.R). Para essas, 0 óbitos
+# aqui é ZERO ESTRUTURAL (não medido nesta base), não supressão por N<5 — rotular
+# distinto para não induzir o leitor a achado de caso raro pequeno (auditoria E10).
+TRACADORAS_FORA_PIPELINE_EIM <- EIM_LOOKUP |>
+  dplyr::filter(escopo == "painel_pezinho", !is.na(tracadora)) |>
+  dplyr::pull(tracadora) |> unique()
+
 tab <- tibble::tibble(tracadora = TRIAGEM) |>
   dplyr::left_join(inf_sim, by = "tracadora") |>
   dplyr::left_join(det_sih, by = "tracadora") |>
@@ -79,8 +92,10 @@ mort <- purrr::pmap_dfr(list(tab$obitos_inf), ~ ic_pois(..1, NV_TOTAL_SIM))
 tab <- tab |>
   dplyr::mutate(
     mort_inf_100k_nv = round(mort$taxa, 2),
-    mort_ic          = ifelse(obitos_inf < N_SUPRESSAO, "N<5 (suprimido)",
-                              sprintf("%.2f–%.2f", mort$ic_inf, mort$ic_sup)),
+    mort_ic          = dplyr::case_when(
+      tracadora %in% TRACADORAS_FORA_PIPELINE_EIM ~ "não medido nesta base (painel pezinho)",
+      obitos_inf < N_SUPRESSAO                     ~ "N<5 (suprimido)",
+      TRUE                                          ~ sprintf("%.2f–%.2f", mort$ic_inf, mort$ic_sup)),
     mort_inf_100k_nv = ifelse(obitos_inf < N_SUPRESSAO, NA_real_, mort_inf_100k_nv)) |>
   dplyr::left_join(LIT |> dplyr::select(tracadora, inc_lit_por_100k_nv, fonte), by = "tracadora") |>
   dplyr::mutate(tracadora = rotular(tracadora)) |>
@@ -88,7 +103,8 @@ tab <- tab |>
 
 cat("\n== Incidência AO NASCIMENTO por traçadora de triagem (pool ", min(ANOS_SIM), "–",
     max(ANOS_SIM), "; NV=", format(NV_TOTAL_SIM, big.mark="."), ") ==\n", sep="")
-cat("Mortalidade infantil (SIM causa básica <1a) e detecção 1º ano (SIH/SIA), por 100 mil NV.\n")
+cat("Mortalidade infantil = SIM causa básica <1a, CAMADA AMPLIADA (core+limítrofe+envelope;\n")
+cat("DIFERENTE do KPI core da home/sim_eim.qmd) e detecção 1º ano (SIH/SIA), por 100 mil NV.\n")
 cat("Incidência da literatura = moldura de plausibilidade [VERIFICAR]; gap = subdetecção.\n\n")
 print(as.data.frame(tab))
 

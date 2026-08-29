@@ -138,6 +138,21 @@ conhecidos dentro de E70–E90 são **E88.9** (distúrbio metabólico não espec
 **E79.0** (gota) — todos classificados como *envelope* na lookup, e todos **fora** do número
 primário. Os *garbage codes* clássicos **E86** (depleção de volume) e **E87** (distúrbios
 hidroeletrolíticos) **não** integram a definição de caso deste painel em nenhuma camada.
+
+**A heurística acima também se aplica DENTRO do core, não só ao envelope** (ref.
+N4 da auditoria de 2026-08-28). **E84 (fibrose cística) domina o numerador core**
+— maioria dos óbitos "core" — com **idade mediana ao óbito 60–68 anos** e mais da
+metade dos casos com ≥50 anos, contra **idade mediana de 11 anos e só ~4% ≥50
+anos** para fibrose cística no SIA (ver [Ambulatorial](sia_eim.qmd)). Esse
+contraste interno ao próprio painel indica que parte relevante do E84 na
+causa básica de óbito é provável **fibrose PULMONAR** codificada por engano
+sob E84 (miscodificação por proximidade de nome, não de doença), e não FC
+verdadeira. **A idade mediana ao óbito reportada nos KPIs desta página (core)
+carrega esse viés** — sem E84 e outros códigos de manifestação adulta
+(Wilson, amiloidose familiar), o perfil etário do core seria bem mais
+pediátrico. Recomenda-se ler E84 nesta base **isoladamente**, como a própria
+lookup já instrui (`scripts/eim_lookup.R`), e não como confirmação de FC letal
+em adultos.
 :::
 
 ## Mortalidade padronizada por EIM (2021–2023)

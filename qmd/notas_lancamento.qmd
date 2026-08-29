@@ -1,0 +1,246 @@
+---
+title: "Notas de lançamento"
+subtitle: "Changelog auditado do painel EIM · o que estava publicado, o que está publicado agora e por quê"
+toc: true
+---
+
+```{r setup}
+#| include: false
+source("_common.R")
+
+# Os valores "publicados agora" são CALCULADOS no render (nunca escritos à mão) —
+# foi exatamente o hábito de fixar número no texto que permitiu a home contradizer
+# a página do SIM antes do Ciclo 1 (ver ref/avaliacao_critica_externa.md).
+sia_core_n  <- D$sia |> dplyr::filter(camada == "core") |> dplyr::count() |>
+  dplyr::collect() |> dplyr::pull(n)
+sia_cl_n    <- D$sia |> dplyr::filter(camada %in% c("core", "limitrofe")) |>
+  dplyr::count() |> dplyr::collect() |> dplyr::pull(n)
+sia_camada_na <- D$sia |> dplyr::filter(is.na(camada)) |> dplyr::count() |>
+  dplyr::collect() |> dplyr::pull(n)
+
+sih_qualq_bruto <- sum(D$sih$eim_qualquer, na.rm = TRUE)
+sih_qualq_core  <- sum(D$sih$camada_qualquer == "core", na.rm = TRUE)
+sih_pct_core    <- 100 * sih_qualq_core / sih_qualq_bruto
+
+sim_cb     <- sum(D$sim$eim_causa_basica, na.rm = TRUE)
+sim_cb_max <- sum(D$sim$eim_cb_ampliado,  na.rm = TRUE)
+
+tx_nac <- D$sim |> dplyr::filter(eim_causa_basica) |>
+  contar_estrato(col_uf = "uf_res") |>
+  taxas_padronizadas(D$pop, grupos = "ano")
+tx_nac_ult <- tx_nac$taxa_pad[which.max(tx_nac$ano)]
+
+# Data do render em pt-BR (mês por índice, para não depender do locale da máquina).
+.MESES_PT <- c("janeiro", "fevereiro", "março", "abril", "maio", "junho",
+               "julho", "agosto", "setembro", "outubro", "novembro", "dezembro")
+data_atualizacao <- paste0(as.integer(format(Sys.Date(), "%d")), " de ",
+                           .MESES_PT[as.integer(format(Sys.Date(), "%m"))], " de ",
+                           format(Sys.Date(), "%Y"))
+```
+
+::: {.meta-atualizacao}
+**Última atualização do painel:** `r data_atualizacao` ·
+[Voltar ao início](index.qmd)
+:::
+
+Este painel é **auditado ativamente**. Duas rodadas independentes de auditoria já revisaram
+a definição de caso, a lookup CID-10, os denominadores e os números publicados — e as duas
+encontraram erros, alguns deles em números de destaque da página inicial. Esta página
+registra **cada correção, ponto a ponto**: o que estava publicado, o que está publicado
+agora e por que mudou.
+
+::: {.callout-nota}
+**Por que publicar os erros.** Um painel de dados administrativos sobre doença rara é uma
+cadeia longa: recorte CID → camadas de captura → consolidação → denominador → padronização
+→ texto. Erro em qualquer elo vira número errado na home. Divulgar a errata é o que
+permite a terceiros distinguir "o número mudou porque o dado mudou" de "o número mudou
+porque o método estava errado" — e é condição para que os valores citados em versões
+anteriores (relatórios, apresentações, rascunhos de manuscrito) possam ser rastreados.
+Os valores da coluna "publicado agora" são **recalculados a cada render**, não digitados.
+:::
+
+::: {.callout-alerta}
+**Se você citou este painel antes desta data**, confira sua citação nas tabelas abaixo.
+Vários números de destaque mudaram por **ordem de grandeza** — notadamente o total de
+óbitos por EIM no SIM (Ciclo 1) e o KPI de AIH com EIM em qualquer campo (Ciclo 2).
+:::
+
+## Estado atual dos números de destaque
+
+```{r kpis-atuais}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(sia_core_n), "registros ambulatoriais (SIA, core)"),
+  c(fmt_n(sih_qualq_core), "AIH com EIM core em qualquer campo (SIH)"),
+  c(paste0(fmt_n(sim_cb), "–", fmt_n(sim_cb_max)),
+    "óbitos por EIM (SIM, causa básica: core–teto, 2021–2023)"),
+  c(paste0(fmt_2(tx_nac_ult), "/100 mil"),
+    paste0("mortalidade padronizada nacional (", max(ANOS_SIM), ")"))
+)))
+```
+
+---
+
+# Ciclo 2 — auditoria de execução (PR #2, versão atual)
+
+Após o Ciclo 1, o código corrigido foi **executado** (não apenas relido) por um
+epidemiologista e um bioinformata em paralelo, para verificar se as correções tinham de
+fato chegado aos números publicados. A auditoria encontrou **regressões introduzidas pelo
+próprio Ciclo 1** e bugs pré-existentes fora do escopo anterior.
+
+## Bloqueantes — afetavam diretamente a página inicial
+
+```{r c2-bloqueantes}
+c2a <- tibble::tribble(
+  ~`Item`, ~`Estava publicado`, ~`Está publicado agora`, ~`Por que mudou`,
+  "Taxa nacional de mortalidade por EIM (home)",
+  "\"NA/100 mil\" como valor mais recente",
+  paste0(fmt_2(tx_nac_ult), "/100 mil em ", max(ANOS_SIM), " (calculada no render)"),
+  "taxas_padronizadas() somava pessoa-anos de anos SEM numerador correspondente: o denominador populacional cobre 2021–2025, mas o SIM só vai até 2023. Os anos-fantasma 2024–2025 entravam no denominador e propagavam NA para a última taxa.",
+
+  "Mapa de mortalidade padronizada por UF",
+  "Taxas ~40% subestimadas (ex.: RR 0,276; MT 0,214)",
+  "Taxas corrigidas (ex.: RR 0,461; MT 0,356)",
+  "Mesmo bug de pessoa-tempo do item acima, agora agrupado por UF: o excesso de pessoa-anos no denominador diluía sistematicamente a taxa de todas as unidades.",
+
+  "Consolidados de SIA e SIH",
+  "Gerados com a lookup CID-10 PRÉ-auditoria (E80.3, E85.0 e E85.2 mal classificados)",
+  "Regenerados (541 arquivos cada) com a lookup corrigida no Ciclo 1",
+  "A correção da lookup no Ciclo 1 só tinha sido aplicada ao SIM. SIA e SIH continuavam servindo camadas calculadas pela versão antiga — o painel publicava duas definições de caso ao mesmo tempo."
+)
+tabela_eim(c2a,
+  titulo = "Ciclo 2 · bloqueantes corrigidos (afetavam números da home)",
+  nota = "Todos os valores 'agora' foram reproduzidos por execução real do pipeline e conferidos de forma independente pelos dois agentes auditores.")
+```
+
+## Bugs de dados
+
+```{r c2-dados}
+c2b <- tibble::tribble(
+  ~`Item`, ~`Estava publicado`, ~`Está publicado agora`, ~`Por que mudou`,
+
+  "Registros do SIA sem camada atribuída",
+  paste0("7.108 registros com camada = NA, ausentes de TODA contagem"),
+  paste0("Classificados e contados — restam ", fmt_n(sia_camada_na),
+         " registros sem camada no dataset atual"),
+  "A classificação olhava só o diagnóstico principal; registros capturados apenas por diagnóstico secundário/causa associada ficavam sem camada. A nova classificar_eim_multi() classifica pelo primeiro campo válido.",
+
+  "KPI \"AIH com EIM em qualquer campo\" (SIH)",
+  "154.375 AIH — apresentado como achado epidemiológico",
+  paste0(fmt_n(sih_qualq_core), " AIH em camada core (", fmt_1(sih_pct_core),
+         "% do recorte bruto de ", fmt_n(sih_qualq_bruto), ")"),
+  "154.375 era ~100% do recorte bruto extraído, ou seja, uma medida do filtro de extração, não da doença. A nova coluna camada_qualquer reporta a composição por camada.",
+
+  "Traçadoras do painel_pezinho com contagem zero",
+  "Rotuladas como \"N<5 suprimido\" (LGPD)",
+  "Rotuladas como zero ESTRUTURAL (condição não medida pelo pipeline EIM)",
+  "Zero estrutural e supressão por raridade são coisas diferentes: o rótulo antigo sugeria que existiam casos escondidos onde não havia nenhuma medição.",
+
+  "Blindagem de escopo da lookup",
+  "classificar_eim() não checava escopo analítico",
+  "Nova classificar_eim_analitico() impede que D56/D57/D81/P37.1 (painel do pezinho) vazem para core/limítrofe de EIM",
+  "Risco latente: qualquer alargamento futuro do filtro de extração misturaria hemoglobinopatias e imunodeficiências ao grupo EIM sem aviso.",
+
+  "contar_estrato()",
+  "Descartava silenciosamente linhas com sexo/UF/faixa etária ausentes",
+  "Descarte contabilizado e avisado (3 de 1.539 óbitos do SIM core)",
+  "Perda silenciosa de denominador/numerador é o tipo de erro que não aparece em nenhuma checagem visual.",
+
+  "profissionais_procedimentos_recife.R",
+  "Lia arquivo renomeado/obsoleto e não filtrava camada",
+  "Lê o consolidado atual e filtra a camada explicitamente",
+  "Herança do Ciclo 1, que renomeou sia_eim_core.rds para sia_eim_core_limitrofe.rds."
+)
+tabela_eim(c2b,
+  titulo = "Ciclo 2 · bugs de dados corrigidos",
+  nota = "O bug de índice introduzido durante a própria implementação de camada_qualquer (which.min() indexando o vetor errado) foi encontrado na validação e coberto por teste de regressão.")
+```
+
+## Transparência metodológica adicionada
+
+- **Denominador populacional constante declarado.** O painel usa a população do **Censo
+  2022 replicada para 2021–2025**, sem projeção intercensitária. Consequência explicitada
+  na home: toda "tendência" de taxa padronizada reflete a tendência da **contagem bruta**,
+  não crescimento populacional.
+- **Nota metodológica sobre E84 no SIM.** Após a correção da definição de caso, o core do
+  SIM passou a ser **dominado por E84 (fibrose cística, 53,7% dos óbitos)** com **idade
+  mediana ao óbito de 60–68 anos** — incompatível com a história natural da FC e em
+  contraste com a FC no SIA (mediana 11 anos). A leitura publicada é de provável
+  **miscodificação de fibrose pulmonar** como E84, não de FC letal em adultos.
+- **Duas mortalidades infantis, dois indicadores.** As mortalidades infantis calculadas
+  sobre a camada **core** e sobre o **ampliado** são agora rotuladas explicitamente como
+  indicadores distintos e **não reconciliáveis** entre si.
+- **Desempenho (sem efeito sobre resultados).** `classificar_eim()` foi vetorizada por
+  valores únicos de CID; a regeneração do SIA (22 M de registros) caiu de ~3 h (não
+  concluída) para ~5 min. Isso não muda nenhum número — mas é o que tornou viável
+  regenerar SIA e SIH com a lookup corrigida.
+
+---
+
+# Ciclo 1 — auditoria da definição de caso (PR #1)
+
+Uma crítica externa apontou inconsistência aritmética nos números do SIM. A avaliação
+completa está em `ref/avaliacao_critica_externa.md`; a crítica **procedia**, embora pelos
+motivos parcialmente errados.
+
+```{r c1-tabela}
+c1 <- tibble::tribble(
+  ~`Item`, ~`Estava publicado`, ~`Está publicado agora`, ~`Por que mudou`,
+
+  "Definição de caso do SIM (eim_causa_basica)",
+  "10.114 óbitos por EIM (2021–2023) — rotulados como camada \"core\"",
+  paste0(fmt_n(sim_cb), " óbitos em camada core; ", fmt_n(sim_cb_max),
+         " como teto (core + limítrofe + envelope), publicados como INTERVALO"),
+  "A flag usava internamente o modo \"ampliado\" (que inclui o envelope: dislipidemia E78, gota E79.0, hemocromatose E83.1, amiloidose adquirida, E88.x, E90) mas era apresentada como core. O número publicado era o teto, não a definição primária.",
+
+  "Consolidado do SIA rotulado como \"core\"",
+  "sia_eim_core.rds — 1.048.176 na home vs 1.345.758 na página do SIA, sob o mesmo rótulo",
+  paste0("sia_eim_core_limitrofe.rds; core = ", fmt_n(sia_core_n),
+         ", core + limítrofe = ", fmt_n(sia_cl_n), ", rotulados separadamente"),
+  "O arquivo sempre conteve core E limítrofe, apesar do nome. A home filtrava, a página do SIA não — duas páginas do mesmo site publicavam números diferentes para o mesmo rótulo.",
+
+  "Narrativa da home sobre tendência",
+  "\"Todas as três bases em alta\"",
+  "SIA e SIH em alta, SIM ESTÁVEL — e a divergência é apresentada como o achado",
+  "O SIM não estava em alta. Detecção subindo com mortalidade estável é o padrão esperado de expansão de rastreio; a afirmação anterior apagava justamente essa leitura.",
+
+  "Lookup CID-10 — bloco E80",
+  "E80.3 agrupado com Gilbert/Crigler-Najjar (rotulado como distúrbio da bilirrubina)",
+  "E80.3 = defeitos da catalase e da peroxidase (acatalasemia); E80.4 (Gilbert) → envelope; E80.5 (Crigler-Najjar) → core; E80.6 (agregador) → limítrofe",
+  "Erro de rótulo na tabela de referência: E80.3 não é distúrbio da bilirrubina na CID-10 V2008. Arrastava consigo a atribuição de camada.",
+
+  "Lookup CID-10 — bloco E85 (amiloidoses)",
+  "E85.0 e E85.2 caindo no fallback \"amiloidose adquirida\" (envelope)",
+  "E85.0 e E85.2 (heredofamiliares) → core; E85.3, E85.4 e o fallback E85 → envelope",
+  "Apenas E85.1 estava marcada como hereditária. As formas heredofamiliares não neuropática e não especificada eram tratadas como adquiridas e saíam do core."
+)
+tabela_eim(c1,
+  titulo = "Ciclo 1 · correções de definição de caso e lookup CID-10",
+  nota = "Auditoria completa, item a item, em ref/avaliacao_critica_externa.md. A mesma rodada resolveu os marcadores [VERIFICAR] de E70.2, E71.1, E71.3 e E88.0 e anotou que E88.4 provavelmente não existe na CID-10 V2008 do DATASUS, que G12.0 capta apenas AME tipo I e que E90 é código asterisco (nunca causa básica).")
+```
+
+::: {.callout-nota}
+**Decisões de projeto que saíram destas auditorias e continuam valendo.**
+
+- **As traçadoras continuam contadas pelo CID nomeado, independentemente da camada** —
+  sem isso a linha "Biotinidase (E88.9 TETO)" zeraria, e perderíamos o achado de que o
+  Ministério da Saúde codifica a biotinidase num balde inespecífico.
+- **Nenhuma taxa é escrita à mão.** Todas as taxas citadas em texto corrido nas páginas
+  são R inline. Foi o hábito oposto que permitiu a home contradizer a página do SIM.
+- **Guarda de contrato** em `qmd/_common.R`: renderizar o site sobre consolidados antigos
+  aborta com mensagem explícita, em vez de falhar no meio de um chunk.
+- **Uma página por comando `quarto render`.** Renderizar vários `.qmd` num único comando,
+  em projeto do tipo *website*, funde os arquivos num só `.knit.md` — o que publicou, por
+  um período, o código-fonte R das páginas SIA/SIH/SIM como texto bruto dentro da home.
+:::
+
+## Correções ainda pendentes
+
+Levantadas nas auditorias e **não** implementadas até esta versão:
+
+- Declarar explicitamente a **completude de 2025** (ano provavelmente parcial no SIA/SIH).
+- **Empirical Bayes** (suavização espacial) nos mapas por UF — hoje as UF de população
+  pequena (AC, RR, AP) oscilam por ruído amostral, com ressalva no texto mas sem correção.
+- Triangulação das três bases também em **base 100**, além do eixo duplo.
+- Razão **mortalidade/detecção** por UF como indicador de acesso.
+- **Cobertura de triagem neonatal** por UF — exige nova extração do SIA por `pa_proc_id`.

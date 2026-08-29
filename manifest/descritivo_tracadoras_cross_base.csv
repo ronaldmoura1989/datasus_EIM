@@ -1,23 +1,23 @@
 tracadora,SIA,SIH_princ,SIM_cb
 AME,45612,3355,59
 Ciclo_ureia,584,134,30
-Fibrose_cistica,568665,6442,826
+Fibrose_cistica,568678,6442,826
 Galactosemia,1125,47,3
-Gaucher_Fabry_NPC,45207,3124,149
-HAC,58291,440,28
+Gaucher_Fabry_NPC,45222,3124,149
+HAC,58323,440,28
 Hemofilia_A,64159,2561,48
 Hemofilia_B,10424,519,3
-Hipotireoidismo_cong,136546,104,26
-Homocistinuria,269,16,3
+Hipotireoidismo_cong,136580,104,26
+Homocistinuria,270,16,3
 Lesch_Nyhan,128,7,4
-MPS_I,7070,1053,6
-MPS_II,10885,1803,19
+MPS_I,7073,1053,6
+MPS_II,10888,1803,19
 MPS_outras,19955,8030,16
 MSUD,660,88,10
 PAF_TTR,32233,115,16
-PKU,121400,1391,6
-Pompe,4679,777,37
+PKU,121406,1391,6
+Pompe,4680,777,37
 Tay-Sachs,473,42,32
-Tirosinemia,727,434,7
-Wilson,31967,156,72
-Biotinidase (E88.9 proxy/TETO),14280,27236,1450
+Tirosinemia,730,434,7
+Wilson,31973,156,72
+Biotinidase (E88.9 proxy/TETO),14284,27236,1450
