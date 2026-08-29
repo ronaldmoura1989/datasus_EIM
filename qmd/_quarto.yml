@@ -27,6 +27,8 @@ website:
         text: Discussão e recomendações
       - href: glossario.qmd
         text: Glossário
+      - href: notas_lancamento.qmd
+        text: Notas de lançamento
   page-footer:
     center: "Microdados DATASUS (SIA-PA, SIH-RD, SIM-DO) · SINASC · Censo 2022/IBGE · CID-10 E70–E90 + triagem · 2021–2025 (SIM até 2023). Taxas de detecção/uso e mortalidade registrada, não de prevalência."
 

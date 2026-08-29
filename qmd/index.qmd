@@ -39,7 +39,20 @@ tx_nac <- D$sim |> dplyr::filter(eim_causa_basica) |>
   taxas_padronizadas(D$pop, grupos = "ano")
 tx_nac_ult <- tx_nac$taxa_pad[which.max(tx_nac$ano)]
 tx_nac_txt <- paste(fmt_2(tx_nac$taxa_pad[order(tx_nac$ano)]), collapse = " → ")
+
+# Data do render em pt-BR — calculada no momento do render, nunca hardcoded.
+# Mês por índice (não `%B`) para não depender do locale da máquina que renderiza.
+.MESES_PT <- c("janeiro", "fevereiro", "março", "abril", "maio", "junho",
+               "julho", "agosto", "setembro", "outubro", "novembro", "dezembro")
+data_atualizacao <- paste0(as.integer(format(Sys.Date(), "%d")), " de ",
+                           .MESES_PT[as.integer(format(Sys.Date(), "%m"))], " de ",
+                           format(Sys.Date(), "%Y"))
 ```
+
+::: {.meta-atualizacao}
+**Última atualização do painel:** `r data_atualizacao` ·
+[Notas de lançamento](notas_lancamento.qmd) — o que mudou, o que estava errado e por quê.
+:::
 
 Os **Erros Inatos do Metabolismo (EIM)** são um grupo **grande e heterogêneo** de doenças
 genéticas raras — aminoacidopatias, acidúrias orgânicas, doenças de depósito lisossômico
@@ -183,3 +196,4 @@ pequena (AC, RR, AP) oscilam por ruído amostral. Detalhes em [Mortalidade (SIM)
 - **[Internações (SIH)](sih_eim.qmd)** — dois sabores (principal vs qualquer campo), peso das MPS/TRE, permanência.
 - **[Mortalidade (SIM)](sim_eim.qmd)** — eixo central: mortalidade padronizada e infantil, incidência ao nascimento por traçadora.
 - **[Teste do pezinho](pezinho.qmd)** — painel completo (tradicional PNTN + expandido, Lei 14.154/2021), EIM e não-EIM.
+- **[Notas de lançamento](notas_lancamento.qmd)** — changelog auditado: cada número que mudou, o valor antigo, o valor atual e a razão da correção.
