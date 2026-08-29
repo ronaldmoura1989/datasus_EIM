@@ -51,6 +51,16 @@ O número de destaque do SIA é, portanto, um **intervalo**:
 **Detecção/uso, não prevalência.** Cada registro é uma **linha de produção ambulatorial**,
 não uma pessoa (o SIA-PA público não tem identificador de paciente). O envelope é o **limite
 superior** do que a subcodificação poderia esconder, não uma estimativa de casos.
+
+**Diferença de definição vs SIH (ref. auditoria de 2026-08-28).** A camada é
+atribuída pelo **primeiro** CID-10 EIM válido entre `pa_cidpri` (principal),
+`pa_cidsec` (secundário) e `pa_cidcas` (causa associada) — não só o principal.
+Isso evita que um registro capturado só por diagnóstico secundário/causa
+associada fique sem camada e suma da contagem, mas o SIA "core" **não é**
+estritamente comparável ao "AIH com EIM principal" do SIH (que usa só
+`diag_princ`). Na prática o efeito é pequeno: os registros preenchidos por
+campo secundário/causa associada são a minoria (o campo principal já classifica
+a maior parte); ver detalhamento em `scripts/get_eim_data_from_SIA.R`.
 :::
 
 ## Core vs envelope — a escala do *bracketing*

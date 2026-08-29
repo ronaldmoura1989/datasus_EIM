@@ -56,6 +56,23 @@ tibble::tibble(
   theme_eim()
 ```
 
+::: {.callout-nota}
+**Composição do "qualquer campo" por camada.** O total de `r fmt_n(n_qualq)` AIH
+mistura core, limítrofe, envelope e triagem fora do capítulo E — não é um número
+de "casos EIM". A tabela mostra a camada MAIS ESPECÍFICA encontrada em qualquer
+campo de diagnóstico da mesma AIH.
+:::
+
+```{r qualquer-composicao}
+sih |>
+  dplyr::filter(eim_qualquer) |>
+  dplyr::mutate(camada_qualquer = dplyr::coalesce(camada_qualquer, "outro/fora do núcleo")) |>
+  dplyr::count(camada_qualquer, name = "aih_registros") |>
+  dplyr::arrange(dplyr::desc(aih_registros)) |>
+  tabela_eim(titulo = "AIH 'qualquer campo' por camada mais específica encontrada",
+            nota = "Só 'core' é achado epidemiológico primário; o resto é teto de subcodificação, triagem fora do capítulo E ou fora de escopo analítico.")
+```
+
 ## Peso das mucopolissacaridoses (MPS) e demais traçadoras
 
 ```{r tracadoras}

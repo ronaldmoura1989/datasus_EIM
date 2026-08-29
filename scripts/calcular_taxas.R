@@ -40,8 +40,15 @@ contar_estrato <- function(df, col_uf, col_idade = "idade_anos", extra = NULL,
       uf    = .data[[col_uf]],
       ano   = as.integer(ano),
       faixa = factor(as.character(harmonizar_faixa(.data[[col_idade]], breaks = FAIXAS_PAD)),
-                     levels = .FAIXA_PAD)) |>
-    dplyr::filter(!is.na(uf), !is.na(sexo), !is.na(faixa), uf %in% UFS)
+                     levels = .FAIXA_PAD))
+  n_antes <- nrow(d)
+  d <- dplyr::filter(d, !is.na(uf), !is.na(sexo), !is.na(faixa), uf %in% UFS)
+  n_perdidos <- n_antes - nrow(d)
+  # Perda silenciosa por sexo/UF/faixa ausente é um bug de auditoria em si (ref.
+  # E8): avisar sempre que houver descarte, para não subestimar a taxa sem rastro.
+  if (n_perdidos > 0)
+    message(sprintf("contar_estrato(): %d/%d linhas descartadas (uf/sexo/faixa ausente ou uf fora de UFS).",
+                    n_perdidos, n_antes))
   chave <- c("uf","ano","sexo","faixa", extra)
   if (is.null(distinct_por)) dplyr::count(d, dplyr::across(dplyr::all_of(chave)), name = "n")
   else d |> dplyr::group_by(dplyr::across(dplyr::all_of(chave))) |>
@@ -56,9 +63,17 @@ pop_padrao <- function(pop, ano_ref = 2022) {
 
 #' Taxas BRUTAS + PADRONIZADAS (direta idade×sexo, IC gama) por grupo.
 #' Aplica supressão N<5 (suprimir_taxa) por padrão.
+#' @param anos anos a manter no DENOMINADOR antes de agrupar. Por padrão, restringe
+#'   ao conjunto de anos presentes em `num` (evita "anos-fantasma": pop cobre
+#'   2021–2025 mas uma base como o SIM só tem 2021–2023 — sem isso, agrupar por
+#'   "ano" cria linhas com pop mas 0 eventos, e agrupar por "uf" soma pessoa-anos
+#'   de anos sem numerador correspondente, subestimando a taxa). Passe `anos = NULL`
+#'   só se `num` deliberadamente não cobrir todo o período do denominador.
 taxas_padronizadas <- function(num, pop, grupos, ano_ref = 2022, por = 1e5,
-                               conf = 0.95, suprimir = TRUE) {
+                               conf = 0.95, suprimir = TRUE,
+                               anos = if ("ano" %in% names(num)) sort(unique(num$ano)) else NULL) {
   std <- pop_padrao(pop, ano_ref)
+  if (!is.null(anos)) pop <- dplyr::filter(pop, ano %in% anos)
   chave <- c(grupos, "sexo", "faixa")
   d <- pop |> dplyr::group_by(dplyr::across(dplyr::all_of(chave))) |>
     dplyr::summarise(pop = sum(pop), .groups = "drop")

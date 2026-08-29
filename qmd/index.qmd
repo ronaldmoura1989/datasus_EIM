@@ -12,8 +12,17 @@ source("_common.R")
 #| include: false
 sia_core_n <- D$sia |> dplyr::filter(camada == "core") |> dplyr::count() |>
   dplyr::collect() |> dplyr::pull(n)
-sih_princ  <- sum(D$sih$eim_principal, na.rm = TRUE)
-sih_qualq  <- sum(D$sih$eim_qualquer,  na.rm = TRUE)
+# Composição do SIA core por escopo (ref. N3/E4 da auditoria): parte do "core"
+# é triagem FORA do capítulo E70–E90 (hipotireoidismo congênito, HAC) — rotular
+# em vez de deixar implícito sob "EIM, core".
+sia_core_fora_cap_e <- D$sia |>
+  dplyr::filter(camada == "core", escopo == "fora_capitulo_E") |> dplyr::count() |>
+  dplyr::collect() |> dplyr::pull(n)
+sih_princ      <- sum(D$sih$eim_principal, na.rm = TRUE)
+# KPI "qualquer campo" honesto: só a camada CORE encontrada em algum campo de
+# diagnóstico — o total bruto (eim_qualquer) é ~100% do recorte extraído, não
+# um achado epidemiológico (ref. N3/E4 da auditoria).
+sih_qualq_core <- sum(D$sih$camada_qualquer == "core", na.rm = TRUE)
 sim_cb     <- sum(D$sim$eim_causa_basica, na.rm = TRUE)   # camada core (definição primária)
 sim_cb_max <- sum(D$sim$eim_cb_ampliado,  na.rm = TRUE)   # teto: core+limítrofe+envelope
 
@@ -48,13 +57,23 @@ período **2021–2025** (SIM disponível até **2023**). A definição de caso 
 #| output: asis
 cat(kpi_row(list(
   c(fmt_n(sia_core_n), "registros ambulatoriais (SIA, core)"),
-  c(fmt_n(sih_princ),  "AIH com EIM principal (SIH)"),
-  c(fmt_n(sih_qualq),  "AIH com EIM em qualquer campo (SIH)"),
+  c(fmt_n(sih_princ),  "AIH com EIM principal (SIH, core)"),
+  c(fmt_n(sih_qualq_core),  "AIH com EIM (core) em qualquer campo (SIH)"),
   c(paste0(fmt_n(sim_cb), "–", fmt_n(sim_cb_max)),
                        "óbitos por EIM (SIM, causa básica: core–teto, 2021–2023)"),
   c(paste0(fmt_2(mort_inf_100k), "/100k NV"), "mortalidade infantil por EIM (2021–2023)")
 )))
 ```
+
+::: {.callout-nota}
+**Sobre o KPI "SIA, core".** `r fmt_n(sia_core_n)` registros inclui
+`r fmt_n(sia_core_fora_cap_e)` de triagem **fora do capítulo E70–E90**
+(hipotireoidismo congênito + hiperplasia adrenal congênita) — coerente com a
+lookup, mas não é só CID E70–E90. Ver composição completa em
+[Ambulatorial](sia_eim.qmd). O sabor "qualquer campo" do SIH acima já é
+restrito à camada core; o total bruto do recorte (todas as camadas, incluindo
+envelope e triagem) é maior e está detalhado em [Internações](sih_eim.qmd).
+:::
 
 ::: {.callout-nota}
 **Como ler estes números.**
@@ -71,6 +90,10 @@ cat(kpi_row(list(
 - Aplicamos **supressão de N<5** (LGPD; regra estrutural em doença rara) nas taxas
   divulgadas. Rótulos CID-10 de 4 caracteres e valores de incidência da literatura
   marcados `[VERIFICAR]`.
+- **Denominador populacional constante**: usamos a população do Censo 2022
+  replicada para 2021–2025 (sem projeção intercensitária) — toda "tendência" de
+  taxa padronizada reflete a tendência da CONTAGEM bruta, não crescimento
+  populacional.
 
 Método e limitações: `plano_analise_EIM_datasus.md` e `RESULTADOS_PRELIMINARES.md`.
 :::

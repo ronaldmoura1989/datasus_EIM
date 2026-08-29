@@ -62,7 +62,10 @@ local({
   }
   exigir(D$sim, c("eim_causa_basica", "eim_cb_ampliado", "cid_cb", "camada_cb"),
          "scripts/get_eim_data_from_SIM.R")
-  exigir(D$sih, c("eim_principal", "eim_qualquer"), "scripts/get_eim_data_from_SIH.R")
+  exigir(D$sih, c("eim_principal", "eim_qualquer", "camada_qualquer"),
+         "scripts/get_eim_data_from_SIH.R")
+  exigir(D$sia_vol_agg, "camada", "scripts/get_eim_data_from_SIA.R")
+  exigir(D$sia, c("camada", "escopo", "campo_captura"), "scripts/get_eim_data_from_SIA.R")
 })
 
 # -----------------------------------------------------------------------------

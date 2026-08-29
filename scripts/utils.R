@@ -16,12 +16,18 @@
 #'   tracadora + heranca + triagem + escopo + eh_eim(lógico)
 classificar_eim <- function(cids, lookup = EIM_LOOKUP) {
   x <- stringr::str_sub(stringr::str_trim(toupper(as.character(cids))), 1, 4)
-  # match por prefixo: 1º prefixo (lookup já ordenada desc(nchar)) que o cid começa
-  idx <- vapply(x, function(c) {
+  # match por prefixo: 1º prefixo (lookup já ordenada desc(nchar)) que o cid começa.
+  # PERFORMANCE: classificar só os VALORES ÚNICOS (dezenas de milhares, não os
+  # 10s de milhões de linhas de SIA/SIM nacionais) e mapear de volta com match() —
+  # o `vapply` por linha era o gargalo real do pipeline, agravado ao classificar
+  # 3 campos por registro (classificar_eim_multi). Resultado idêntico, só mais rápido.
+  ux <- unique(x)
+  idx_u <- vapply(ux, function(c) {
     if (is.na(c) || c == "") return(NA_integer_)
     hit <- which(stringr::str_starts(c, lookup$prefixo))
     if (length(hit)) hit[1] else NA_integer_
   }, integer(1), USE.NAMES = FALSE)
+  idx <- idx_u[match(x, ux)]
   tibble::tibble(
     cid       = x,
     subgrupo  = lookup$subgrupo[idx],
@@ -33,6 +39,47 @@ classificar_eim <- function(cids, lookup = EIM_LOOKUP) {
     escopo    = lookup$escopo[idx],
     eh_eim    = !is.na(idx)
   )
+}
+
+#' Como classificar_eim(), mas RESTRINGE ao escopo analítico do EIM ("todos" de
+#' eh_eim(): núcleo E70–E90 + triagem fora do capítulo E + contexto raras; NUNCA
+#' o painel_pezinho — D56/D57/D81/P371, pipeline próprio). Usar sempre que a
+#' camada/subgrupo classificados alimentarem KPIs/taxas de EIM (ex.: SIA/SIH),
+#' para que um alargamento futuro do filtro de captura não vaze doença de
+#' triagem NÃO-EIM para o core/limítrofe (ref. avaliacao_critica_externa.md, E5/N8).
+classificar_eim_analitico <- function(cids, lookup = EIM_LOOKUP) {
+  cl <- classificar_eim(cids, lookup)
+  fora_escopo <- cl$eh_eim & !(cl$escopo %in% c("nucleo_eim","fora_capitulo_E","contexto_raras"))
+  cl$subgrupo[fora_escopo]  <- NA_character_
+  cl$classe[fora_escopo]    <- NA_character_
+  cl$camada[fora_escopo]    <- NA_character_
+  cl$tracadora[fora_escopo] <- NA_character_
+  cl$heranca[fora_escopo]   <- NA
+  cl$triagem[fora_escopo]   <- NA
+  cl$eh_eim[fora_escopo]    <- FALSE
+  cl
+}
+
+#' Classifica pelo PRIMEIRO campo de diagnóstico (em ordem de prioridade) que
+#' contém um CID EIM válido no escopo analítico — em vez de classificar só pelo
+#' campo principal. Sem isso, um registro capturado só por diagnóstico
+#' secundário/causa associada (cidpri não-EIM) fica com camada=NA e some de toda
+#' contagem por camada, mesmo aparecendo em `eim_qualquer` (ref. N7 da auditoria).
+#' @param ... vetores de CID na ordem de prioridade (ex.: principal, secundário, causa)
+classificar_eim_multi <- function(..., lookup = EIM_LOOKUP) {
+  campos <- list(...)
+  cls <- purrr::map(campos, classificar_eim_analitico, lookup = lookup)
+  out <- cls[[1]]
+  out$campo_captura <- ifelse(out$eh_eim, "1", NA_character_)
+  for (i in seq_along(cls)[-1]) {
+    usar <- !out$eh_eim & cls[[i]]$eh_eim
+    if (any(usar)) {
+      out[usar, c("cid","subgrupo","classe","camada","tracadora","heranca","triagem","escopo","eh_eim")] <-
+        cls[[i]][usar, c("cid","subgrupo","classe","camada","tracadora","heranca","triagem","escopo","eh_eim")]
+      out$campo_captura[usar] <- as.character(i)
+    }
+  }
+  out
 }
 
 #' Conveniência lógica: "é EIM no modo escolhido".
