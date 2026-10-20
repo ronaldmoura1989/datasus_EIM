@@ -137,10 +137,11 @@ mal preenchida — a barra `<1 mês` × `1–11 m` é **frágil** (ver limitaç�
 
 O SIA-PA público **não tem identificador de paciente**. Para os subgrupos crônicos de alto
 volume, construímos um **pseudo-ID** por *record linkage* determinístico (blocking
-sexo × município, janela de ano de nascimento ±1, componentes conexos) e reportamos o número
-de pacientes como **intervalo [registros ; pseudo-pacientes]** com a **razão
-registros/paciente** (intensidade de uso). O método (*bracketing*, chave estrita↔frouxa)
-está no [Glossário](glossario.qmd).
+sexo × município [× raça/cor na chave estrita], janela de ano de nascimento ±1, ligação certa
+entre registros da mesma APAC, componentes conexos) e reportamos o número de pacientes como
+**intervalo [frouxa ; estrita]** com a **razão registros/paciente** (intensidade de uso). O
+método (*bracketing*, chave estrita↔frouxa) está no [Glossário](glossario.qmd); a correção de
+outubro/2026 do motor está nas [Notas de lançamento](notas_lancamento.qmd).
 
 ```{r pseudo-tab}
 pseudo |>
@@ -152,15 +153,19 @@ pseudo |>
     `Intervalo de pacientes` = paste0("[", fmt_n(pseudo_pac_frouxa), " ; ",
                                       fmt_n(pseudo_pac_estrita), "]"),
     `Reg./paciente` = fmt_2(razao),
-    `% chave completa` = fmt_1(pct_chave_completa)) |>
+    `% chave completa` = fmt_1(pct_chave_completa),
+    `Ref.: pacientes/mês no CEAF (2024)` = dplyr::if_else(is.na(ref_ceaf_mes), "—",
+                                                         fmt_n(round(ref_ceaf_mes)))) |>
   tabela_eim(
     titulo = "Registros vs pseudo-pacientes por subgrupo crônico de alto volume (SIA core)",
-    nota = "Pseudo-ID é AGRUPADOR de registros compatíveis, não identificador de pessoas (LGPD; ver Glossário). Estrita = limite superior de pacientes; frouxa = inferior. Razão reg./paciente = intensidade de uso. Só agregados; supressão N<5.")
+    nota = "Pseudo-ID é AGRUPADOR de registros compatíveis, não identificador de pessoas (LGPD; ver Glossário). Estrita = limite superior de pacientes; frouxa = inferior. Razão reg./paciente = intensidade de uso. Referência CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês; o pseudo-ID conta quem apareceu em 2021–2025, com ou sem medicamento, e por isso fica acima). Só agregados; supressão N<5.")
 ```
 
 ::: {.callout-nota}
-**Como ler o intervalo.** A fibrose cística tem ~5,3 registros por pseudo-paciente — muitos
-atendimentos por criança acompanhada, coerente com doença crônica de seguimento intensivo. A
+**Como ler o intervalo.** A fibrose cística tem
+~`r fmt_1(pseudo$razao[pseudo$subgrupo == "fibrose_cistica"])` registros por
+pseudo-paciente — muitos atendimentos por pessoa acompanhada, coerente com doença crônica de
+seguimento intensivo (cada medicamento dispensado no CEAF é um registro mensal). A
 **cautela do EIM**: como a idade SIA está em anos inteiros, o `ano_nasc_proxy` tem **resolução
 ruim em <1 ano**, então o pseudo-ID é um limite **grosseiro** — intensidade de uso, **não**
 contagem de pessoas. O intervalo estrita↔frouxa é o indicador honesto; nunca um número pontual.
