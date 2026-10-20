@@ -62,7 +62,8 @@ Os valores da coluna "publicado agora" são **recalculados a cada render**, não
 ::: {.callout-alerta}
 **Se você citou este painel antes desta data**, confira sua citação nas tabelas abaixo.
 Vários números de destaque mudaram por **ordem de grandeza** — notadamente o total de
-óbitos por EIM no SIM (Ciclo 1) e o KPI de AIH com EIM em qualquer campo (Ciclo 2).
+óbitos por EIM no SIM (Ciclo 1), o KPI de AIH com EIM em qualquer campo (Ciclo 2) e o
+número estimado de pacientes do SIA (pseudo-ID, Ciclo 3).
 :::
 
 ## Estado atual dos números de destaque
@@ -78,6 +79,95 @@ cat(kpi_row(list(
     paste0("mortalidade padronizada nacional (", max(ANOS_SIM), ")"))
 )))
 ```
+
+---
+
+# Ciclo 3 — pseudo-ID corrigido e doenças separadas pelo medicamento (outubro/2026)
+
+A separação de doenças pelo medicamento dispensado no CEAF (abaixo) trouxe, pela primeira
+vez, uma **referência externa** para o número de pacientes: cada paciente em tratamento tem
+uma APAC ativa por mês. Comparado a ela, o pseudo-ID publicado estava **inflado em até uma
+ordem de grandeza** — 1.043–1.117 "indivíduos" com MPS em PE para cerca de 70 pacientes em
+TRE por mês.
+
+```{r c3-setup}
+#| include: false
+ps_br  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"), show_col_types = FALSE)
+ps_pe  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes_PE.csv"), show_col_types = FALSE)
+ps_rec <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes_Recife.csv"), show_col_types = FALSE)
+TOT <- "TOTAL (todos os subgrupos core)"
+iv_br  <- function(sg) with(ps_br[ps_br$subgrupo == sg, ],
+  paste0(fmt_n(pseudo_pac_frouxa), "–", fmt_n(pseudo_pac_estrita), " (", fmt_1(razao), " reg./pac.)"))
+iv_loc <- function(d, sg) with(d[d$subgrupo == sg, ],
+  paste0(fmt_n(pseudo_frouxa), "–", fmt_n(pseudo_estrita),
+         if (!is.na(ref_ceaf_mes)) paste0("; ref. CEAF ", fmt_n(round(ref_ceaf_mes)), "/mês") else ""))
+```
+
+## Errata — pseudo-individualização do SIA
+
+```{r c3-tabela}
+c3 <- tibble::tribble(
+  ~`Item`, ~`Estava publicado`, ~`Está publicado agora`,
+  "Fibrose cística — Brasil (frouxa–estrita)",  "103.660–111.738 (5,3 reg./pac.)", iv_br("fibrose_cistica"),
+  "PKU — Brasil",                                "24.404–27.741 (4,7 reg./pac.)",   iv_br("aminoacidopatia_PKU"),
+  "Esfingolipidoses E75.2 — Brasil",            "9.883–10.942 (4,5 reg./pac.)",    iv_br("esfingolipidose_outras"),
+  "MPS — Brasil",                                "8.168–9.141 (4,5 reg./pac.)",     iv_br("mucopolissacaridose"),
+  "Hipotireoidismo congênito — Brasil",         "20.313–26.173 (5,9 reg./pac.)",   iv_br("hipotireoidismo_congenito"),
+  "MPS — Pernambuco",                            "1.043–1.117",                     iv_loc(ps_pe, "mucopolissacaridose"),
+  "Fibrose cística — Pernambuco",               "3.102–3.444",                     iv_loc(ps_pe, "fibrose_cistica"),
+  "Total EIM core — Pernambuco",                "5.713–6.438 (6,3 reg./indivíduo)",
+    paste0(iv_loc(ps_pe, TOT), " (", fmt_1(ps_pe$razao[ps_pe$subgrupo == TOT]), " reg./indivíduo)"),
+  "Total EIM core — Recife",                    "2.905–3.134 (9,7 reg./indivíduo)",
+    paste0(iv_loc(ps_rec, TOT), " (", fmt_1(ps_rec$razao[ps_rec$subgrupo == TOT]), " reg./indivíduo)")
+)
+tabela_eim(c3,
+  titulo = "Ciclo 3 · pseudo-pacientes antes e depois da correção do motor de linkage",
+  nota = "Ref. CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês). O pseudo-ID conta quem apareceu em 2021–2025, com ou sem medicamento, e por isso fica acima da referência — mas agora na mesma ordem de grandeza. Valores 'estava publicado' transcritos dos manifestos da versão anterior.")
+```
+
+**Por que mudou.** Três defeitos do motor de linkage, corrigidos em
+`scripts/pseudo_id_motor.R` (agora compartilhado pelos scripts nacional e de PE/Recife, que
+antes tinham cópias próprias):
+
+1. **Raça/cor era requisito de chave completa — inclusive na variante frouxa, que não usa
+   raça.** Todo registro com raça "99" (sem informação) virava um paciente próprio; eram
+   5–17% dos registros nacionais, conforme o subgrupo, e 18% dos de MPS em PE. Agora raça ausente é a categoria
+   "sem informação" na chave estrita/intermediária e é ignorada na frouxa.
+2. **Chave incompleta somava integralmente nos três limites.** Agora soma no superior, zero
+   no inferior e proporcionalmente na estimativa central.
+3. **Registros da mesma APAC não eram ligados entre si.** O nº da APAC (APAC principal ou
+   secundária) é identificador do paciente no período; ligá-lo repara o município trocado
+   dentro da APAC — frequente no CEAF de PE, onde o município do paciente sai quase sempre
+   como Recife.
+
+**O que não mudou.** Registros, AIH, óbitos, taxas e as demais tabelas. A razão
+registros/paciente **subiu** — o que muda a leitura: cada paciente crônico gera dezenas de
+registros (um por medicamento dispensado por mês), não 4–6. O dado de Recife continua
+medindo **acesso**, agravado pelo registro centralizado do CEAF na capital.
+
+## Novidade — doenças separadas pelo medicamento dispensado (APAC)
+
+Os códigos **E76.2** (MPS III/IVA/VI/VII), **E74.0** (todas as glicogenoses, inclusive
+Pompe), **E75.2** (Gaucher, Fabry, Niemann-Pick…) e **E83.0** (Wilson, Menkes…) agregam
+doenças distintas. O novo `scripts/separacao_medicamento_apac.R` usa o procedimento SIGTAP
+do medicamento do CEAF para atribuir o tipo nas APAC do SIA (TRE das MPS, de Pompe, de
+Gaucher e de Fabry; miglustate; penicilamina/trientina) e vincula as AIH a essas APAC por
+sexo × ano de nascimento × município/UF. Em CIDs já específicos, o medicamento estratifica
+genótipo/fenótipo: ETI (≥1 F508del) e ivacaftor (gating) na fibrose cística, sapropterina
+na PKU, fludrocortisona na HAC, tafamidis na ATTRv. Resultado publicado na
+[página de Pernambuco](pe_eim.qmd) e em `manifest/med_apac_*.csv`.
+
+- **Nenhum número anterior mudou** — a separação é uma camada nova sobre os mesmos
+  consolidados.
+- **Dois códigos SIGTAP sem nome** no dataset embutido foram identificados pelo perfil de
+  uso e seguem marcados [VERIFICAR]: 06.04.24.012-0 (TRE de Fabry, desde 2025-03) e
+  06.04.86.003-0 (ETI pediátrico, 6–11 anos).
+- **Achado de qualidade de dado:** nas APAC do CEAF em PE o município do paciente é quase
+  sempre Recife, e um lote de 2024-03 da farmácia estadual saiu com municípios trocados —
+  por isso o vínculo tem um segundo nível por UF, e as AIH em que a chave casa com mais de
+  um tipo são publicadas como **ambíguas**, não forçadas.
+- **Pacientes em tratamento** são estimados pela mediana mensal de APAC distintas (uma APAC ativa
+  por paciente por mês), medida que não depende da chave de vínculo.
 
 ---
 

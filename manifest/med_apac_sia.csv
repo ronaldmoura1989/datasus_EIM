@@ -1,0 +1,72 @@
+escopo,grupo,tipo,via,registros,apac,unidades,pac_mes_ref,pac_mes_4tri,pac_mes_max
+Brasil,esfingolipidose_outras,Gaucher,APAC com medicamento,38753,17475,575711,688,689,721
+Brasil,esfingolipidose_outras,Gaucher,vínculo à APAC (UF),1290,273,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,Gaucher,vínculo à APAC (município),1743,357,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,Fabry,APAC com medicamento,521,233,3132,NA,NA,126
+Brasil,esfingolipidose_outras,Fabry,vínculo à APAC (UF),34,14,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,Fabry,vínculo à APAC (município),53,21,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,Gaucher tipo 1 ou NP-C,APAC com medicamento,1325,578,101511,20,23,30
+Brasil,esfingolipidose_outras,Gaucher tipo 1 ou NP-C,vínculo à APAC (município),35,10,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,"E75.2 sem medicamento (NP-A/B, Krabbe, LDM, Farber… ou sem tratamento)",sem medicamento,917,197,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,Não separável (vínculo ambíguo),vínculo à APAC (UF),446,102,NA,NA,NA,NA
+Brasil,esfingolipidose_outras,Não separável (vínculo ambíguo),vínculo à APAC (município),105,NA,NA,NA,NA,NA
+Brasil,glicogenose,Pompe (GSD II),APAC com medicamento,2016,924,72204,53,54,61
+Brasil,glicogenose,Pompe (GSD II),vínculo à APAC (UF),417,115,NA,NA,NA,NA
+Brasil,glicogenose,Pompe (GSD II),vínculo à APAC (município),385,58,NA,NA,NA,NA
+Brasil,glicogenose,Glicogenose sem TRE (não-Pompe ou Pompe sem TRE),sem medicamento,1862,479,NA,NA,NA,NA
+Brasil,metab_cobre,Wilson,APAC com medicamento,30056,12597,2710591,448,594,690
+Brasil,metab_cobre,Wilson,vínculo à APAC (UF),814,80,NA,NA,NA,NA
+Brasil,metab_cobre,Wilson,vínculo à APAC (município),871,159,NA,NA,NA,NA
+Brasil,metab_cobre,"E83.0 sem quelante (Menkes, outros, ou Wilson em zinco)",sem medicamento,232,40,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS I,APAC com medicamento,5287,2164,134743,90.5,95,100
+Brasil,mucopolissacaridose,MPS I,CID específico,775,140,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS I,vínculo à APAC (UF),477,92,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS I,vínculo à APAC (município),534,141,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS II,APAC com medicamento,9054,3573,115632,148,153,177
+Brasil,mucopolissacaridose,MPS II,CID específico,235,43,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS II,vínculo à APAC (UF),373,86,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS II,vínculo à APAC (município),1226,242,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS IVA,APAC com medicamento,6359,2814,220923,120,119,129
+Brasil,mucopolissacaridose,MPS IVA,vínculo à APAC (UF),88,39,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS IVA,vínculo à APAC (município),303,100,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS VI,APAC com medicamento,10120,4368,207322,194,196,199
+Brasil,mucopolissacaridose,MPS VI,vínculo à APAC (UF),290,94,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS VI,vínculo à APAC (município),1194,264,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS VII,APAC com medicamento,343,147,6477,12,12,15
+Brasil,mucopolissacaridose,MPS VII,vínculo à APAC (UF),10,7,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS VII,vínculo à APAC (município),49,35,NA,NA,NA,NA
+Brasil,mucopolissacaridose,MPS III/IV/VI/VII — sem medicamento vinculado,sem medicamento,292,65,NA,NA,NA,NA
+Brasil,mucopolissacaridose,Não separável (vínculo ambíguo),APAC com medicamento,NA,NA,96,NA,NA,NA
+Brasil,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (UF),606,147,NA,NA,NA,NA
+Brasil,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (município),298,42,NA,NA,NA,NA
+PE,esfingolipidose_outras,Gaucher,APAC com medicamento,1508,520,23116,26.5,26,28
+PE,esfingolipidose_outras,Gaucher,vínculo à APAC (UF),50,19,NA,NA,NA,NA
+PE,esfingolipidose_outras,Gaucher,vínculo à APAC (município),30,12,NA,NA,NA,NA
+PE,esfingolipidose_outras,Fabry,APAC com medicamento,NA,NA,8,NA,NA,NA
+PE,esfingolipidose_outras,Gaucher tipo 1 ou NP-C,APAC com medicamento,57,20,4950,NA,NA,NA
+PE,esfingolipidose_outras,"E75.2 sem medicamento (NP-A/B, Krabbe, LDM, Farber… ou sem tratamento)",sem medicamento,78,30,NA,NA,NA,NA
+PE,glicogenose,Pompe (GSD II),APAC com medicamento,91,32,2719,NA,NA,NA
+PE,glicogenose,Pompe (GSD II),vínculo à APAC (UF),43,16,NA,NA,NA,NA
+PE,glicogenose,Pompe (GSD II),vínculo à APAC (município),NA,NA,NA,NA,NA,NA
+PE,glicogenose,Glicogenose sem TRE (não-Pompe ou Pompe sem TRE),sem medicamento,141,46,NA,NA,NA,NA
+PE,metab_cobre,Wilson,APAC com medicamento,771,269,51580,15,13,17
+PE,metab_cobre,Wilson,vínculo à APAC (UF),44,17,NA,NA,NA,NA
+PE,metab_cobre,Wilson,vínculo à APAC (município),8,NA,NA,NA,NA,NA
+PE,metab_cobre,"E83.0 sem quelante (Menkes, outros, ou Wilson em zinco)",sem medicamento,5,NA,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS I,APAC com medicamento,247,85,3370,NA,NA,5
+PE,mucopolissacaridose,MPS I,CID específico,5,5,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS I,vínculo à APAC (UF),8,6,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS I,vínculo à APAC (município),14,6,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS II,APAC com medicamento,647,221,7601,11,11,13
+PE,mucopolissacaridose,MPS II,CID específico,12,6,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS II,vínculo à APAC (UF),40,8,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS II,vínculo à APAC (município),41,17,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS IVA,APAC com medicamento,1014,352,36032,19,19,21
+PE,mucopolissacaridose,MPS IVA,vínculo à APAC (UF),NA,NA,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS IVA,vínculo à APAC (município),NA,NA,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS VI,APAC com medicamento,2036,699,38564,37,38,39
+PE,mucopolissacaridose,MPS VI,vínculo à APAC (UF),40,15,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS VI,vínculo à APAC (município),95,40,NA,NA,NA,NA
+PE,mucopolissacaridose,MPS III/IV/VI/VII — sem medicamento vinculado,sem medicamento,9,NA,NA,NA,NA,NA
+PE,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (UF),380,70,NA,NA,NA,NA
+PE,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (município),28,13,NA,NA,NA,NA

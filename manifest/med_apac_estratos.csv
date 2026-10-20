@@ -1,0 +1,15 @@
+escopo,grupo,estrato,pac_mes_ref,pac_mes_4tri,pac_mes_max,pct_4tri
+Brasil,aminoacidopatia_PKU,Total do grupo no CEAF,1494.5,1463,1587,NA
+Brasil,fibrose_cistica,Total do grupo no CEAF,4214.5,4600,4710,NA
+Brasil,amiloidose_familiar,Tafamidis — ATTRv em tratamento,680.5,772,969,NA
+Brasil,aminoacidopatia_PKU,Sapropterina — responsiva a BH4,75,75,91,5.126452494873548
+Brasil,fibrose_cistica,ETI — ≥1 F508del,1187,1807,2116,39.28260869565217
+Brasil,fibrose_cistica,Ivacaftor — variante de gating,54,46,61,1
+Brasil,hiperplasia_adrenal_cong,Fludrocortisona — perdedora de sal provável,678,719,758,NA
+PE,aminoacidopatia_PKU,Total do grupo no CEAF,41.5,40,48,NA
+PE,fibrose_cistica,Total do grupo no CEAF,125.5,139,141,NA
+PE,amiloidose_familiar,Tafamidis — ATTRv em tratamento,25.5,32,52,NA
+PE,aminoacidopatia_PKU,Sapropterina — responsiva a BH4,9,9,13,22.5
+PE,fibrose_cistica,ETI — ≥1 F508del,54,62,78,44.60431654676259
+PE,fibrose_cistica,Ivacaftor — variante de gating,11,11,11,7.913669064748201
+PE,hiperplasia_adrenal_cong,Fludrocortisona — perdedora de sal provável,16,16,21,NA

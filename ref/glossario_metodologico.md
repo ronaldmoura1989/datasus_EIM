@@ -173,6 +173,10 @@ Pseudo-individualização / pseudo-paciente
   que provavelmente pertencem à mesma pessoa (por sexo, município e ano de
   nascimento aproximado) para **estimar** o número de indivíduos — resultado
   reportado como **intervalo (pseudo-paciente)**, nunca como contagem exata.
+  Registros da mesma APAC (mesmo nº de autorização) são ligados com certeza;
+  raça/cor só refina a chave estrita, e a falta dela não impede a ligação.
+  Nos grupos dispensados pelo CEAF, a contagem mensal de APAC com medicamento
+  serve de referência externa.
 : **Por que importa:** "registros" e "pessoas" são coisas diferentes. Um
   paciente de MPS em terapia de reposição enzimática gera dezenas de AIH de
   infusão por ano. Sem pseudo-individualização, contar registros infla

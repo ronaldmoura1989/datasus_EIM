@@ -190,8 +190,10 @@ O SIA-PA público **não tem identificador de paciente (CNS)** — cada linha é
 atendimento, não uma pessoa. Para estimar **quantos indivíduos** geram os registros de
 EIM em Pernambuco, construímos um **pseudo-ID** por *record linkage* determinístico
 (agrupando registros compatíveis por sexo × município × ano de nascimento aproximado,
-com resolução por componentes conexos). O resultado é reportado como **intervalo
-[registros ; indivíduos estimados]**, nunca como número exato (ver [Glossário](glossario.qmd#pseudo)).
+ligando com certeza os registros da mesma APAC, com resolução por componentes conexos). O
+resultado é reportado como **intervalo [frouxa ; estrita]**, nunca como número exato (ver
+[Glossário](glossario.qmd)); nos grupos do CEAF, a contagem mensal de APAC com medicamento
+serve de referência externa.
 
 ```{r pseudo-pe-setup}
 #| include: false
@@ -216,11 +218,14 @@ pp_pe |>
   dplyr::transmute(
     Subgrupo = stringr::str_replace_all(subgrupo, "_", " "),
     Registros = fmt_n(registros),
-    `Indivíduos (frouxa–estrita)` = paste0(fmt_n(pseudo_frouxa), "–", fmt_n(pseudo_estrita)),
-    `Reg./indivíduo` = fmt_1(razao)) |>
+    `Indivíduos (frouxa–estrita)` = paste0(dplyr::if_else(is.na(pseudo_frouxa), "N<5", fmt_n(pseudo_frouxa)),
+                                           "–", fmt_n(pseudo_estrita)),
+    `Reg./indivíduo` = fmt_1(razao),
+    `Ref.: pacientes/mês no CEAF (2024)` = dplyr::if_else(is.na(ref_ceaf_mes), "—",
+                                                         fmt_n(round(ref_ceaf_mes)))) |>
   tabela_eim(
     titulo = "Indivíduos estimados por subgrupo no SIA-EIM (core) — Pernambuco",
-    nota = "Pseudo-ID = agrupador de registros compatíveis, NÃO identificador de pessoas (LGPD: só agregados, supressão N<5). Intervalo, não ponto. Razão registros/indivíduo = intensidade de acompanhamento crônico. Cautela: idade no SIA em anos inteiros → resolução fraca em <1 ano.")
+    nota = "Pseudo-ID = agrupador de registros compatíveis, NÃO identificador de pessoas (LGPD: só agregados, supressão N<5). Intervalo, não ponto. Razão registros/indivíduo = intensidade de acompanhamento crônico. Referência CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês; o pseudo-ID conta quem apareceu em 2021–2025, com ou sem medicamento). '—' = grupo sem medicamento no CEAF ou N<5. Cautela: idade no SIA em anos inteiros → resolução fraca em <1 ano.")
 ```
 
 ::: {.callout-nota}
@@ -355,6 +360,250 @@ tibble::tibble(
 maioria das AIH de EIM em PE é de terapia crônica de curta duração, não de descompensação
 grave. A gravidade aguda está na cauda longa e no uso de UTI, concentrado nos EIM letais
 precoces (ciclo da ureia, tirosinemia).
+:::
+
+## Doenças separadas pelo medicamento dispensado (APAC)
+
+Vários códigos CID-10 agregam doenças distintas — **E76.2** ("outras MPS" = MPS III, IVA,
+VI e VII), **E74.0** (todas as glicogenoses, inclusive **Pompe**), **E75.2** (Gaucher,
+Fabry, Niemann-Pick, Krabbe, LDM…) e **E83.0** (Wilson, Menkes e outros). Como cada
+medicamento do CEAF tem procedimento SIGTAP próprio na APAC, o **medicamento dispensado
+identifica o tipo** (eixo A, *desambiguação*). Em CIDs já específicos, o medicamento ainda
+revela **fenótipo ou genótipo** — modulador de CFTR, sapropterina, fludrocortisona,
+tafamidis (eixo B, *estratificação*). As AIH, que não registram medicamento, são vinculadas
+às APAC pela chave sexo × ano de nascimento × município (ou, na falta, UF) — método e
+limites em `scripts/separacao_medicamento_apac.R`.
+
+```{r med-setup}
+#| include: false
+med_sia  <- readr::read_csv(here::here("manifest/med_apac_sia.csv"),      show_col_types = FALSE)
+med_sih  <- readr::read_csv(here::here("manifest/med_apac_sih.csv"),      show_col_types = FALSE)
+med_uf   <- readr::read_csv(here::here("manifest/med_apac_uf.csv"),       show_col_types = FALSE)
+med_estr <- readr::read_csv(here::here("manifest/med_apac_estratos.csv"), show_col_types = FALSE)
+med_qc   <- readr::read_csv(here::here("manifest/med_apac_vinculo.csv"),  show_col_types = FALSE)
+MED_ANO_REF <- 2024L   # mesmo ANO_REF do script (último ano completo no SIA)
+
+pop_ref <- D$pop |> dplyr::filter(ano == MED_ANO_REF)
+pop_pe  <- sum(pop_ref$pop[pop_ref$uf == "PE"])
+pop_br  <- sum(pop_ref$pop)
+
+GRUPO_ROT <- c(mucopolissacaridose = "MPS", glicogenose = "Glicogenoses",
+               esfingolipidose_outras = "Esfingolipidoses (E75.2)",
+               metab_cobre = "Metabolismo do cobre (E83.0)",
+               fibrose_cistica = "Fibrose cística", aminoacidopatia_PKU = "PKU",
+               hiperplasia_adrenal_cong = "HAC", amiloidose_familiar = "ATTRv (PAF-TTR)")
+ORDEM_A <- c("MPS I", "MPS II", "MPS IVA", "MPS VI", "MPS VII", "Pompe (GSD II)",
+             "Gaucher", "Fabry", "Gaucher tipo 1 ou NP-C", "Wilson")
+
+# A — pacientes em tratamento = mediana mensal de APAC distintas no ano de referência
+med_pac <- med_sia |>
+  dplyr::filter(via == "APAC com medicamento", tipo %in% ORDEM_A) |>
+  dplyr::select(escopo, grupo, tipo, pac = pac_mes_ref) |>
+  tidyr::pivot_wider(names_from = escopo, values_from = pac, names_prefix = "pac_") |>
+  dplyr::mutate(
+    pe_ausente = is.na(pac_PE) &
+      !tipo %in% med_sia$tipo[med_sia$escopo == "PE" & med_sia$via == "APAC com medicamento"],
+    pm_PE  = 1e6 * pac_PE / pop_pe,
+    pm_BR  = 1e6 * pac_Brasil / pop_br,
+    razao  = pm_PE / pm_BR,
+    pct_pe = 100 * pac_PE / pac_Brasil)
+lin   <- function(t) dplyr::filter(med_pac, tipo == t)
+mps6  <- lin("MPS VI"); mps4a <- lin("MPS IVA"); gau <- lin("Gaucher")
+
+# B — estratos (4º trimestre do ano de referência: capta a rampa do ETI desde 2024-04)
+estr <- med_estr |>
+  dplyr::filter(estrato != "Total do grupo no CEAF") |>
+  dplyr::select(escopo, grupo, estrato, pac = pac_mes_4tri, pct = pct_4tri) |>
+  tidyr::pivot_wider(names_from = escopo, values_from = c(pac, pct)) |>
+  dplyr::mutate(pm_PE = 1e6 * pac_PE / pop_pe, pm_BR = 1e6 * pac_Brasil / pop_br,
+                razao = pm_PE / pm_BR, pct_pe = 100 * pac_PE / pac_Brasil)
+eti <- dplyr::filter(estr, grepl("^ETI", estrato))
+iva <- dplyr::filter(estr, grepl("^Ivacaftor", estrato))
+sap <- dplyr::filter(estr, grepl("^Sapropterina", estrato))
+
+# SIH — atribuição das AIH E76.2 e E75.2 de PE
+qc_pe  <- function(c4) med_qc |> dplyr::filter(escopo == "PE", cid4 == c4)
+pct_atrib <- function(c4) sum(qc_pe(c4)$pct_aih[grepl("^vinculado", qc_pe(c4)$status)], na.rm = TRUE)
+pct_e762_atrib <- pct_atrib("E762")
+pct_e762_amb   <- sum(qc_pe("E762")$pct_aih[qc_pe("E762")$status == "ambíguo"], na.rm = TRUE)
+sv_e752 <- dplyr::filter(qc_pe("E752"), status == "sem vínculo")
+gsd_pe  <- med_sih |> dplyr::filter(escopo == "PE", grupo == "glicogenose")
+pct_pompe_aih <- 100 * sum(gsd_pe$aih[gsd_pe$tipo == "Pompe (GSD II)"], na.rm = TRUE) /
+  sum(gsd_pe$aih, na.rm = TRUE)
+e752_pe <- med_sih |> dplyr::filter(escopo == "PE", grupo == "esfingolipidose_outras")
+pct_gaucher_aih <- 100 * sum(e752_pe$aih[e752_pe$tipo == "Gaucher"], na.rm = TRUE) /
+  sum(e752_pe$aih, na.rm = TRUE)
+
+# Infusão hospitalar de MPS (proc. 0303030046) faturada por AIH: peso de PE no país
+inf_e762 <- D$sih |>
+  dplyr::filter(eim_principal, substr(diag_princ, 1, 4) == "E762", proc_rea == "0303030046")
+aih_inf_br <- dplyr::n_distinct(inf_e762$n_aih)
+aih_inf_pe <- dplyr::n_distinct(inf_e762$n_aih[inf_e762$uf_res %in% "PE"])
+
+# Outras UFs com taxa ≥1,5× a nacional (texto gerado, não digitado)
+ufs_acima <- function(t) {
+  ref <- med_pac$pm_BR[med_pac$tipo == t]
+  u <- med_uf |> dplyr::filter(tipo == t, uf != "PE", por_milhao >= 1.5 * ref) |>
+    dplyr::arrange(dplyr::desc(por_milhao))
+  paste0(u$uf, " (", fmt_1(u$por_milhao), ")", collapse = ", ")
+}
+top_4a <- med_uf |> dplyr::filter(tipo == "MPS IVA", !is.na(por_milhao)) |>
+  dplyr::slice_max(por_milhao, n = 1)
+
+fmt_n_sup <- function(x) dplyr::if_else(is.na(x), "N<5", fmt_n(x))
+fmt_1_sup <- function(x) dplyr::if_else(is.na(x), "—", fmt_1(x))
+```
+
+```{r med-kpis}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(mps6$pac_PE), paste0("pacientes com MPS VI em TRE/mês em PE (", MED_ANO_REF, ") — ",
+                               fmt_1(mps6$razao), "× a taxa nacional")),
+  c(paste0(fmt_1(mps6$pct_pe), "%"), "dos pacientes em galsulfase do país estão em PE"),
+  c(fmt_n(gau$pac_PE), "pacientes com Gaucher em TRE/mês em PE"),
+  c(paste0(fmt_1(iva$pct_pe), "%"), "dos pacientes em ivacaftor isolado do país estão em PE")
+)))
+```
+
+### A. Desambiguação — pacientes em tratamento, Pernambuco vs. Brasil
+
+```{r med-tabela-pacientes}
+med_pac |>
+  dplyr::mutate(tipo = factor(tipo, levels = ORDEM_A)) |>
+  dplyr::arrange(tipo) |>
+  dplyr::transmute(
+    Grupo = GRUPO_ROT[grupo],
+    `Tipo (pelo medicamento)` = as.character(tipo),
+    `PE · pacientes/mês` = dplyr::if_else(pe_ausente, "0", fmt_n_sup(pac_PE)),
+    `PE · por milhão`    = dplyr::if_else(pe_ausente, "0", fmt_1_sup(pm_PE)),
+    `Brasil · pacientes/mês` = fmt_n_sup(pac_Brasil),
+    `Brasil · por milhão`    = fmt_1_sup(pm_BR),
+    `Razão PE/Brasil`  = fmt_1_sup(razao),
+    `% do Brasil em PE` = fmt_1_sup(pct_pe)) |>
+  tabela_eim(
+    titulo = paste0("Pacientes em tratamento por tipo — mediana mensal de APAC distintas, ", MED_ANO_REF),
+    nota = paste0("Uma APAC do CEAF agrupa os medicamentos do paciente e fica ativa por mês; a mediana mensal de APAC distintas estima os pacientes EM TRATAMENTO no ano (não os diagnosticados). Miglustate = Gaucher tipo 1 ou NP-C (não separáveis, salvo quando a mesma APAC tem TRE de Gaucher). Fabry: TRE no CEAF só a partir de 2025-03 (código 06.04.24.012-0, provável alfagalsidase — nome a verificar no SIGTAP), daí 0 no ano de referência. População: Censo 2022 (base constante). Supressão N<5. Tratamento por via judicial fora do CEAF não aparece."))
+```
+
+```{r med-uf-fig}
+#| fig-width: 11
+#| fig-height: 5.5
+uf_fig <- med_uf |>
+  dplyr::filter(tipo %in% c("MPS VI", "MPS IVA"), !is.na(por_milhao)) |>
+  dplyr::mutate(tipo = factor(tipo, levels = c("MPS VI", "MPS IVA")),
+                eixo = paste(uf, tipo, sep = "___"),
+                eixo = forcats::fct_reorder(eixo, por_milhao),
+                destaque = uf == "PE")
+ref_br <- med_pac |>
+  dplyr::filter(tipo %in% c("MPS VI", "MPS IVA")) |>
+  dplyr::transmute(tipo = factor(tipo, levels = c("MPS VI", "MPS IVA")), pm_BR)
+
+ggplot(uf_fig, aes(eixo, por_milhao, fill = destaque)) +
+  geom_col(width = 0.7) +
+  geom_hline(data = ref_br, aes(yintercept = pm_BR), linetype = "dashed",
+             color = "#26495C", linewidth = 0.5) +
+  geom_text(aes(label = fmt_1(por_milhao)), hjust = -0.15, size = 3, color = "#0E2F38") +
+  coord_flip(clip = "off") +
+  facet_wrap(~ tipo, scales = "free_y") +
+  scale_x_discrete(labels = function(x) sub("___.*$", "", x)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.18))) +
+  scale_fill_manual(values = c(`TRUE` = "#1B6F6A", `FALSE` = "#B9CFCB"), guide = "none") +
+  labs(x = NULL, y = paste0("Pacientes em TRE por milhão de habitantes (", MED_ANO_REF, ")"),
+       title = "MPS VI e MPS IVA em TRE por UF — Pernambuco em destaque",
+       subtitle = "Linha tracejada = Brasil. Só UFs com ≥5 pacientes/mês (supressão N<5).") +
+  theme_eim()
+```
+
+### Internações (SIH) de PE atribuídas por tipo
+
+```{r med-tabela-sih}
+tot_grupo <- med_sih |>
+  dplyr::filter(escopo == "PE") |>
+  dplyr::group_by(grupo) |>
+  dplyr::summarise(aih_grupo = sum(aih, na.rm = TRUE), .groups = "drop")
+
+med_sih |>
+  dplyr::filter(escopo == "PE") |>
+  dplyr::left_join(tot_grupo, by = "grupo") |>
+  dplyr::mutate(grupo = factor(grupo, levels = names(GRUPO_ROT))) |>
+  dplyr::arrange(grupo) |>
+  dplyr::transmute(
+    Grupo = GRUPO_ROT[as.character(grupo)],
+    Tipo  = tipo,
+    `Como foi atribuído` = via,
+    AIH   = fmt_n_sup(aih),
+    `% das AIH do grupo` = fmt_1_sup(100 * aih / aih_grupo),
+    `Pacientes (SIH)` = fmt_n_sup(pacientes),
+    `Perm. mediana (dias)` = fmt_1(perm_mediana)) |>
+  tabela_eim(
+    titulo = "AIH com MPS, glicogenose, E75.2 ou E83.0 como diagnóstico principal, por tipo atribuído — Pernambuco, 2021–2025",
+    nota = "Vínculo (município) = mesmo sexo, ano de nascimento e município de residência que uma APAC com medicamento; vínculo (UF) = idem na mesma UF, usado quando o município não casa. Só são aceitos tipos compatíveis com o CID da AIH; vários candidatos são resolvidos pela interseção das doenças (miglustate + TRE de Gaucher = Gaucher). Ambíguo = a chave casa com tipos incompatíveis entre si. 'Sem medicamento' = sem APAC correspondente (MPS III, glicogenoses hepáticas/musculares, NP-A/B, Krabbe, LDM, tratamento judicial ou falha de vínculo). % sobre as células não suprimidas. Paciente SIH = data de nascimento × sexo × município. Supressão N<5.")
+```
+
+### B. Estratificação — o que o medicamento revela sobre genótipo e fenótipo
+
+```{r med-tabela-estratos}
+estr |>
+  dplyr::mutate(grupo = factor(grupo, levels = names(GRUPO_ROT))) |>
+  dplyr::arrange(grupo, estrato) |>
+  dplyr::transmute(
+    Grupo = GRUPO_ROT[as.character(grupo)],
+    `Medicamento → o que indica` = estrato,
+    `PE · pacientes/mês` = fmt_n_sup(pac_PE),
+    `PE · % do grupo no CEAF` = fmt_1_sup(pct_PE),
+    `Brasil · pacientes/mês` = fmt_n_sup(pac_Brasil),
+    `Brasil · % do grupo no CEAF` = fmt_1_sup(pct_Brasil),
+    `Razão PE/Brasil (por milhão)` = fmt_1_sup(razao),
+    `% do Brasil em PE` = fmt_1_sup(pct_pe)) |>
+  tabela_eim(
+    titulo = paste0("Pacientes por medicamento que indica genótipo/fenótipo — mediana mensal de APAC, out–dez/", MED_ANO_REF),
+    nota = "4º trimestre para captar a rampa do ETI, ofertado a partir de 2024-04. ETI = elexacaftor/tezacaftor/ivacaftor, incorporado para ≥6 anos com ao menos uma F508del (Portaria SECTICS/MS 47/2023); ivacaftor isolado = variantes de gating (critério a confirmar no PCDT). % do grupo no CEAF: denominador = APAC com qualquer medicamento do grupo (FC: alfadornase, pancreatina, tobramicina, moduladores; PKU: fórmula metabólica, sapropterina) — só para FC e PKU. Fludrocortisona e tafamidis sem denominador comparável. Supressão N<5.")
+```
+
+::: {.callout-nota}
+**Leitura.**
+
+- **MPS VI é a MPS de Pernambuco.** Com `r fmt_n(mps6$pac_PE)` pacientes em galsulfase por
+  mês, PE tem `r fmt_1(mps6$pm_PE)` pacientes por milhão — `r fmt_1(mps6$razao)` vezes a taxa
+  nacional — e reúne `r fmt_1(mps6$pct_pe)`% dos pacientes em TRE para MPS VI do país, com
+  apenas `r fmt_1(100 * pop_pe / pop_br)`% da população. Outras UFs com taxa ≥1,5× a
+  nacional (por milhão): `r ufs_acima("MPS VI")`.
+- **MPS IVA também se concentra no Nordeste.** PE tem `r fmt_n(mps4a$pac_PE)` pacientes em
+  alfaelosulfase (`r fmt_1(mps4a$razao)`× a taxa nacional), e a maior taxa do país é de
+  `r top_4a$uf` (`r fmt_1(top_4a$por_milhao)` por milhão). O agrupamento nordestino das duas
+  MPS é compatível com efeito fundador e consanguinidade regional — **hipótese** a testar
+  com dado genético (haplótipos das variantes *ARSB* e *GALNS*), não conclusão deste
+  descritivo.
+- **O volume do SIH de PE é de faturamento, não de morbidade.** PE responde por
+  `r fmt_1(100 * aih_inf_pe / aih_inf_br)`% das AIH de infusão de MPS com CID E76.2 do país
+  (`r fmt_n(aih_inf_pe)` de `r fmt_n(aih_inf_br)`, procedimento 03.03.03.004-6), com cerca de
+  `r fmt_1(100 * (mps6$pac_PE + mps4a$pac_PE) / (mps6$pac_Brasil + mps4a$pac_Brasil))`% dos
+  pacientes em TRE para MPS IVA/VI: a infusão semanal é faturada como AIH de hospital-dia em
+  PE muito mais do que nas outras UFs.
+- **E75.2 em PE é sobretudo Gaucher.** `r fmt_1(pct_gaucher_aih)`% das AIH de E75.2 vinculam
+  a TRE de Gaucher (`r fmt_n(gau$pac_PE)` pacientes/mês, `r fmt_1(gau$razao)`× a taxa
+  nacional). As AIH **sem medicamento** (`r fmt_1(sv_e752$pct_aih)`%) mostram dois perfis:
+  por paciente, mediana de `r fmt_n(sv_e752$idade_mediana)` anos — vários são pacientes de
+  MPS com AIH codificada como E75.2; por AIH, `r fmt_1(sv_e752$pct_fem_aih)`% mulheres e
+  mediana de `r fmt_n(sv_e752$idade_mediana_aih)` anos, com infusões regulares — padrão
+  compatível com TRE de Fabry por via judicial antes da oferta no CEAF (2025-03), a
+  confirmar.
+- **Pompe concentra `r fmt_1(pct_pompe_aih)`% das AIH de glicogenose de PE** (infusão
+  quinzenal de alfa-alglicosidase), mas são menos de 5 pacientes em TRE por mês. As demais
+  AIH de E74.0 seguem sem tipo: não há medicamento que identifique as glicogenoses
+  hepáticas e musculares — separá-las exige teste genético.
+- **Fibrose cística: o genótipo já está no dado.** `r fmt_1(eti$pct_PE)`% dos pacientes com FC
+  no CEAF em PE usam ETI (≥1 F508del; Brasil `r fmt_1(eti$pct_Brasil)`%), e PE reúne
+  `r fmt_1(iva$pct_pe)`% dos pacientes em **ivacaftor isolado** do país —
+  `r fmt_1(iva$pct_PE)`% da FC estadual contra `r fmt_1(iva$pct_Brasil)`% no Brasil. Excesso
+  de variantes de gating em PE é sinal genético a investigar.
+- **PKU:** `r fmt_1(sap$pct_PE)`% dos pacientes com PKU no CEAF em PE usam sapropterina
+  (Brasil `r fmt_1(sap$pct_Brasil)`%) — diferença que pode refletir genótipo *PAH* responsivo
+  a BH4 ou prática de prescrição; o teste de resposta e o genótipo distinguem.
+- **Limites do vínculo.** O município do paciente na APAC do CEAF não é confiável em PE
+  (quase todas saem com Recife), daí o segundo nível por UF; `r fmt_1(pct_e762_amb)`% das
+  AIH E76.2 de PE ficam **ambíguas** (a chave casa com MPS IVA e VI). A chave não é
+  identificador (LGPD): o resultado é atribuição provável, não diagnóstico.
 :::
 
 ## Óbitos (SIM) em Pernambuco — 2021–2023
@@ -542,9 +791,12 @@ estimados** — e a **intensidade de uso é maior na capital** (**~`r fmt_1(tot_
 registros/indivíduo** em Recife vs **~`r fmt_1(tot_pe$razao)`** no estado). É a assinatura da
 **rede de referência**: relativamente menos pacientes, cada um com muito mais atendimentos
 (infusões de TRE, seguimento crônico), inclusive pacientes **encaminhados do interior** via
-TFD que passam a ser atendidos — e por vezes registrados — na capital. Reforça que o dado de
-Recife mede **acesso/oferta**, não onde os casos "existem". Intervalo, não ponto; pseudo-ID é
-agrupador, não identificador (LGPD).
+TFD que passam a ser atendidos — e por vezes registrados — na capital. Nas APAC do CEAF o
+efeito é extremo: o município do paciente sai quase sempre como Recife, qualquer que seja a
+residência (ver a seção de medicamentos acima), então os indivíduos "de Recife" incluem
+pacientes do interior em tratamento pelo CEAF. Reforça que o dado de Recife mede
+**acesso/oferta**, não onde os casos "existem". Intervalo, não ponto; pseudo-ID é agrupador,
+não identificador (LGPD).
 :::
 
 ```{r recife-tracadoras}

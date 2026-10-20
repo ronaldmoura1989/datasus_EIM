@@ -1,0 +1,53 @@
+escopo,grupo,tipo,via,aih,pacientes,perm_mediana
+Brasil,esfingolipidose_outras,Gaucher,vínculo à APAC (UF),777,56,0
+Brasil,esfingolipidose_outras,Gaucher,vínculo à APAC (município),1676,65,0
+Brasil,esfingolipidose_outras,Fabry,vínculo à APAC (UF),NA,NA,3
+Brasil,esfingolipidose_outras,Fabry,vínculo à APAC (município),5,NA,0
+Brasil,esfingolipidose_outras,Gaucher tipo 1 ou NP-C,vínculo à APAC (município),8,NA,0
+Brasil,esfingolipidose_outras,"E75.2 sem medicamento (NP-A/B, Krabbe, LDM, Farber… ou sem tratamento)",sem medicamento,642,75,0
+Brasil,esfingolipidose_outras,Não separável (vínculo ambíguo),vínculo à APAC (UF),13,12,1
+Brasil,esfingolipidose_outras,Não separável (vínculo ambíguo),vínculo à APAC (município),NA,NA,0
+Brasil,glicogenose,Pompe (GSD II),vínculo à APAC (UF),187,31,1
+Brasil,glicogenose,Pompe (GSD II),vínculo à APAC (município),325,24,0
+Brasil,glicogenose,Glicogenose sem TRE (não-Pompe ou Pompe sem TRE),sem medicamento,265,116,2
+Brasil,metab_cobre,Wilson,vínculo à APAC (UF),45,39,6
+Brasil,metab_cobre,Wilson,vínculo à APAC (município),60,47,5
+Brasil,metab_cobre,"E83.0 sem quelante (Menkes, outros, ou Wilson em zinco)",sem medicamento,51,48,3
+Brasil,mucopolissacaridose,MPS I,CID específico,219,40,0
+Brasil,mucopolissacaridose,MPS I,vínculo à APAC (UF),143,28,0
+Brasil,mucopolissacaridose,MPS I,vínculo à APAC (município),691,31,0
+Brasil,mucopolissacaridose,MPS II,CID específico,280,52,0
+Brasil,mucopolissacaridose,MPS II,vínculo à APAC (UF),151,25,0
+Brasil,mucopolissacaridose,MPS II,vínculo à APAC (município),1372,38,0
+Brasil,mucopolissacaridose,MPS IVA,vínculo à APAC (UF),349,24,0
+Brasil,mucopolissacaridose,MPS IVA,vínculo à APAC (município),777,24,0
+Brasil,mucopolissacaridose,MPS VI,vínculo à APAC (UF),833,27,0
+Brasil,mucopolissacaridose,MPS VI,vínculo à APAC (município),3939,58,0
+Brasil,mucopolissacaridose,MPS VII,vínculo à APAC (UF),NA,NA,0
+Brasil,mucopolissacaridose,MPS VII,vínculo à APAC (município),11,NA,1
+Brasil,mucopolissacaridose,MPS III/IV/VI/VII — sem medicamento vinculado,sem medicamento,648,87,0
+Brasil,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (UF),855,41,0
+Brasil,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (município),617,11,0
+PE,esfingolipidose_outras,Gaucher,vínculo à APAC (UF),702,29,0
+PE,esfingolipidose_outras,Gaucher,vínculo à APAC (município),1378,20,0
+PE,esfingolipidose_outras,Gaucher tipo 1 ou NP-C,vínculo à APAC (município),5,NA,0
+PE,esfingolipidose_outras,"E75.2 sem medicamento (NP-A/B, Krabbe, LDM, Farber… ou sem tratamento)",sem medicamento,567,36,0
+PE,glicogenose,Pompe (GSD II),vínculo à APAC (UF),60,7,0
+PE,glicogenose,Pompe (GSD II),vínculo à APAC (município),52,NA,0
+PE,glicogenose,Glicogenose sem TRE (não-Pompe ou Pompe sem TRE),sem medicamento,57,9,0
+PE,metab_cobre,Wilson,vínculo à APAC (UF),7,NA,7
+PE,metab_cobre,Wilson,vínculo à APAC (município),NA,NA,0
+PE,metab_cobre,"E83.0 sem quelante (Menkes, outros, ou Wilson em zinco)",sem medicamento,NA,NA,3.5
+PE,mucopolissacaridose,MPS I,CID específico,14,10,0
+PE,mucopolissacaridose,MPS I,vínculo à APAC (UF),82,7,0
+PE,mucopolissacaridose,MPS I,vínculo à APAC (município),327,NA,0
+PE,mucopolissacaridose,MPS II,CID específico,141,20,0
+PE,mucopolissacaridose,MPS II,vínculo à APAC (UF),85,8,0
+PE,mucopolissacaridose,MPS II,vínculo à APAC (município),481,8,0
+PE,mucopolissacaridose,MPS IVA,vínculo à APAC (UF),133,16,1
+PE,mucopolissacaridose,MPS IVA,vínculo à APAC (município),160,8,0
+PE,mucopolissacaridose,MPS VI,vínculo à APAC (UF),789,18,0
+PE,mucopolissacaridose,MPS VI,vínculo à APAC (município),2663,28,0
+PE,mucopolissacaridose,MPS III/IV/VI/VII — sem medicamento vinculado,sem medicamento,68,23,0
+PE,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (UF),829,32,0
+PE,mucopolissacaridose,Não separável (vínculo ambíguo),vínculo à APAC (município),617,11,0
