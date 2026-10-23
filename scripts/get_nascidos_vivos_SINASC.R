@@ -1,57 +1,39 @@
 # =============================================================================
 # get_nascidos_vivos_SINASC.R — Denominador de INCIDÊNCIA AO NASCIMENTO (SINASC)
-# Baixa o SINASC (nascidos vivos) por UF × ano via microdatasus (FTP DATASUS),
-# agrega a CONTAGENS por UF × ano × sexo (residência da mãe = CODMUNRES) e
-# DESCARTA os microdados. É o denominador das taxas de incidência ao nascimento
-# das doenças-traçadoras de triagem neonatal (plano §4b).
+# Nascidos vivos por UF de residência da mãe (CODMUNRES) × ano × sexo, 2010+.
 #
-# Estratégia (sugestão do usuário): baixar ANUAL para todos os estados, como o SIM.
-# Disponibilidade: 2021–2024 (2025 provavelmente ainda não publicado → tenta e ignora).
-# Cache: pula UF×ano já agregado. Saída: data/denominators/nascidos_vivos.parquet
+# FONTE: denominadores agregados pela filtragem dos DBC do DATASUS no R550-2
+# (scripts/r550/filtrar_um.R → <DIR_FILTRADO>/SINASC/denominador/DN{UF}{AAAA}.parquet),
+# calculados sobre TODAS as declarações de nascido vivo do arquivo. Substitui o
+# download por microdatasus::fetch_datasus (que só cobria 2021–2024).
+# Anos: ANOS_SINASC (definitivos); o ano PRELIMINAR (subpasta PRELIM no FTP) fica
+# marcado em status_dado e fora do denominador padrão.
+# Saída: data/denominators/nascidos_vivos.{parquet,rds} (uf, sexo, nv, ano, status_dado)
 # Rodar: Rscript scripts/get_nascidos_vivos_SINASC.R
 # =============================================================================
 
 source(here::here("scripts", "00_setup.R"))
-suppressPackageStartupMessages(library(microdatasus))
-options(timeout = 600)
 
-ANOS_SINASC <- 2021:2024                      # 2025 raramente disponível; ajustar se sair
-OUT <- here::here("data/denominators/nascidos_vivos.parquet")
-CACHE <- here::here("data/denominators/_nv_cache")
-dir.create(CACHE, showWarnings = FALSE, recursive = TRUE)
+fs <- list.files(file.path(DIR_FILTRADO, "SINASC", "denominador"), pattern = "\\.parquet$", full.names = TRUE)
+if (!length(fs)) stop("Sem denominadores do SINASC em ", DIR_FILTRADO)
 
-agrega_uf_ano <- function(uf, ano) {
-  cache_fp <- file.path(CACHE, sprintf("nv_%s_%d.rds", uf, ano))
-  if (file.exists(cache_fp)) return(readRDS(cache_fp))
-  x <- tryCatch(
-    fetch_datasus(year_start = ano, year_end = ano, uf = uf, information_system = "SINASC"),
-    error = function(e) { message(sprintf("  %s %d: ERRO (%s) — pulando", uf, ano, conditionMessage(e))); NULL })
-  if (is.null(x) || !nrow(x)) return(NULL)
-  x <- janitor::clean_names(x)
-  out <- x |>
-    dplyr::mutate(
-      uf   = uf_from_mun(codmunres),                 # UF de residência da mãe
-      sexo = dplyr::recode(as.character(sexo), "1"="Masculino","2"="Feminino",
-                           .default = NA_character_)) |>
-    dplyr::filter(!is.na(uf)) |>
-    dplyr::count(uf, sexo, name = "nv") |>
-    dplyr::mutate(ano = ano)
-  saveRDS(out, cache_fp)
-  log_run("sinasc", uf, ano, "ok", n_lidas = nrow(x), n_eim = sum(out$nv))
-  message(sprintf("  %s %d: %d nascidos vivos", uf, ano, sum(out$nv)))
-  out
-}
+nv <- purrr::map_dfr(fs, arrow::read_parquet) |>
+  dplyr::transmute(uf = uf_res, ano = as.integer(arq_ano), status_dado,
+                   sexo = dplyr::recode(as.character(sexo), "1" = "Masculino", "2" = "Feminino",
+                                        .default = NA_character_),
+                   nascidos) |>
+  dplyr::filter(!is.na(uf)) |>
+  dplyr::group_by(uf, sexo, ano, status_dado) |>
+  dplyr::summarise(nv = sum(nascidos), .groups = "drop") |>
+  dplyr::select(uf, sexo, nv, ano, status_dado) |>
+  dplyr::arrange(ano, uf, sexo)
 
-message("== SINASC: baixando e agregando nascidos vivos (UF × ano × sexo) ==")
-grade <- tidyr::expand_grid(uf = UFS, ano = ANOS_SINASC)
-nv <- purrr::pmap(grade, function(uf, ano) agrega_uf_ano(uf, ano)) |>
-  purrr::compact() |> dplyr::bind_rows()
-
-# QC: completude UF×ano e total nacional por ano
 cat("\n• nascidos vivos por ano (Brasil):\n")
-print(nv |> dplyr::group_by(ano) |> dplyr::summarise(nv = sum(nv),
-      ufs = dplyr::n_distinct(uf)))
+print(nv |> dplyr::group_by(ano, status_dado) |>
+        dplyr::summarise(nv = sum(nv), ufs = dplyr::n_distinct(uf), .groups = "drop"), n = 30)
+faltam <- setdiff(ANOS_SINASC, nv$ano[nv$status_dado == "DEFINITIVO"])
+if (length(faltam)) warning("anos definitivos ausentes: ", paste(faltam, collapse = ", "))
 
-arrow::write_parquet(nv, OUT)
+arrow::write_parquet(nv, here::here("data/denominators/nascidos_vivos.parquet"))
 saveRDS(nv, here::here("data/denominators/nascidos_vivos.rds"))
-message(sprintf("\n✓ SINASC: %d linhas (UF×ano×sexo) → %s", nrow(nv), basename(OUT)))
+message(sprintf("\n✓ SINASC: %d linhas (UF×ano×sexo) → nascidos_vivos.parquet", nrow(nv)))

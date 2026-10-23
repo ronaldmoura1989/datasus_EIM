@@ -56,14 +56,18 @@ cadeia longa: recorte CID → camadas de captura → consolidação → denomina
 permite a terceiros distinguir "o número mudou porque o dado mudou" de "o número mudou
 porque o método estava errado" — e é condição para que os valores citados em versões
 anteriores (relatórios, apresentações, rascunhos de manuscrito) possam ser rastreados.
-Os valores da coluna "publicado agora" são **recalculados a cada render**, não digitados.
+Os valores da coluna "publicado agora" são **recalculados a cada render**, não digitados — por
+isso, nos Ciclos 1 e 2, eles mostram o número **vigente** (desde o Ciclo 4, na série
+`r PER`) e diferem do "estava publicado" também pela janela. As tabelas dos Ciclos 3 e 4
+registram os valores de cada versão.
 :::
 
 ::: {.callout-alerta}
 **Se você citou este painel antes desta data**, confira sua citação nas tabelas abaixo.
 Vários números de destaque mudaram por **ordem de grandeza** — notadamente o total de
-óbitos por EIM no SIM (Ciclo 1), o KPI de AIH com EIM em qualquer campo (Ciclo 2) e o
-número estimado de pacientes do SIA (pseudo-ID, Ciclo 3).
+óbitos por EIM no SIM (Ciclo 1), o KPI de AIH com EIM em qualquer campo (Ciclo 2), o
+número estimado de pacientes do SIA (pseudo-ID, Ciclo 3) e, no Ciclo 4, **todos os totais**,
+que passaram a cobrir `r PER` em vez de 2021–2025.
 :::
 
 ## Estado atual dos números de destaque
@@ -74,11 +78,89 @@ cat(kpi_row(list(
   c(fmt_n(sia_core_n), "registros ambulatoriais (SIA, core)"),
   c(fmt_n(sih_qualq_core), "AIH com EIM core em qualquer campo (SIH)"),
   c(paste0(fmt_n(sim_cb), "–", fmt_n(sim_cb_max)),
-    "óbitos por EIM (SIM, causa básica: core–teto, 2021–2023)"),
+    paste0("óbitos por EIM (SIM, causa básica: core–teto, ", PER_SIM, ")")),
   c(paste0(fmt_2(tx_nac_ult), "/100 mil"),
     paste0("mortalidade padronizada nacional (", max(ANOS_SIM), ")"))
 )))
 ```
+
+---
+
+# Ciclo 4 — série 2010–2025 a partir dos dados brutos do DATASUS (outubro/2026)
+
+```{r c4-setup}
+#| include: false
+# Errata do SIM na MESMA janela que estava publicada (2021–2023): isola o efeito do bug
+s21 <- dplyr::filter(D$sim, ano %in% 2021:2023)
+c4_qualq    <- sum(s21$eim_qualquer, na.rm = TRUE)
+c4_cb       <- sum(s21$eim_causa_basica, na.rm = TRUE)
+c4_cb_max   <- sum(s21$eim_cb_ampliado, na.rm = TRUE)
+c4_so_linha <- sum(s21$eim_qualquer & !s21$eim_cb_ampliado, na.rm = TRUE)
+# Leituras de tendência na série longa (calculadas, nunca digitadas)
+tx_sih_c4 <- D$sih |> dplyr::filter(eim_principal) |>
+  contar_estrato(col_uf = "uf_res", distinct_por = "n_aih") |>
+  taxas_padronizadas(D$pop, grupos = "ano")
+tr_sih_c4 <- tendencia_txt(tx_sih_c4)
+tr_sim_c4 <- tendencia_txt(tx_nac)
+```
+
+O painel deixou de usar os RData pré-processados de 2020–2025 do servidor Lika e passou a
+ser reconstruído a partir dos **arquivos originais do DATASUS** (DBC do FTP oficial), baixados
+e filtrados de novo para **`r PER`**. A recomendação de série longa vinha de duas
+necessidades: tirar o efeito da pandemia do ano-base e cobrir o período **anterior à Política
+Nacional de Atenção Integral às Pessoas com Doenças Raras** (Portaria GM/MS 199/2014). Os
+12.122 arquivos (224 GB; SIA-PA, SIH-RD, SIM-DO e SINASC) foram filtrados numa única passada
+— com os mesmos números do pipeline anterior no teste de regressão (PE 2021: SIH e SIA
+idênticos linha a linha) — e o SIM passou a ser lido cru.
+
+## Errata — óbitos com EIM nas causas múltiplas (SIM)
+
+```{r c4-errata}
+c4a <- tibble::tribble(
+  ~`Item (mesma janela publicada, 2021–2023)`, ~`Estava publicado`, ~`Está publicado agora`, ~`Por que mudou`,
+  "Óbitos com EIM em qualquer linha da declaração de óbito", "10.554", fmt_n(c4_qualq),
+  paste0("O filtro antigo lia só os 4 primeiros caracteres de cada campo de causa. No SIM, as linhas A–D e II trazem vários CIDs concatenados com \"*\" (ex.: \"*A419*J960\") — o filtro não reconhecia nenhum. ", fmt_n(c4_so_linha), " óbitos com EIM só nas causas múltiplas ficavam de fora."),
+  "Óbitos com EIM como causa básica (core)", "1.539", fmt_n(c4_cb), "Inalterado: a causa básica é um CID por campo, e o filtro a lia corretamente.",
+  "Óbitos com EIM como causa básica (teto: core+limítrofe+envelope)", "10.114", fmt_n(c4_cb_max), "Inalterado — confirma que a nova filtragem reproduz o que estava certo."
+)
+tabela_eim(c4a, titulo = "Ciclo 4 · errata do SIM, isolada na janela 2021–2023",
+  nota = "A taxa de mortalidade publicada (causa básica core) não era afetada. O indicador corrigido é o de 'qualquer linha', usado na página do SIM para posicionar o EIM na declaração de óbito; o grosso do acréscimo é envelope (dislipidemia, outros distúrbios metabólicos) em adultos.")
+```
+
+## Leituras que mudaram com a série longa
+
+```{r c4-leituras}
+c4b <- tibble::tribble(
+  ~`Item`, ~`Estava publicado (2021–2025)`, ~`Está publicado agora`, ~`Por que mudou`,
+  "Tendência da internação (SIH, diagnóstico principal)", "Em alta clara: 2,17 → 2,83/100 mil, ~+9%/ano (2021–2024)",
+  paste0(tr_sih_c4$dir, ": ", tr_sih_c4$var, " em ", PER, "; ", serie_txt(tx_sih_c4)),
+  "O recorte começava no vale da pandemia (2020); a 'alta' era recuperação. Em 16 anos não há tendência sustentada.",
+  "Tendência da mortalidade (SIM, causa básica core)", "Estável: 0,25 → 0,26 → 0,25/100 mil (2021–2023)",
+  paste0(tr_sim_c4$dir, ": ", tr_sim_c4$var, " em ", PER_SIM, "; ", serie_txt(tx_nac)),
+  "Com 15 anos a tendência aparece — e é bem mais lenta que a da detecção ambulatorial.",
+  "Denominador populacional", "Censo 2022 replicado como constante em 2021–2025",
+  paste0("Projeções da População IBGE, Revisão 2024 — série anual ", PER),
+  "Uma única série ancorada no Censo 2022, sem degrau entre fontes; as taxas por 100 mil mudam um pouco também por isso.",
+  "Ano analítico do SIA", "Ano do arquivo (mês de processamento)", "Ano da competência de atendimento (PA_CMP)",
+  "Um atendimento de dezembro faturado em janeiro passa a contar no ano em que ocorreu.",
+  "SIM e SINASC", "SIM 2021–2023; SINASC 2021–2024", paste0("Definitivos ", PER_SIM, "; o ano preliminar fica fora das taxas"),
+  "O DATASUS publicou o SIM 2024 definitivo; preliminares são incompletos e sujeitos a revisão."
+)
+tabela_eim(c4b, titulo = "Ciclo 4 · o que muda de leitura com a série 2010–2025",
+  nota = "Todos os totais do painel (registros, AIH, óbitos, pacientes estimados) passaram a cobrir a série longa e NÃO são comparáveis aos da versão 2021–2025.")
+```
+
+**Cuidados novos, medidos no catálogo de colunas por ano** (`scripts/r550/catalogo_schema.R`):
+
+- O **CID secundário da AIH muda de campo** em 2014–2015 (DIAG_SECUN → DIAGSEC1–9) e seu
+  preenchimento cresce ao longo da série; no **SIA o CID secundário praticamente some a partir
+  de 2015**. Séries comparáveis usam o diagnóstico **principal**.
+- **Raça/cor no SIA** passa de cerca de um terço preenchida em 2010 a mais de 90% em 2025 —
+  só é analisável nos anos recentes.
+- O **volume de registros do SIA mais que triplica** em 2010–2025; contagem bruta não é
+  tendência, e as taxas usam população anual.
+- Vários **procedimentos SIGTAP** usados nas análises de medicamento e de genética só existem
+  a partir de 2014 ou depois; ausência antes disso pode ser inexistência do código.
 
 ---
 
@@ -90,39 +172,27 @@ uma APAC ativa por mês. Comparado a ela, o pseudo-ID publicado estava **inflado
 ordem de grandeza** — 1.043–1.117 "indivíduos" com MPS em PE para cerca de 70 pacientes em
 TRE por mês.
 
-```{r c3-setup}
-#| include: false
-ps_br  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"), show_col_types = FALSE)
-ps_pe  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes_PE.csv"), show_col_types = FALSE)
-ps_rec <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes_Recife.csv"), show_col_types = FALSE)
-TOT <- "TOTAL (todos os subgrupos core)"
-iv_br  <- function(sg) with(ps_br[ps_br$subgrupo == sg, ],
-  paste0(fmt_n(pseudo_pac_frouxa), "–", fmt_n(pseudo_pac_estrita), " (", fmt_1(razao), " reg./pac.)"))
-iv_loc <- function(d, sg) with(d[d$subgrupo == sg, ],
-  paste0(fmt_n(pseudo_frouxa), "–", fmt_n(pseudo_estrita),
-         if (!is.na(ref_ceaf_mes)) paste0("; ref. CEAF ", fmt_n(round(ref_ceaf_mes)), "/mês") else ""))
-```
-
 ## Errata — pseudo-individualização do SIA
 
 ```{r c3-tabela}
+# Valores CONGELADOS da versão do Ciclo 3 (janela 2021–2025, manifestos do commit 8a776ba):
+# uma errata registra o que cada versão publicou. Os números atuais (série 2010+) estão
+# nas páginas e no Ciclo 4.
 c3 <- tibble::tribble(
-  ~`Item`, ~`Estava publicado`, ~`Está publicado agora`,
-  "Fibrose cística — Brasil (frouxa–estrita)",  "103.660–111.738 (5,3 reg./pac.)", iv_br("fibrose_cistica"),
-  "PKU — Brasil",                                "24.404–27.741 (4,7 reg./pac.)",   iv_br("aminoacidopatia_PKU"),
-  "Esfingolipidoses E75.2 — Brasil",            "9.883–10.942 (4,5 reg./pac.)",    iv_br("esfingolipidose_outras"),
-  "MPS — Brasil",                                "8.168–9.141 (4,5 reg./pac.)",     iv_br("mucopolissacaridose"),
-  "Hipotireoidismo congênito — Brasil",         "20.313–26.173 (5,9 reg./pac.)",   iv_br("hipotireoidismo_congenito"),
-  "MPS — Pernambuco",                            "1.043–1.117",                     iv_loc(ps_pe, "mucopolissacaridose"),
-  "Fibrose cística — Pernambuco",               "3.102–3.444",                     iv_loc(ps_pe, "fibrose_cistica"),
-  "Total EIM core — Pernambuco",                "5.713–6.438 (6,3 reg./indivíduo)",
-    paste0(iv_loc(ps_pe, TOT), " (", fmt_1(ps_pe$razao[ps_pe$subgrupo == TOT]), " reg./indivíduo)"),
-  "Total EIM core — Recife",                    "2.905–3.134 (9,7 reg./indivíduo)",
-    paste0(iv_loc(ps_rec, TOT), " (", fmt_1(ps_rec$razao[ps_rec$subgrupo == TOT]), " reg./indivíduo)")
+  ~`Item`, ~`Estava publicado`, ~`Corrigido no Ciclo 3 (2021–2025)`,
+  "Fibrose cística — Brasil (frouxa–estrita)",  "103.660–111.738 (5,3 reg./pac.)", "19.102–28.778 (23,0 reg./pac.)",
+  "PKU — Brasil",                                "24.404–27.741 (4,7 reg./pac.)",   "4.709–8.909 (17,2 reg./pac.)",
+  "Esfingolipidoses E75.2 — Brasil",            "9.883–10.942 (4,5 reg./pac.)",    "2.012–3.237 (18,2 reg./pac.)",
+  "MPS — Brasil",                                "8.168–9.141 (4,5 reg./pac.)",     "1.827–2.666 (16,6 reg./pac.)",
+  "Hipotireoidismo congênito — Brasil",         "20.313–26.173 (5,9 reg./pac.)",   "13.707–21.233 (7,7 reg./pac.)",
+  "MPS — Pernambuco",                            "1.043–1.117",                     "118–183; ref. CEAF 71/mês",
+  "Fibrose cística — Pernambuco",               "3.102–3.444",                     "726–1.159; ref. CEAF 125/mês",
+  "Total EIM core — Pernambuco",                "5.713–6.438 (6,3 reg./indivíduo)", "1.726–2.507; ref. CEAF 326/mês (17,2 reg./indivíduo)",
+  "Total EIM core — Recife",                    "2.905–3.134 (9,7 reg./indivíduo)", "505–674; ref. CEAF 327/mês (44,8 reg./indivíduo)"
 )
 tabela_eim(c3,
-  titulo = "Ciclo 3 · pseudo-pacientes antes e depois da correção do motor de linkage",
-  nota = "Ref. CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês). O pseudo-ID conta quem apareceu em 2021–2025, com ou sem medicamento, e por isso fica acima da referência — mas agora na mesma ordem de grandeza. Valores 'estava publicado' transcritos dos manifestos da versão anterior.")
+  titulo = "Ciclo 3 · pseudo-pacientes antes e depois da correção do motor de linkage (janela 2021–2025)",
+  nota = "Ref. CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês). O pseudo-ID conta quem apareceu na janela, com ou sem medicamento, e por isso fica acima da referência — mas, corrigido, na mesma ordem de grandeza. Valores transcritos dos manifestos de cada versão; os números atuais (série 2010+) estão nas páginas do painel.")
 ```
 
 **Por que mudou.** Três defeitos do motor de linkage, corrigidos em
@@ -171,7 +241,7 @@ na PKU, fludrocortisona na HAC, tafamidis na ATTRv. Resultado publicado na
 
 ---
 
-# Ciclo 2 — auditoria de execução (PR #2, versão atual)
+# Ciclo 2 — auditoria de execução (PR #2)
 
 Após o Ciclo 1, o código corrigido foi **executado** (não apenas relido) por um
 epidemiologista e um bioinformata em paralelo, para verificar se as correções tinham de

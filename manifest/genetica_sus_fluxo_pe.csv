@@ -1,0 +1,44 @@
+categoria,uf_exec,exames,pct
+Farmacogenética,PE,42,95.5
+Farmacogenética,SP,,4.5
+Citogenética,AL,,0.1
+Citogenética,MG,6,0.2
+Citogenética,PE,3594,97.8
+Citogenética,RJ,5,0.1
+Citogenética,SP,26,0.7
+Citogenética,PR,23,0.6
+Citogenética,BA,9,0.2
+Citogenética,CE,,0.1
+Citogenética,DF,7,0.2
+Oncologia molecular,CE,6,0.1
+Oncologia molecular,PE,7765,99.9
+Oncologia molecular,SP,,0
+Oncologia molecular,TO,,0
+Genética molecular dirigida,PR,9,1
+Genética molecular dirigida,GO,,0.3
+Citogenômica (array),GO,,20
+Citogenômica (array),PE,,80
+Genética molecular dirigida,BA,,0.1
+Genética molecular dirigida,RJ,,0.1
+Genética molecular dirigida,SP,,0.1
+Bioquímica especializada de EIM,RS,5,38.5
+Bioquímica especializada de EIM,PE,8,61.5
+Genética molecular dirigida,CE,,0.5
+Genética molecular dirigida,PE,851,97.8
+outro 02.02.10,SE,,100
+Confirmatório / diagnóstico tardio (pezinho),BA,7,0.6
+Confirmatório / diagnóstico tardio (pezinho),SP,,0.1
+Confirmatório / diagnóstico tardio (pezinho),AL,,0.3
+Confirmatório / diagnóstico tardio (pezinho),ES,,0.1
+Confirmatório / diagnóstico tardio (pezinho),MG,,0.1
+Confirmatório / diagnóstico tardio (pezinho),PE,1138,98.8
+Confirmatório / diagnóstico tardio (pezinho),PI,,0.1
+Atendimento de doenças raras,BA,8,0.1
+Atendimento de doenças raras,CE,6,0
+Atendimento de doenças raras,PB,,0
+Atendimento de doenças raras,PE,15041,99.5
+Atendimento de doenças raras,PR,15,0.1
+Atendimento de doenças raras,RJ,18,0.1
+Atendimento de doenças raras,SP,,0
+Atendimento de doenças raras,GO,7,0
+Atendimento de doenças raras,RS,7,0

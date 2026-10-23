@@ -46,11 +46,18 @@ set.seed(42)
 # -----------------------------------------------------------------------------
 # 1. Parâmetros globais
 # -----------------------------------------------------------------------------
-# Janela: 2021–2026 (pedido). Disponibilidade real no remoto Lika (2026-07-01):
-#   SIA/SIH = 2021–2025 (trimestral); SIM-DO = 2021–2023 (2024+ ainda não no DATASUS);
-#   SINASC = a baixar (anual). 2026 ainda não existe. ANOS_SIM tratado à parte.
-ANOS      <- 2021:2025
-ANOS_SIM  <- 2021:2023
+# Janela: 2010–2025 (série longa: elimina o efeito COVID como ano-base e cobre o
+#   período anterior à Política Nacional de Doenças Raras, Portaria GM/MS 199/2014).
+#   Brutos = DBC do FTP do DATASUS (R550-2), filtrados por scripts/r550/filtrar_um.R.
+#   SIA/SIH mensais até 2026 → 2025 é o último ano completo. SIM/SINASC: definitivos
+#   até 2024; 2025 é PRELIMINAR e fica fora das taxas (ANOS_SIM/ANOS_SINASC).
+ANOS        <- 2010:2025
+ANOS_SIM    <- 2010:2024
+ANOS_SINASC <- 2010:2024
+# Filtrados 2010+ (parquet de scripts/r550/filtrar_um.R: <BASE>/{filtrado,denominador}/).
+# No R550-2 é um link para ~/Documentos/ronald/datasus_filtrado; sobrescrever com a
+# variável de ambiente EIM_DIR_FILTRADO se estiver noutro lugar.
+DIR_FILTRADO <- Sys.getenv("EIM_DIR_FILTRADO", here::here("data/filtered_2010"))
 MESES <- 1:12                 # SIA/SIH mensais; SIM/SINASC anuais
 UFS   <- c("AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG",
            "PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO")
@@ -69,7 +76,7 @@ FAIXAS_EIM <- c(0, 1/12, 1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, Inf)
 FAIXAS_PAD <- c(seq(0, 80, by = 5), Inf)
 POP_PADRAO   <- "censo2022"
 N_SUPRESSAO  <- 5             # LGPD: suprimir N<5 (REGRA ESTRUTURAL em doença rara)
-ANOS_COVID   <- c(2020, 2021)
+ANOS_COVID   <- 2020:2022   # pandemia: queda de acesso (2020–21) e excesso de óbitos (U07, 2020–22)
 
 # Paleta visual (espectro verde-azulado → índigo, distinta do HS rosé-roxo)
 PAL_EIM      <- c("#1B6F6A","#2E9E96","#8FD3C7","#3E5C8A","#7FA6D9","#26495C","#0E2F38")

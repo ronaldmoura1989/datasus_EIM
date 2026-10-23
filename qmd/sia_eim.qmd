@@ -1,6 +1,6 @@
 ---
 title: "Ambulatorial (SIA-PA)"
-subtitle: "Detecção ambulatorial de EIM · core vs envelope · traçadoras · taxas por UF · 2021–2025"
+subtitle: "Detecção ambulatorial de EIM · core vs envelope · traçadoras · taxas por UF · 2010–2025"
 toc: false
 ---
 
@@ -82,7 +82,7 @@ D$sia_vol_agg |>
   scale_fill_manual(values = c("Envelope (E78 etc. — TETO)" = "#8FD3C7",
                                "Limítrofe" = "#7FA6D9",
                                "Core (EIM nomeados)" = "#1B6F6A"), guide = "none") +
-  labs(x = NULL, y = "Registros ambulatoriais (SIA, 2021–2025)",
+  labs(x = NULL, y = paste0("Registros ambulatoriais (SIA, ", PER, ")"),
        title = "Camadas do SIA: o envelope é ~20× o core",
        subtitle = "Envelope = dislipidemia (E78) e correlatos: doença comum, tratada como bracketing, não caso.") +
   theme_eim()
@@ -101,7 +101,7 @@ D$m_tracadora |>
   coord_flip(clip = "off") +
   scale_y_continuous(labels = scales::label_number(big.mark = ".", scale_cut = scales::cut_short_scale()),
                      expand = expansion(mult = c(0, 0.16))) +
-  labs(x = NULL, y = "Registros ambulatoriais (core, 2021–2025)",
+  labs(x = NULL, y = paste0("Registros ambulatoriais (core, ", PER, ")"),
        title = "Traçadoras de EIM no SIA (registros ≥ 500)",
        subtitle = "Fibrose cística domina o volume; hipotireoidismo congênito e PKU (rastreadas) em seguida.") +
   theme_eim()
@@ -158,7 +158,7 @@ pseudo |>
                                                          fmt_n(round(ref_ceaf_mes)))) |>
   tabela_eim(
     titulo = "Registros vs pseudo-pacientes por subgrupo crônico de alto volume (SIA core)",
-    nota = "Pseudo-ID é AGRUPADOR de registros compatíveis, não identificador de pessoas (LGPD; ver Glossário). Estrita = limite superior de pacientes; frouxa = inferior. Razão reg./paciente = intensidade de uso. Referência CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês; o pseudo-ID conta quem apareceu em 2021–2025, com ou sem medicamento, e por isso fica acima). Só agregados; supressão N<5.")
+    nota = paste0("Pseudo-ID é AGRUPADOR de registros compatíveis, não identificador de pessoas (LGPD; ver Glossário). Estrita = limite superior de pacientes; frouxa = inferior. Razão reg./paciente = intensidade de uso. Referência CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês; o pseudo-ID conta quem apareceu em ", PER, ", com ou sem medicamento, e por isso fica acima). Só agregados; supressão N<5."))
 ```
 
 ::: {.callout-nota}
@@ -189,7 +189,7 @@ proc_top |>
     Registros = fmt_n(registros),
     `Valor aprovado (R$)` = paste0("R$ ", fmt_n(round(valor_apr)))) |>
   tabela_eim(
-    titulo = "Top 15 procedimentos SIGTAP no SIA-EIM (core, 2021–2025)",
+    titulo = paste0("Top 15 procedimentos SIGTAP no SIA-EIM (core, ", PER, ")"),
     nota = "Nomes via tabela SIGTAP (microdatasus::sigtab). Códigos sem correspondência marcados [VERIFICAR nome SIGTAP]. Dispensação de alto custo, consultas e exames dominam.")
 ```
 

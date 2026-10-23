@@ -13,7 +13,12 @@ source("_common.R")
 tx_sim <- D$sim |> dplyr::filter(eim_causa_basica) |>
   contar_estrato(col_uf = "uf_res") |>
   taxas_padronizadas(D$pop, grupos = "ano")
-tx_sim_txt <- paste(fmt_2(tx_sim$taxa_pad[order(tx_sim$ano)]), collapse = " → ")
+tx_sim_txt <- serie_txt(tx_sim)
+tr_sim <- tendencia_txt(tx_sim)
+tr_sia <- D$sia |> dplyr::filter(camada == "core") |> dplyr::select(ano) |> dplyr::collect() |>
+  dplyr::count(ano, name = "eventos") |> tendencia_txt()
+tr_sih <- D$sih |> dplyr::filter(eim_principal) |> dplyr::group_by(ano) |>
+  dplyr::summarise(eventos = dplyr::n_distinct(n_aih), .groups = "drop") |> tendencia_txt()
 
 mi_sim <- D$sim |> dplyr::filter(eim_causa_basica, obito_infantil) |>
   dplyr::count(ano, name = "obitos") |>
@@ -53,9 +58,11 @@ primária. Ver o [Glossário](glossario.qmd) para os termos técnicos.
 
 ## O que os dados mostram — em uma frase
 
-A **internação por EIM sobe ~+9%/ano** (2,17 → 2,83/100 mil hab) enquanto a **mortalidade
-padronizada fica estável** (`r tx_sim_txt`/100 mil) — padrão **compatível com expansão de
-triagem e de terapia** (não com aumento de incidência); a **mortalidade infantil por EIM**
+Em `r PER`, a **detecção ambulatorial de EIM está `r tr_sia$dir`** (`r tr_sia$var`), a
+**internação `r tr_sih$dir`** (`r tr_sih$var`) e a **mortalidade padronizada
+`r tr_sim$dir`**, porém bem mais devagar (`r tr_sim$var`; `r tx_sim_txt` por 100 mil) —
+padrão **compatível com expansão de triagem, de diagnóstico e de terapia** (não com aumento de
+incidência); a **mortalidade infantil por EIM**
 (`r mi_faixa`/100 mil NV, `r mi_obitos` óbitos/ano) concentra-se nos **letais precoces**
 cuja triagem ainda está em implantação; a rede é **centralizada** (Recife concentra `r rec_txt`); e a **codificação é, ela própria, um achado** (biotinidase invisível no
 balde E88.9; Gaucher/Fabry/Niemann-Pick fundidos em E75.2).

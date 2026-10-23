@@ -86,7 +86,9 @@ resolver_nome <- function(df) {
 # -----------------------------------------------------------------------------
 sia <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds")) |>
   dplyr::filter(camada == "core") |>
-  dplyr::select(pa_proc_id, tracadora, subgrupo, pa_qtdapr, pa_valapr)
+  dplyr::select(pa_proc_id, tracadora, subgrupo, pa_qtdapr, pa_valapr) |>
+  dplyr::mutate(pa_qtdapr = suppressWarnings(as.numeric(pa_qtdapr)),   # consolidado 2010+ pode vir como texto
+                pa_valapr = suppressWarnings(as.numeric(pa_valapr)))
 
 # -----------------------------------------------------------------------------
 # 3. Top procedimentos GLOBAL (por volume de registros)

@@ -18,6 +18,8 @@
 #
 # USO (no remoto):
 #   Rscript filtrar_cid_remoto.R --base=SIA [--uf=ac] [--out=/dados/eim/SIA]
+#   Filtro por PROCEDIMENTO (OR com o CID): --procs="0202110,0604020" casa prefixos de
+#   PA_PROC_ID (SIA) ou PROC_REA/PROC_SOLIC (SIH). Só procedimento: --prefs=NONE.
 # =============================================================================
 
 suppressPackageStartupMessages(library(stringr))
@@ -45,7 +47,15 @@ PREF_DEFAULT <- c("E70","E71","E72","E73","E74","E75","E76","E77","E78","E79","E
           "G120","D66","D67")                       # raras não-EIM da lista MS (contexto)
 prefs_arg <- getarg("prefs", "")
 PREF <- if (nzchar(prefs_arg)) toupper(strsplit(prefs_arg, ",")[[1]]) else PREF_DEFAULT
-REGEX_EIM <- paste0("^(", paste(sort(unique(PREF)), collapse="|"), ")")
+PREF <- setdiff(PREF, "NONE")
+REGEX_EIM <- if (length(PREF)) paste0("^(", paste(sort(unique(PREF)), collapse="|"), ")") else NULL
+
+# Prefixos de procedimento SIGTAP (opcional; OR com o filtro de CID)
+procs_arg  <- getarg("procs", "")
+PROCS      <- if (nzchar(procs_arg)) strsplit(procs_arg, ",")[[1]] else character()
+REGEX_PROC <- if (length(PROCS)) paste0("^(", paste(sort(unique(PROCS)), collapse="|"), ")") else NULL
+COLS_PROC  <- switch(BASE, SIA = "PA_PROC_ID", SIH = c("PROC_REA", "PROC_SOLIC"), SIM = character())
+if (is.null(REGEX_EIM) && is.null(REGEX_PROC)) stop("Nenhum filtro: informe --prefs e/ou --procs")
 
 # Colunas de CID por base (comparação por NOME em maiúsculas → case-insensitive)
 COLS_CID <- switch(BASE,
@@ -68,12 +78,14 @@ carregar_x <- function(fp){ e<-new.env(); nm<-load(fp, envir=e); get(nm[1], envi
 
 filtrar_eim <- function(df){
   up <- toupper(names(df))
-  cols <- names(df)[up %in% COLS_CID]
-  if (!length(cols)) return(df[0, , drop=FALSE])
   hit <- rep(FALSE, nrow(df))
-  for (cc in cols) {
+  if (!is.null(REGEX_EIM)) for (cc in names(df)[up %in% COLS_CID]) {
     v <- str_sub(str_trim(toupper(as.character(df[[cc]]))), 1, 4)
     hit <- hit | (str_starts(v, REGEX_EIM) %in% TRUE)
+  }
+  if (!is.null(REGEX_PROC)) for (cc in names(df)[up %in% COLS_PROC]) {
+    v <- str_trim(as.character(df[[cc]]))
+    hit <- hit | (str_starts(v, REGEX_PROC) %in% TRUE)
   }
   df[which(hit), , drop=FALSE]
 }

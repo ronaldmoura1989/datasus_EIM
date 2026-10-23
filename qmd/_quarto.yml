@@ -5,7 +5,7 @@ project:
 
 website:
   title: "Erros Inatos do Metabolismo no SUS"
-  description: "Caracterização dos EIM (CID-10 E70–E90 + triagem neonatal) nos microdados do DATASUS — SIA, SIH, SIM e SINASC, 2021–2025."
+  description: "Caracterização dos EIM (CID-10 E70–E90 + triagem neonatal) nos microdados do DATASUS — SIA, SIH, SIM e SINASC, 2010–2025."
   site-url: ""
   navbar:
     background: "#1B6F6A"
@@ -30,7 +30,7 @@ website:
       - href: notas_lancamento.qmd
         text: Notas de lançamento
   page-footer:
-    center: "Microdados DATASUS (SIA-PA, SIH-RD, SIM-DO) · SINASC · Censo 2022/IBGE · CID-10 E70–E90 + triagem · 2021–2025 (SIM até 2023). Taxas de detecção/uso e mortalidade registrada, não de prevalência."
+    center: "Microdados DATASUS (SIA-PA, SIH-RD, SIM-DO) · SINASC · Projeções da População IBGE 2024 · CID-10 E70–E90 + triagem · 2010–2025 (SIM até 2024). Taxas de detecção/uso e mortalidade registrada, não de prevalência."
 
 format:
   html:
