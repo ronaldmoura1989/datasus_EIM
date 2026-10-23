@@ -52,7 +52,7 @@ tibble::tibble(
                     guide = "none") +
   labs(x = NULL, y = paste0("AIH distintas (", PER, ")"),
        title = "SIH: dois sabores de captura — NÃO somar",
-       subtitle = "Qualquer campo (~6×) inclui comorbidade e contexto; principal é o motivo da internação.") +
+       subtitle = paste0("Qualquer campo (~", round(n_qualq / n_princ), "×) inclui comorbidade e contexto; principal é o motivo da internação.")) +
   theme_eim()
 ```
 
@@ -121,10 +121,10 @@ tx_ano |>
   geom_line(color = "#1B6F6A", linewidth = 1.1) +
   geom_point(color = "#1B6F6A", size = 2.4) +
   geom_text(aes(label = fmt_2(taxa_pad)), vjust = -1.1, size = 3, color = "#0E2F38") +
-  scale_x_continuous(breaks = ANOS) +
+  escala_anos() +
   labs(x = NULL, y = "por 100 mil (padronizada)",
        title = "Taxa de internação por EIM (principal), padronizada por idade e sexo",
-       subtitle = paste0(serie_txt(tx_ano), " · tendência ", tr_sih$var)) +
+       subtitle = paste0(serie_txt(tx_ano), "\nVariação média ", tr_sih$var, " — ", tr_sih$dir, ".")) +
   theme_eim()
 ```
 

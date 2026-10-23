@@ -3,7 +3,7 @@
 **Projeto DATASUS-EIM (Erros Inatos do Metabolismo) — perspectiva de genética clínica e medicina de doenças raras.**
 
 > **Aviso de leitura (obrigatório).** Este é um estudo **ecológico/descritivo** sobre dados
-> administrativos secundários (SIA/SIH 2021–2025; SIM 2021–2023; SINASC como denominador).
+> administrativos secundários (SIA/SIH `r PER`; SIM e SINASC `r PER_SIM`, definitivos; SINASC como denominador).
 > A unidade é o **registro/atendimento** (ou o óbito no SIM), **não a pessoa**. As taxas são de
 > **detecção/uso e mortalidade registrada — nunca prevalência**. As três bases medem conceitos
 > distintos e **não se somam**. Nenhuma associação aqui autoriza inferência causal ou individual
@@ -15,13 +15,6 @@
 
 # Parte A — Discussão clínico-genética dos resultados
 
-> ⚠️ **NÚMEROS DESATUALIZADOS — pendente de regeneração.** A definição de caso do SIM
-> mudou: `eim_causa_basica` usava a camada *ampliado* (core+limítrofe+**envelope**) e passou
-> a usar **core**, alinhando-se a SIA e SIH. A lookup também foi corrigida (E80.3/E80.4/E80.5
-> e E85.0/E85.2). **Todos os números de mortalidade abaixo precedem essas correções** e
-> superestimam a carga de EIM. Regenerar com o pipeline antes de citar.
-> Ver `ref/avaliacao_critica_externa.md`.
-
 ## A.1 A dissociação incidência × mortalidade infantil à luz da história natural
 
 O achado mais informativo do eixo de mortalidade (SIM como base central) é uma **dissociação
@@ -31,32 +24,46 @@ separação **é história natural, não ruído de dado**.
 De um lado, as **doenças tratáveis e rastreadas** mostram alta intensidade de acompanhamento no
 1º ano com mortalidade infantil baixíssima:
 
-- **Hipotireoidismo congênito** (E03.1): detecção ambulatorial expressiva (38.782 registros SIA
-  no 1º ano) com mortalidade infantil de **0,08/100 mil NV** — a menor entre as tratáveis de
-  alto volume. Tratamento simples e barato (levotiroxina); triagem histórica (Fase I do PNTN).
-- **PKU / fenilcetonúria** (E70.0): **1 óbito infantil** em todo o pool 2021–2023 (taxa
-  suprimida por N<5), contra 7.063 registros SIA e 78 AIH no 1º ano. É o retrato canônico do
+- **Hipotireoidismo congênito** (E03.1): detecção ambulatorial expressiva (`r N(inc("Hipotireoidismo_cong", "sia"))` registros SIA
+  no 1º ano; `r N(inc("Hipotireoidismo_cong", "aih"))` AIH) com mortalidade infantil de **`r D2(inc("Hipotireoidismo_cong", "mi"))`/100 mil NV**
+  (`r N(inc("Hipotireoidismo_cong", "obitos"))` óbitos no pool `r PER_SIM`) — muito abaixo de FC e HAC, com volume de acompanhamento comparável ou maior.
+  Tratamento simples e barato (levotiroxina); triagem histórica (Fase I do PNTN).
+- **PKU / fenilcetonúria** (E70.0): **`r N(inc("PKU", "obitos"))` óbitos infantis** em todo o pool `r PER_SIM`
+  (**`r D2(inc("PKU", "mi"))`/100 mil NV**, a menor taxa entre as traçadoras com taxa publicável), contra
+  `r N(inc("PKU", "sia"))` registros SIA e `r N(inc("PKU", "aih"))` AIH no 1º ano. É o retrato canônico do
   sucesso do modelo triagem + dietoterapia isenta de fenilalanina: uma doença que, sem triagem,
   causa deficiência intelectual grave, e que rastreada e tratada **praticamente não mata no
   primeiro ano**.
-- **Fibrose cística** (E84): maior detecção entre as tratáveis (50.826 registros SIA no 1º ano),
-  mortalidade infantil **0,81/100 mil NV** — mais alta que PKU/HC porque a FC tem morbidade
+- **Fibrose cística** (E84): maior detecção entre as tratáveis (`r N(inc("Fibrose_cistica", "sia"))` registros SIA no 1º ano;
+  `r N(inc("Fibrose_cistica", "aih"))` AIH), mortalidade infantil **`r D2(inc("Fibrose_cistica", "mi"))`/100 mil NV**
+  (`r N(inc("Fibrose_cistica", "obitos"))` óbitos) — mais alta que PKU/HC porque a FC tem morbidade
   respiratória/pancreática progressiva mesmo sob tratamento, mas ainda muito abaixo do que seria
   sua letalidade sem cuidado organizado. Serve de **benchmark de doença bem codificada** (não é
   EIM *stricto sensu*).
-- **HAC** (E25.0): mortalidade infantil **0,23/100 mil NV** — intermediária, coerente com o
+- **HAC** (E25.0): mortalidade infantil **`r D2(inc("HAC", "mi"))`/100 mil NV** (`r N(inc("HAC", "obitos"))` óbitos;
+  `r N(inc("HAC", "sia"))` registros SIA no 1º ano) — intermediária entre HC/PKU e FC, coerente com o
   risco de crise perdedora de sal no neonato, mitigável se detectada e tratada a tempo.
 
 Do outro lado, as **letais precoces** — aquelas em que o **óbito neonatal é o próprio desfecho
 clínico da história natural**, mesmo quando a doença é detectada:
 
-- **Distúrbios do ciclo da ureia** (E72.2): 8 óbitos infantis, mortalidade infantil
-  **0,10/100 mil NV**, contra apenas 135 registros SIA e 14 AIH no 1º ano. A hiperamonemia
-  neonatal é uma emergência metabólica que pode matar em horas a dias; a razão detecção-baixa /
-  óbito-presente é a assinatura de uma doença que **mata antes de gerar acompanhamento crônico**.
-- **MSUD / leucinose** (E71.0): 6 óbitos infantis, **0,08/100 mil NV**, com só 102 registros SIA
-  e 33 AIH no 1º ano. Mesmo padrão — crise metabólica neonatal (encefalopatia por acúmulo de
-  aminoácidos de cadeia ramificada) como apresentação.
+- **Distúrbios do ciclo da ureia** (E72.2): `r N(inc("Ciclo_ureia", "obitos"))` óbitos infantis, mortalidade infantil
+  **`r D2(inc("Ciclo_ureia", "mi"))`/100 mil NV**, contra apenas `r N(inc("Ciclo_ureia", "sia"))` registros SIA e
+  `r N(inc("Ciclo_ureia", "aih"))` AIH no 1º ano. A hiperamonemia neonatal é uma emergência metabólica que pode
+  matar em horas a dias; a razão detecção-baixa / óbito-presente é a assinatura de uma doença que
+  **mata antes de gerar acompanhamento crônico**.
+- **MSUD / leucinose** (E71.0): `r N(inc("MSUD", "obitos"))` óbitos infantis, **`r D2(inc("MSUD", "mi"))`/100 mil NV**, com só
+  `r N(inc("MSUD", "sia"))` registros SIA e `r N(inc("MSUD", "aih"))` AIH no 1º ano. Mesmo padrão — crise metabólica
+  neonatal (encefalopatia por acúmulo de aminoácidos de cadeia ramificada) como apresentação.
+
+**Atenção à métrica.** Com a série longa, a taxa de mortalidade infantil *por nascido vivo* **não separa
+sozinha** os dois perfis: ela mistura incidência da doença (rara nas letais precoces) com letalidade, e as
+letais precoces têm taxa por NV baixa (ciclo da ureia `r D2(inc("Ciclo_ureia", "mi"))`, MSUD `r D2(inc("MSUD", "mi"))`) justamente por serem raras — inferior à da HAC
+(`r D2(inc("HAC", "mi"))`) e comparável à do HC (`r D2(inc("Hipotireoidismo_cong", "mi"))`). O que separa os perfis é a **razão óbito infantil ÷ registros SIA no 1º ano**:
+cerca de `r D1(1000 * inc("Ciclo_ureia", "obitos") / inc("Ciclo_ureia", "sia"))` óbitos por mil registros no ciclo da ureia, contra
+`r D1(1000 * inc("Hipotireoidismo_cong", "obitos") / inc("Hipotireoidismo_cong", "sia"))` no HC e `r D1(1000 * inc("PKU", "obitos") / inc("PKU", "sia"))` na PKU
+(FC: `r D1(1000 * inc("Fibrose_cistica", "obitos") / inc("Fibrose_cistica", "sia"))`; HAC: `r D1(1000 * inc("HAC", "obitos") / inc("HAC", "sia"))`). Isto é uma razão entre
+numeradores de bases distintas — **índice de contraste, não letalidade** — e é lido como tal.
 
 A leitura genético-clínica é direta: **a triagem só converte incidência em sobrevida quando
 existe janela terapêutica e tratamento efetivo** (dieta, cofator, hormônio, quelante). Para PKU,
@@ -65,12 +72,16 @@ janela é **estreitíssima** (o dano pode ocorrer antes de o resultado do teste 
 triagem, embora essencial, precisa vir acoplada a **protocolo de emergência metabólica** e
 **acesso rápido a centro de referência** — do contrário o desfecho continua sendo o óbito.
 
-Contraste numérico útil: a mortalidade padronizada por EIM (idade×sexo, IC gama) é **estável em
-~1,66/100 mil hab** (1,69 → 1,65 → 1,66 em 2021–2023), enquanto a **internação por EIM sobe
-claramente** (2,17 → 2,83/100 mil, ~+9%/ano). A mortalidade infantil por EIM fica em
-**~3,2–3,7/100 mil NV**. **Denominador de óbito estável + detecção/internação em alta** é
-compatível com **expansão de diagnóstico e de TRE, não com aumento de incidência real** — exatamente
-o que se esperaria de ampliação de triagem e de rede, não de mudança na biologia populacional.
+Contraste numérico útil: a mortalidade padronizada por EIM (idade×sexo, IC gama) está **`r TR$sim$dir`**
+(`r TR$sim$var`; `r SERIE$sim`/100 mil hab, `r PER_SIM`), enquanto a internação por EIM está
+**`r TR$sih$dir`** (`r TR$sih$var`; `r SERIE$sih`, `r PER`). A mortalidade infantil por EIM oscila em
+**`r D2(MI$min)`–`r D2(MI$max)`/100 mil NV** (`r N(MI$obitos_min)`–`r N(MI$obitos_max)` óbitos/ano), **`r MI$tr$dir`** (`r MI$tr$var`).
+A leitura é mais cautelosa que a da janela curta: a série longa **não** mostra internação em alta contínua
+(o aparente crescimento recente era recuperação pós-pandemia), e a **mortalidade geral em alta lenta com mortalidade
+infantil sem tendência** é compatível com **melhor identificação/codificação da causa básica e envelhecimento
+da coorte diagnosticada** (mais EIM de início tardio reconhecidos), mais do que com mudança na biologia
+populacional. **Não é possível, com este desenho, atribuir a alta a incidência real** — hipótese de
+expansão de diagnóstico e de TRE segue plausível, mas não demonstrada.
 
 > **Ressalva.** "Detecção no 1º ano" via SIA são **registros, não crianças** (a idade no SIA é
 > mal preenchida) — leem-se como **intensidade de uso**, não incidência. A mortalidade infantil
@@ -86,21 +97,24 @@ vigilância de doença rara, ambas visíveis nos números:
 **(1) Colapso de doenças distintas num único código.** O **E75.2** agrega **Gaucher + Fabry +
 Niemann-Pick C** — três doenças com genes, heranças e terapias diferentes (Gaucher AR com TRE por
 imiglucerase; Fabry **ligada ao X** com agalsidase; Niemann-Pick C sem TRE, mecanismo de
-transporte de colesterol). No painel, E75.2 aparece com 45.207 registros SIA, 3.124 AIH e 149
-óbitos — mas **é impossível dizer, só pelo CID, quantos são de cada doença**. Como Fabry é XL e
+transporte de colesterol). No painel, E75.2 aparece com `r N(trac("Gaucher_Fabry_NPC", "SIA"))` registros SIA, `r N(trac("Gaucher_Fabry_NPC", "SIH"))` AIH e `r N(trac("Gaucher_Fabry_NPC", "SIM"))`
+óbitos (causa básica) — mas **é impossível dizer, só pelo CID, quantos são de cada doença**. Como Fabry é XL e
 Gaucher/NP-C são AR, nem a razão de sexo resolve a desagregação. O mesmo vale para **E74.0**, que
 funde **todas as glicogenoses + doença de Pompe**, e para **E72.2**, que agrega **todo o ciclo da
 ureia** (OTC ligada ao X + as formas recessivas). Para essas, a **única via de desagregação é
 triangular o CID com o procedimento-APAC da enzima** (imiglucerase↔Gaucher, alglucosidase↔Pompe,
 laronidase↔MPS I, idursulfase↔MPS II, galsulfase↔MPS VI) — o procedimento é **mais específico que
-o CID**, invertendo a lógica usual `[CONFIRMAR códigos APAC via SIGTAP]`.
+o CID**, invertendo a lógica usual `[CONFIRMAR códigos APAC via SIGTAP]`. O painel já
+publica esse caminho na **página de Pernambuco**: a separação de doenças pelo **medicamento da APAC** (MPS VI/IVA/I/II/VII, Pompe,
+Gaucher, Fabry, Wilson) desfaz parte desses baldes e é a demonstração prática do argumento.
 
 **(2) Doença de triagem escondida em código-balde inespecífico.** A **deficiência de biotinidase**
 — EIM rastreado no pezinho (Fase IV), tratável com **biotina oral barata** — é codificada pelo MS
 em **E88.9 ("distúrbio metabólico não especificado")**, o **mesmo balde do envelope de ruído**.
-Resultado: os 14.280 registros SIA / 27.236 AIH / 1.450 óbitos rotulados "biotinidase" são um
-**TETO**, não a doença — E88.9 agrega outros distúrbios, e a AIH-principal de 27.236 é sobretudo
-ruído inespecífico. A "mortalidade infantil da biotinidase" de **0,91/100 mil NV** é o exemplo
+Resultado: os `r N(trac("Biotinidase (E88.9 proxy/TETO)", "SIA"))` registros SIA / `r N(trac("Biotinidase (E88.9 proxy/TETO)", "SIH"))` AIH / `r N(trac("Biotinidase (E88.9 proxy/TETO)", "SIM"))` óbitos rotulados "biotinidase" são um
+**TETO**, não a doença — E88.9 agrega outros distúrbios, e a AIH-principal é sobretudo
+ruído inespecífico. A "mortalidade infantil da biotinidase" de **`r D2(inc("Biotinidase (E88.9 TETO)", "mi"))`/100 mil NV**
+(`r N(inc("Biotinidase (E88.9 TETO)", "obitos"))` óbitos) — a maior de todas as traçadoras — é o exemplo
 perfeito do artefato: **a biotinidase tratada quase não mata** — esses óbitos são de outros
 distúrbios metabólicos letais que caem no mesmo E88.9. Ou seja, o sistema tem uma doença de
 triagem que ele **não consegue enxergar no próprio dado de vigilância**.
@@ -139,11 +153,12 @@ epidemiologia dos EIM" seria erro grosseiro.
 ## A.4 Doenças lisossômicas e o peso da terapia de reposição enzimática (TRE)
 
 As **mucopolissacaridoses (MPS)** têm **peso hospitalar desproporcional ao seu número de
-pacientes**: MPS I/II/outras somam ~37.910 registros SIA mas concentram um volume enorme de AIH
-(MPS "outras" 8.030; MPS II 1.803; MPS I 1.053 AIH), contra pouquíssimos óbitos (6–19). O motivo
+pacientes**: MPS I/II/outras somam `r N(trac("MPS_I", "SIA") + trac("MPS_II", "SIA") + trac("MPS_outras", "SIA"))` registros SIA mas concentram um volume expressivo de AIH
+(MPS "outras" `r N(trac("MPS_outras", "SIH"))`; MPS II `r N(trac("MPS_II", "SIH"))`; MPS I `r N(trac("MPS_I", "SIH"))` AIH), contra poucos óbitos
+por causa básica em `r PER_SIM` (MPS "outras" `r N(trac("MPS_outras", "SIM"))`; MPS II `r N(trac("MPS_II", "SIM"))`; MPS I `r N(trac("MPS_I", "SIM"))`). O motivo
 é biológico-terapêutico: as MPS têm **TRE por infusão endovenosa periódica** (laronidase,
 idursulfase, galsulfase), e **cada infusão gera uma AIH** — muitas vezes em regime de
-**hospital-dia**, o que também explica a **permanência mediana ~0 dia** observada no recorte de
+**hospital-dia**, o que também explica a **permanência mediana muito curta (próxima de zero)** observada no recorte de
 PE. Ou seja, **o número de AIH mede intensidade de tratamento crônico, não número de pacientes
 nem gravidade aguda**. A gravidade aguda real (descompensação, UTI) está na cauda longa e nos EIM
 letais precoces (ciclo da ureia, tirosinemia), não nas infusões de TRE.
@@ -152,7 +167,8 @@ Duas implicações genético-clínicas:
 
 - A **desagregação por procedimento-APAC** (§A.2) não é só um truque de dado — é o que permite
   transformar "E75.2/E74.0/E76.x" em Gaucher, Pompe, MPS I, MPS II, MPS VI **identificáveis**, e
-  portanto quantificar quem está de fato em TRE e a que custo.
+  portanto quantificar quem está de fato em TRE e a que custo — caminho que a página de
+  Pernambuco já percorre ao separar MPS VI/IVA/I/II/VII, Pompe, Gaucher, Fabry e Wilson pelo medicamento da APAC.
 - O **gasto medido é um piso**: TRE e fórmulas trafegam também por **judicialização** e compras
   centralizadas, parcialmente **fora do SIA/SIH**. Medicamentos órfãos de EIM estão entre os mais
   judicializados do SUS; o dado administrativo não distingue via incorporada de ordem judicial.
@@ -195,9 +211,10 @@ específico (busca ativa, denominador de triados por UF), não é inferível des
 ## B.1 Ampliar e qualificar a triagem neonatal, priorizando por tratabilidade × letalidade
 
 - **Achado motivador.** A dissociação incidência × mortalidade infantil (§A.1) mostra que a
-  triagem **converte incidência em sobrevida onde há tratamento efetivo** (PKU: ~1 óbito infantil
-  no pool; HC: 0,08/100 mil NV) mas **não basta sozinha** para os letais precoces (ciclo da ureia
-  0,10; MSUD 0,08/100 mil NV), onde o óbito neonatal é o desfecho mesmo com detecção.
+  triagem **converte incidência em sobrevida onde há tratamento efetivo** (PKU: `r N(inc("PKU", "obitos"))` óbitos infantis
+  no pool `r PER_SIM`; HC: `r D2(inc("Hipotireoidismo_cong", "mi"))`/100 mil NV) mas **não basta sozinha** para os letais precoces (ciclo da ureia
+  `r D2(inc("Ciclo_ureia", "mi"))`; MSUD `r D2(inc("MSUD", "mi"))`/100 mil NV — taxas baixas por NV por serem doenças raras, mas com óbito desproporcional ao
+  acompanhamento registrado, §A.1), onde o óbito neonatal é o desfecho mesmo com detecção.
 - **Ação.** Acelerar a implementação escalonada da **Lei 14.154/2021** priorizando as Etapas 2–3
   (aminoacidopatias, galactosemias, ciclo da ureia, beta-oxidação, lisossômicas)
   `[VERIFICAR cronograma efetivo por UF na Portaria GM/MS 7.293/2025]`, mas **acoplando cada
@@ -301,12 +318,12 @@ específico (busca ativa, denominador de triados por UF), não é inferível des
   longitudinal. Gradientes geográficos misturam **incidência real e acesso** — não separáveis
   aqui.
 - **Detecção/uso ≠ prevalência.** Séries em alta (SIA/SIH) refletem **expansão de triagem e TRE**,
-  não necessariamente aumento de incidência; mortalidade padronizada estável (~1,66/100 mil)
-  reforça essa leitura.
+  não necessariamente aumento de incidência; a mortalidade padronizada **`r TR$sim$dir`**
+  (`r TR$sim$var`) e a internação **`r TR$sih$dir`** pedem cautela: a série longa não sustenta a narrativa simples de "tudo em alta por expansão".
 - **Heterogeneidade extrema.** "EIM" agrega centenas de entidades incomparáveis — nunca ler um
   "total EIM" como doença; a narrativa se ancora em **traçadoras** e **subgrupos**, não no
   agregado.
 - **Marcos normativos e prevalências `[VERIFICAR]`.** PNTN, Lei 14.154/2021, PCDT, incorporações
   CONITEC, rótulos de CID-10 e prevalências de literatura exigem confirmação em fonte primária
   antes de uso oficial.
-- **SIM cobre só 2021–2023; idade no SIA é mal preenchida; E88.9/E78 são teto, não caso.**
+- **SIM/SINASC cobrem `r PER_SIM` (definitivos), SIA/SIH `r PER`; idade no SIA é mal preenchida; E88.9/E78 são teto, não caso.**

@@ -1,8 +1,9 @@
 ## Discussão epidemiológica e insights para a gestão do SUS
 
 > **Natureza do estudo e limite de inferência.** Trata-se de estudo **ecológico/descritivo
-> de séries temporais sobre dados administrativos secundários** (SIA-PA, SIH-RD, SIM-DO e
-> SINASC do DATASUS). A unidade é o registro/atendimento/óbito, **não o indivíduo**. As
+> de séries temporais sobre dados administrativos secundários** (SIA-PA e SIH-RD em
+> `r PER`; SIM-DO e SINASC em `r PER_SIM`, anos definitivos, do DATASUS). A unidade é o
+> registro/atendimento/óbito, **não o indivíduo**. As
 > taxas apresentadas são de **detecção, uso de serviço e mortalidade registrada — nunca
 > prevalência ou incidência verdadeiras**. As três bases medem conceitos distintos e **não
 > se somam**. "EIM" é um **grupo heterogêneo** de centenas de doenças com biologia,
@@ -15,77 +16,131 @@
 
 # PARTE A — Discussão dos resultados
 
-> ⚠️ **NÚMEROS DESATUALIZADOS — pendente de regeneração.** A definição de caso do SIM
-> mudou: `eim_causa_basica` usava a camada *ampliado* (core+limítrofe+**envelope**) e passou
-> a usar **core**, alinhando-se a SIA e SIH. A lookup também foi corrigida (E80.3/E80.4/E80.5
-> e E85.0/E85.2). **Todos os números de mortalidade abaixo precedem essas correções** e
-> superestimam a carga de EIM. Regenerar com o pipeline antes de citar.
+> **Números calculados no render.** Todos os números de resultado desta seção saem do
+> pipeline no momento da renderização (definição de caso **core** em SIA, SIH e SIM, com a
+> lookup corrigida — E80.3/E80.4/E80.5 e E85.0/E85.2 — e leitura das causas múltiplas do
+> SIM incluindo os CIDs com asterisco). Versões anteriores deste texto, escritas para uma
+> janela curta e com a camada *ampliada* no SIM, superestimavam a mortalidade por EIM.
 > Ver `ref/avaliacao_critica_externa.md`.
 
-## A.1 Carga e tendência de uso de serviço: por que a internação sobe e a mortalidade fica estável
+## A.1 Carga e tendência de uso de serviço: o descompasso entre detecção, internação e óbito
 
-O achado mais nítido da série é uma **dissociação temporal entre uso de serviço e óbito**.
-A **internação por EIM** (diagnóstico principal, camada core, taxa padronizada por
-idade×sexo com IC gama) subiu de forma consistente: **2,17 → 2,43 → 2,64 → 2,83 por 100
-mil habitantes** de 2021 a 2024 (2,79 em 2025), uma razão de taxas de **~+9% ao ano**. No
-mesmo período, a **mortalidade por EIM** (causa básica, padronizada) permaneceu **estável
-em torno de 1,66/100 mil** (1,69 → 1,65 → 1,66 em 2021–2023). O volume ambulatorial (SIA
-core) acompanha o mesmo sentido de alta (175.894 registros em 2021 → 237.440 em 2025).
+O achado mais nítido da série é um **descompasso temporal entre detecção, uso hospitalar e
+óbito**. O **volume ambulatorial** (SIA, camada core) está **`r TR$sia$dir`**
+(`r TR$sia$var`): de `r N(SIA_INI)` registros em `r ANO_INI` para `r N(SIA_FIM)` em
+`r ANO_FIM`. A **internação por EIM** (diagnóstico principal, camada core, taxa padronizada
+por idade×sexo) está **`r TR$sih$dir`** em `r PER` (`r TR$sih$var`; `r SERIE$sih` por 100
+mil habitantes): oscila ao longo da série e tem um **vale em 2020**
+(`r fmt_pct(variacao_pct(tx_sih_d, 2019, 2020, "eventos"), 0)`% de AIH em relação a 2019),
+compatível com a retração assistencial da pandemia de covid-19. A alta observada a partir de
+2021 — que, numa janela curta pós-pandemia, parece uma subida clara — é, na série longa,
+sobretudo **recuperação do vale pandêmico**, e não tendência estrutural. A **mortalidade por
+EIM** (causa básica core, padronizada) está **`r TR$sim$dir`** (`r TR$sim$var`;
+`r SERIE$sim` por 100 mil habitantes, `r PER_SIM`), porém **mais devagar que a detecção
+ambulatorial**.
+
+A série longa atravessa ainda o marco da **Política Nacional de Atenção Integral às Pessoas
+com Doenças Raras** (Portaria GM/MS 199/2014 `[VERIFICAR]`), o que permite contrastar os
+períodos pré e pós-política. O máximo da taxa de internação ocorre em
+`r tx_sih_d$ano[which.max(tx_sih_d$taxa_pad)]`,
+`r if (tx_sih_d$ano[which.max(tx_sih_d$taxa_pad)] > 2014) "já no período pós-política" else "ainda antes da política"`
+— coincidência temporal que **não autoriza inferência causal**: habilitação de serviços de
+referência, mudanças de financiamento e de codificação e a própria expansão da triagem
+ocorrem ao mesmo tempo.
 
 Epidemiologicamente, **uma incidência real crescente de EIM é a hipótese menos plausível**
-para explicar esse padrão — doença genética monogênica não muda de incidência populacional
-em quatro anos. O conjunto de explicações **compatíveis** com os dados aponta para o
-**numerador de detecção e de tratamento**, não para mais doença:
+para explicar a alta da detecção e da mortalidade registrada — doença genética monogênica
+não muda de incidência populacional em `r length(ANOS)` anos. O conjunto de explicações
+**compatíveis** com os dados aponta para o **numerador de detecção, de tratamento e de
+registro**, não para mais doença:
 
-- **Expansão da triagem neonatal** (PNTN + Lei 14.154/2021), que aumenta o diagnóstico
-  precoce sem alterar a incidência subjacente;
+- **Expansão da triagem neonatal** (PNTN, incluindo a Fase IV com biotinidase e HAC, e Lei
+  14.154/2021), que aumenta o diagnóstico precoce sem alterar a incidência subjacente;
 - **Ampliação e cronificação do tratamento**, sobretudo a **terapia de reposição
   enzimática (TRE)** nas doenças lisossômicas, que gera **múltiplas AIH por paciente/ano**
   (cada infusão é uma internação/hospital-dia). O peso hospitalar desproporcional das
-  **mucopolissacaridoses (MPS)** — 8.030 AIH principais nas "outras MPS", 1.803 na MPS II,
-  1.053 na MPS I — e a **permanência mediana próxima de zero** (padrão de hospital-dia de
-  infusão) confirmam que a alta de internação é **intensidade de tratamento de crônicos que
-  sobrevivem**, não descompensação aguda crescente;
-- **Melhora de codificação e de acesso** à rede de referência ao longo do tempo.
+  **mucopolissacaridoses (MPS)** — `r N(trac("MPS_outras","SIH"))` AIH principais nas
+  "outras MPS", `r N(trac("MPS_II","SIH"))` na MPS II, `r N(trac("MPS_I","SIH"))` na MPS I
+  em `r PER` — e a **permanência mediana próxima de zero** (padrão de hospital-dia de
+  infusão) indicam que boa parte da internação por EIM é **intensidade de tratamento de
+  crônicos que sobrevivem**, não descompensação aguda;
+- **Melhora de codificação, de reconhecimento e de acesso** à rede de referência ao longo
+  do tempo — inclusive na Declaração de Óbito: mais pacientes diagnosticados em vida
+  significam mais óbitos em que o EIM é reconhecido e registrado como causa.
 
-> **Leitura para a gestão:** a curva ascendente de internação é **compatível com sucesso do
+> **Leitura para a gestão:** a alta da detecção ambulatorial é **compatível com sucesso do
 > sistema** (mais diagnóstico e mais tratamento de sobreviventes), e não com piora
-> epidemiológica. A estabilidade da mortalidade, nesse enquadramento, é o esperado: quem já
-> era diagnosticado e tratado continua morrendo na mesma proporção; os ganhos de triagem
-> ainda não se traduziram em queda visível de óbito no curto período disponível.
+> epidemiológica; a internação, sem tendência sustentada na série longa, reflete
+> sobretudo o peso estável do tratamento de crônicos e o choque da pandemia. A
+> mortalidade registrada, subindo mais devagar que a detecção, é **compatível com melhor
+> reconhecimento e codificação do EIM na DO e com uma coorte maior de diagnosticados** — não
+> com aumento de letalidade. Os ganhos de triagem ainda não se traduziram em queda visível
+> de óbito no agregado nacional.
 
 ## A.2 Mortalidade como eixo central e a mortalidade infantil evitável
 
-Coerente com o desenho (SIM é a base central para EIM, porque a doença grave costuma ser a
-**causa básica** do óbito e mata **precocemente, antes de qualquer registro ambulatorial**),
-a mortalidade é o indicador mais robusto do estudo. Foram **10.114 óbitos com EIM como
-causa básica** e 10.554 com EIM em qualquer linha (2021–2023) — o pequeno diferencial
-(~4%) indica que, quando o EIM está na Declaração de Óbito, ele é quase sempre reconhecido
-como **raiz da cadeia causal**, não como contribuinte.
+Coerente com o desenho, o SIM é a base central para os **EIM letais precoces**, porque
+nesses a doença grave costuma ser a **causa básica** do óbito e mata **precocemente, antes
+de qualquer registro ambulatorial**. Em `r PER_SIM` foram **`r N(SIM_CB)` óbitos com EIM
+(core) como causa básica** — até `r N(SIM_CB_MAX)` no teto (core + limítrofe + envelope). A
+menção a EIM em **qualquer linha** da DO, por sua vez, soma `r N(SIM_QUALQ)` óbitos, dos
+quais `r N(SIM_SO_LINHA)` têm o código **apenas nas linhas** (causa básica fora do conjunto
+EIM mesmo no teto). Ou seja: **a maior parte das menções a códigos metabólicos na DO não é
+causa básica** — é sobretudo de códigos do envelope, em adultos, como causa contribuinte.
+A leitura de que "quando o EIM está na DO ele é quase sempre a raiz da cadeia causal" **não
+se sustenta**; para os EIM raros e graves, a causa básica core segue sendo o numerador
+adequado, e as causas múltiplas servem para dimensionar teto e subcodificação, não carga
+de EIM.
 
-O eixo mais acionável é a **mortalidade infantil específica por EIM** (óbitos <1 ano ÷
-nascidos vivos SINASC): **3,74 → 3,75 → 3,23 por 100 mil NV** (2021–2023). São **~82 a 100
-óbitos infantis por ano** por uma causa em boa parte **evitável ou mitigável por diagnóstico
-neonatal precoce**. A leve redução em 2023 (IC 2,57–4,01) é **sugestiva, não conclusiva** —
-o N é pequeno, o intervalo se sobrepõe aos anos anteriores e a série do SIM só vai até 2023.
+O eixo mais acionável é a **mortalidade infantil específica por EIM** (óbitos <1 ano com
+EIM core como causa básica ÷ nascidos vivos SINASC): entre **`r D2(MI$min)` e
+`r D2(MI$max)` por 100 mil NV** ao ano em `r PER_SIM` (`r MI$serie`), ou **`r N(MI$obitos_min)`
+a `r N(MI$obitos_max)` óbitos infantis por ano**, por uma causa em boa parte **evitável ou
+mitigável por diagnóstico neonatal precoce**. A série está **`r MI$tr$dir`**
+(`r MI$tr$var`): em `r length(ANOS_SIM)` anos — que incluem a Fase IV do PNTN e o início da
+implantação da Lei 14.154 — a mortalidade infantil por EIM **não mostra queda detectável**
+no agregado nacional. Com N anual pequeno, isso **não prova ausência de efeito** da
+triagem; indica que eventuais ganhos ainda não são visíveis nessa escala.
 
-A **incidência ao nascimento por traçadora** revela dois perfis fisiopatológicos opostos e
-é o achado mais informativo para a política:
+A **incidência ao nascimento/1º ano por traçadora** (pool `r PER_SIM`) revela dois perfis
+fisiopatológicos opostos — mais nítidos quando se compara o **óbito infantil com a detecção
+no 1º ano** do que pela mortalidade infantil isolada — e é o achado mais informativo para
+a política:
 
-- **Tratáveis e rastreadas** — hipotireoidismo congênito (mortalidade infantil 0,08/100 mil
-  NV), PKU (N<5 de óbitos infantis; 1 óbito), fibrose cística (0,81) — têm **alta detecção
-  no 1º ano e mortalidade infantil baixíssima**. É a **assinatura de triagem + tratamento
-  funcionando**: detecta-se cedo, trata-se, e a criança não morre.
-- **Letais precoces** — distúrbios do ciclo da ureia (0,10/100 mil NV, 8 óbitos) e
-  MSUD/leucinose (0,08, 6 óbitos) — têm o **óbito infantil como desfecho de referência**:
-  são justamente as doenças da **Etapa 2** da Lei 14.154 (aminoacidopatias, ciclo da ureia,
-  beta-oxidação), cuja triagem **ainda está em implantação**. Aqui, cada óbito infantil é um
+- **Tratáveis e rastreadas** — hipotireoidismo congênito
+  (`r N(inc("Hipotireoidismo_cong","obitos"))` óbitos <1 ano frente a
+  `r N(inc("Hipotireoidismo_cong","sia"))` registros SIA no 1º ano; mortalidade infantil
+  `r D2(inc("Hipotireoidismo_cong","mi"))`/100 mil NV), PKU (`r N(inc("PKU","obitos"))`
+  óbitos frente a `r N(inc("PKU","sia"))` registros SIA e `r N(inc("PKU","aih"))` AIH no 1º
+  ano; `r if (is.na(inc("PKU","mi"))) "mortalidade infantil suprimida, N<5" else paste0(D2(inc("PKU","mi")), "/100 mil NV")`)
+  e fibrose cística (`r N(inc("Fibrose_cistica","obitos"))` óbitos frente a
+  `r N(inc("Fibrose_cistica","sia"))` registros SIA e `r N(inc("Fibrose_cistica","aih"))`
+  AIH no 1º ano) — têm **muita detecção e acompanhamento no 1º ano e poucos óbitos em
+  relação a ela**. É a **assinatura de triagem + tratamento funcionando**: detecta-se cedo,
+  trata-se, e a criança em regra não morre. A fibrose cística é a ressalva: pela frequência
+  da doença, sua mortalidade infantil **não é desprezível**
+  (`r D2(inc("Fibrose_cistica","mi"))`/100 mil NV) e ela concentra o **maior número
+  absoluto de óbitos infantis entre as traçadoras específicas** — compatível com formas
+  graves de apresentação neonatal e com atraso entre triagem positiva, confirmação e
+  início do tratamento `[VERIFICAR na literatura]`.
+- **Letais precoces** — distúrbios do ciclo da ureia
+  (`r N(inc("Ciclo_ureia","obitos"))` óbitos <1 ano frente a `r N(inc("Ciclo_ureia","sia"))`
+  registros SIA e `r N(inc("Ciclo_ureia","aih"))` AIH no 1º ano;
+  `r D2(inc("Ciclo_ureia","mi"))`/100 mil NV) e MSUD/leucinose
+  (`r N(inc("MSUD","obitos"))` óbitos frente a `r N(inc("MSUD","sia"))` registros SIA e
+  `r N(inc("MSUD","aih"))` AIH no 1º ano; `r D2(inc("MSUD","mi"))`/100 mil NV) — têm o
+  **óbito infantil na mesma ordem de grandeza da detecção no 1º ano**: poucos óbitos em
+  número absoluto, mas o óbito é o **desfecho de referência**. São justamente as doenças
+  da **Etapa 2** da Lei 14.154 (aminoacidopatias, ciclo da ureia, beta-oxidação), cuja
+  triagem **ainda está em implantação**. Aqui, cada óbito infantil é um
   **evento-sentinela de oportunidade perdida de rastreio**.
 
 > **Leitura para a gestão:** a mortalidade infantil por EIM funciona como **indicador de
 > desempenho do arco rastreio→diagnóstico→tratamento**. Onde a triagem madura já opera, o
-> óbito é raro; onde a triagem não chegou (Etapa 2), o óbito ainda é o desfecho. A distância
-> entre os dois perfis é a **medida da lacuna evitável**.
+> óbito é raro em relação à detecção; onde a triagem não chegou (Etapa 2), o óbito ainda é
+> o desfecho. A distância entre os dois perfis é a **medida da lacuna evitável** — e a
+> fibrose cística mostra que, mesmo com triagem implantada, o volume absoluto de óbitos
+> infantis pede vigilância própria do tempo até o tratamento.
 
 ## A.3 A triagem neonatal como modificador temporal e espacial: detecção confundida com incidência
 
@@ -96,10 +151,12 @@ confundidor da série**. A expansão é **escalonada e desigual por UF**, o que 
 armadilhas interpretativas centrais:
 
 1. **Quebra estrutural na série temporal.** Cada fase/etapa habilitada em cada UF introduz
-   um degrau de detecção. A alta de internação/detecção pós-2021 é, em parte relevante,
-   **artefato de política de rastreio** — mais doenças procuradas, mais casos achados — e
-   **não** aumento de incidência. Modelar isso como covariável de período/quebra, não como
-   tendência epidemiológica suave.
+   um degrau de detecção — a série `r PER` atravessa tanto a implantação da Fase IV quanto
+   o início da Lei 14.154. A alta da detecção ambulatorial ao longo do período é, em parte
+   relevante, **artefato de política de rastreio** — mais doenças procuradas, mais casos
+   achados — e **não** aumento de incidência. Modelar isso como covariável de
+   período/quebra (e o vale de 2020 como choque da pandemia), não como tendência
+   epidemiológica suave.
 2. **Falso gradiente geográfico.** Uma UF que ainda não habilitou a Etapa 2 terá
    **"incidência zero" artificial** de galactosemia ou MSUD — não porque a doença não
    ocorra, mas porque não é rastreada. Comparações interestaduais de detecção estão
@@ -109,13 +166,17 @@ armadilhas interpretativas centrais:
    disponível em TabNet público** `[VERIFICAR]`.
 
 O **painel completo do pezinho** materializa essa leitura. A **doença falciforme (D57)**
-domina o painel — 1,18 milhão de registros SIA, ~67 mil AIH, 1.581 óbitos, detecção
-hospitalar no 1º ano de **18,5/100 mil NV** —, carga de ordem de grandeza do core EIM
-inteiro, mantida **isolada** para não contaminar as taxas de EIM. A **toxoplasmose
-congênita (P37.1)** tem a **maior detecção hospitalar no 1º ano de todo o painel (93,1/100
-mil NV)**, coerente com tratamento neonatal prolongado. A **IDP/SCID (D81)**, de triagem
-recente por TREC, já aparece (637 AIH, 34 óbitos, 0,21/100 mil NV) — sinal precoce de que a
-fase mais nova do painel começa a produzir dado.
+domina o painel — `r N(pz("D57","SIA"))` registros SIA, `r N(pz("D57","SIH"))` AIH,
+`r N(pz("D57","SIM"))` óbitos, detecção hospitalar no 1º ano de
+**`r D2(pz("D57","SIH_inf_nv"))`/100 mil NV** —, carga de grande magnitude, mantida
+**isolada** para não contaminar as taxas de EIM. A **toxoplasmose congênita (P37.1)** tem a
+**maior detecção hospitalar no 1º ano de todo o painel
+(`r D2(pz("P371","SIH_inf_nv"))`/100 mil NV)**, coerente com tratamento neonatal
+prolongado. A **IDP/SCID (D81)**, de triagem recente por TREC, já aparece
+(`r N(pz("D81","SIH"))` AIH, `r N(pz("D81","SIM"))` óbitos,
+`r D2(pz("D81","SIH_inf_nv"))` AIH no 1º ano/100 mil NV) — sinal de que a fase mais nova do
+painel começa a produzir dado, embora o código D81 também capte imunodeficiências
+diagnosticadas fora da triagem.
 
 > **Ressalva central (obrigatória):** onde a detecção sobe após a entrada de uma doença no
 > painel, o achado é **compatível com ampliação da oferta de triagem**, não com mudança de
@@ -125,9 +186,10 @@ fase mais nova do painel começa a produzir dado.
 ## A.4 Inequidades regionais e concentração na capital
 
 O recorte de Pernambuco expõe o padrão de **rede de referência centralizada** que
-provavelmente se repete em outras UFs. **Recife concentra ~77% dos registros ambulatoriais
-(SIA) do estado, mas apenas ~12,5% dos óbitos por EIM** (causa básica). Essa **dissociação
-entre onde se trata e onde se morre** é epidemiologicamente informativa:
+provavelmente se repete em outras UFs. **Recife concentra ~`r N(REC$sia)`% dos registros
+ambulatoriais (SIA core) do estado, mas apenas ~`r N(REC$obitos)`% dos óbitos por EIM**
+(causa básica core). Essa **dissociação entre onde se trata e onde se morre** é
+epidemiologicamente informativa:
 
 - O **ambulatorial concentra na capital** porque é onde estão os centros de referência, a
   genética clínica, a nutrição especializada e a infusão de TRE — o paciente crônico
@@ -158,22 +220,29 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 - **Biotinidase codificada em E88.9 é o "teto" (E88.9 como balde inespecífico).** O MS
   codifica a deficiência de biotinidase em **E88.9 ("distúrbio metabólico não
   especificado")** por ausência de CID-10 específico. Isso **inviabiliza isolar biotinidase
-  por CID**: os 27.236 AIH e 1.450 óbitos "em E88.9" são majoritariamente **ruído
-  inespecífico** (outros distúrbios metabólicos, inclusive letais), não biotinidase real —
-  que, sendo rastreada e tratável, quase não mata. A taxa aparente de 0,91/100 mil NV é
-  **teto de E88.9**, não incidência da doença. Um EIM de triagem neonatal fica, na prática,
-  **invisível ao sistema de informação** por decisão de codificação.
+  por CID**: as `r N(pz("E889","SIH"))` AIH e os `r N(pz("E889","SIM"))` óbitos "em E88.9"
+  são majoritariamente **ruído inespecífico** (outros distúrbios metabólicos, inclusive
+  letais), não biotinidase real — que, sendo rastreada e tratável, quase não mata. A
+  mortalidade infantil aparente de
+  `r D2(inc("Biotinidase (E88.9 TETO)","mi"))`/100 mil NV é **teto de E88.9**, não
+  mortalidade pela doença. Um EIM de triagem neonatal fica, na prática, **invisível ao
+  sistema de informação** por decisão de codificação.
 - **E75.2 (e blocos correlatos) agregam doenças distintas.** Gaucher, Fabry e Niemann-Pick
   colapsam em **E75.2**; Pompe cai em **E74.0** (glicogenoses). O CID-10 (4 caracteres) **não
   isola** a maioria das traçadoras lisossômicas — a desagregação só é possível **triangulando
   com o procedimento-APAC da enzima** (imiglucerase↔Gaucher, alglucosidase↔Pompe,
   idursulfase↔MPS II etc.), que é **mais específico que o CID**.
 - **Subcodificação e "outros/não especificados" inflados.** O **envelope** ambulatorial
-  (E78 dislipidemia sobretudo) é **~20× o core** — a maior parte do capítulo E no
-  ambulatorial é doença comum, não EIM raro. Códigos "outros/SOE" (E729, E749, E759, E769,
-  E779, E888/E889) **deslocam massa para o inespecífico e esvaziam os CIDs específicos**. E
-  há subcodificação franca: **E71.4 (deficiência de carnitina/CPT) retorna zero em todas as
-  bases**, provavelmente diluída em E71.1/E71.8.
+  (E78 dislipidemia sobretudo) é **~`r N(RAZAO_ENV)`× o core** — a maior parte do capítulo E
+  no ambulatorial é doença comum, não EIM raro. Códigos "outros/SOE" (E729, E749, E759,
+  E769, E779, E888/E889) **deslocam massa para o inespecífico e esvaziam os CIDs
+  específicos**. E há subcodificação franca: **E71.4 (deficiência de carnitina/CPT) não
+  retornou registros em nenhuma base** na verificação feita para a janela anterior
+  `[VERIFICAR]` na série `r PER`, provavelmente diluída em E71.1/E71.8.
+- **A DO mistura EIM e envelope.** A grande diferença entre óbitos com EIM como causa
+  básica core (`r N(SIM_CB)`) e com código metabólico em qualquer linha (`r N(SIM_QUALQ)`)
+  mostra que, sem separar camadas, a mortalidade "por distúrbio metabólico" seria
+  dominada por condições comuns de adultos.
 
 > **Leitura para a gestão:** parte substancial da "epidemiologia dos EIM" no DATASUS é, na
 > verdade, **epidemiologia da codificação**. Sem CID específico para biotinidase e sem
@@ -207,24 +276,30 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 
 ## B.2 Vigiar a mortalidade infantil por EIM como indicador-sentinela **[prioridade alta]**
 
-- **Achado:** **~82–100 óbitos infantis/ano** por EIM (3,2–3,7/100 mil NV), concentrados nos
-  **letais precoces da Etapa 2** (ciclo da ureia, MSUD) cuja triagem ainda está em
-  implantação — cada óbito é uma **oportunidade perdida de rastreio**.
+- **Achado:** **`r N(MI$obitos_min)`–`r N(MI$obitos_max)` óbitos infantis/ano** por EIM
+  (`r D2(MI$min)`–`r D2(MI$max)`/100 mil NV em `r PER_SIM`), **`r MI$tr$dir`** — a
+  mortalidade infantil por EIM não caiu no período. Em número absoluto, a fibrose cística
+  (já rastreada) é a traçadora com mais óbitos infantis; nos **letais precoces da Etapa 2**
+  (ciclo da ureia, MSUD), cuja triagem ainda está em implantação, os óbitos são poucos mas
+  da mesma ordem de grandeza da detecção — cada um é uma **oportunidade perdida de
+  rastreio**.
 - **Ação:** incorporar a **mortalidade infantil específica por EIM** ao rol de indicadores
   monitorados pelos **Comitês de Prevenção do Óbito Infantil e Fetal** e à vigilância do
   óbito, com **investigação nominal** dos óbitos infantis por causa metabólica (foi triado?
-  em que idade? houve atraso diagnóstico?). Usar o SIM como **detector da falha** do arco de
-  triagem.
+  em que idade? houve atraso diagnóstico ou terapêutico?). Usar o SIM como **detector da
+  falha** do arco de triagem.
 - **Indicador:** coeficiente de mortalidade infantil por EIM/100 mil NV por UF/ano; **% dos
-  óbitos infantis por EIM que haviam sido triados** para a respectiva doença; proporção de
-  óbitos sob **CID inespecífico** (E88.x) como proxy de subinvestigação.
+  óbitos infantis por EIM que haviam sido triados** para a respectiva doença; tempo entre
+  triagem positiva e início do tratamento nos óbitos de doenças já rastreadas (fibrose
+  cística); proporção de óbitos sob **CID inespecífico** (E88.x) como proxy de
+  subinvestigação.
 
 ## B.3 Regionalizar a rede de referência e qualificar o fluxo de TFD **[prioridade alta]**
 
-- **Achado:** **Recife concentra ~77% do ambulatorial mas ~12,5% dos óbitos** de PE —
-  dissociação **compatível com vazio assistencial no interior** e dependência do TFD; o
-  óbito por EIM letal precoce ocorre com frequência **antes de chegar ao centro de
-  referência**.
+- **Achado:** **Recife concentra ~`r N(REC$sia)`% do ambulatorial mas ~`r N(REC$obitos)`%
+  dos óbitos** de PE — dissociação **compatível com vazio assistencial no interior** e
+  dependência do TFD; o óbito por EIM letal precoce ocorre com frequência **antes de chegar
+  ao centro de referência**.
 - **Ação:** mapear via **CNES** os Serviços de Referência em Triagem Neonatal e centros de
   doenças raras habilitados e seus **vazios territoriais**; pactuar em **CIB/CIR** pontos de
   coleta e de acompanhamento **regionalizados** (aproximar a coleta e o seguimento do
@@ -237,8 +312,10 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 ## B.4 Qualificar a codificação: CID específico e vínculo procedimento–APAC↔doença **[prioridade alta — pré-condição de tudo]**
 
 - **Achado:** **biotinidase presa em E88.9** (invisível por CID); **E75.2/E74.0 agregam**
-  Gaucher/Fabry/Niemann-Pick/Pompe; **E71.4 retorna zero**; envelope inespecífico ~20× o
-  core. O sistema não enxerga doenças que trata.
+  Gaucher/Fabry/Niemann-Pick/Pompe; **E71.4 sem registros** na verificação anterior
+  `[VERIFICAR]` na série `r PER`; envelope inespecífico ~`r N(RAZAO_ENV)`× o core no SIA; e,
+  no SIM, a maioria das menções a códigos metabólicos na DO está fora da causa básica EIM.
+  O sistema não enxerga doenças que trata.
 - **Ação:** (a) pleitear/adotar **codificação específica** para as condições sem CID próprio
   (biotinidase), inclusive via migração para **CID-11** onde houver código dedicado
   `[VERIFICAR disponibilidade]`; (b) padronizar, no **SIGTAP/APAC e no CEAF**, o **vínculo
@@ -251,13 +328,16 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 
 ## B.5 Gerir o alto custo e antecipar a judicialização (TRE e moduladores de CFTR) **[prioridade alta]**
 
-- **Achado:** as **MPS têm peso hospitalar desproporcional** (8.030+1.803+1.053 AIH
-  principais) por **infusões repetidas de TRE**, e o SIA/SIH captura só o que trafega pelo
-  SUS regular — parte do gasto (compras centralizadas, **execução judicial**, fórmulas
-  metabólicas) fica **fora do SIA/SIH**, tornando o gasto medido um **piso**. A fibrose
-  cística lidera o ambulatorial e as internações (568.665 registros SIA; 6.442 AIH), com
-  forte pressão dos **moduladores de CFTR** (elexacaftor/tezacaftor/ivacaftor — Trikafta),
-  medicamento de altíssimo custo e alvo frequente de judicialização.
+- **Achado:** as **MPS têm peso hospitalar desproporcional**
+  (`r N(trac("MPS_outras","SIH"))` + `r N(trac("MPS_II","SIH"))` + `r N(trac("MPS_I","SIH"))`
+  AIH principais em `r PER`) por **infusões repetidas de TRE**, e o SIA/SIH captura só o que
+  trafega pelo SUS regular — parte do gasto (compras centralizadas, **execução judicial**,
+  fórmulas metabólicas) fica **fora do SIA/SIH**, tornando o gasto medido um **piso**. A
+  fibrose cística lidera o ambulatorial entre as traçadoras específicas e está entre as
+  que mais internam (`r N(trac("Fibrose_cistica","SIA"))` registros SIA;
+  `r N(trac("Fibrose_cistica","SIH"))` AIH), com forte pressão dos **moduladores de CFTR**
+  (elexacaftor/tezacaftor/ivacaftor — Trikafta), medicamento de altíssimo custo e alvo
+  frequente de judicialização.
 - **Ação:** montar **projeção de demanda e custo** de TRE e de moduladores de CFTR por UF a
   partir da coorte detectada (a alta de detecção de hoje é a demanda de amanhã);
   articular **compra centralizada/negociação de preço** e acompanhar as decisões da
@@ -270,13 +350,15 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 ## B.6 Usar o próprio DATASUS como ferramenta de monitoramento contínuo **[prioridade média]**
 
 - **Achado:** o pipeline reprodutível (SIA/SIH/SIM/SINASC triangulados, com lookup
-  versionada de definição de caso e supressão N<5) já produz **taxas padronizadas com IC** e
-  **incidência ao nascimento por traçadora** — é infraestrutura, não análise pontual.
+  versionada de definição de caso e supressão N<5) já produz **taxas padronizadas com IC**,
+  **tendências de série longa** e **incidência ao nascimento por traçadora** — é
+  infraestrutura, não análise pontual.
 - **Ação:** **institucionalizar o monitoramento** com atualização anual automática das bases
-  (incluindo SIM/SINASC quando o DATASUS publicar 2024+), **canal endêmico/limiares** por
-  traçadora sensível e **alerta de aberração** (ex.: elevação de óbito infantil por EIM em
-  uma UF). Publicar como **painel de vigilância de doenças raras** de acesso aos gestores,
-  respeitando a **LGPD** (dado de saúde é sensível; agregação e supressão N<5 obrigatórias).
+  (incluindo SIM/SINASC quando o DATASUS publicar como definitivos os anos posteriores a
+  `r ANO_FIM_SIM`), **canal endêmico/limiares** por traçadora sensível e **alerta de
+  aberração** (ex.: elevação de óbito infantil por EIM em uma UF). Publicar como **painel
+  de vigilância de doenças raras** de acesso aos gestores, respeitando a **LGPD** (dado de
+  saúde é sensível; agregação e supressão N<5 obrigatórias).
 - **Indicador:** existência e periodicidade do painel; nº de sinais de aberração investigados
   por ano; latência entre publicação do dado no DATASUS e atualização do painel.
 
@@ -284,8 +366,9 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 
 - **Achado:** condições **não-EIM** do painel (falciforme D57, talassemias D56, IDP/SCID
   D81, toxoplasmose congênita P37.1) exigem extração **multi-capítulo** — a **falciforme
-  domina o painel** (1,18M SIA; 1.581 óbitos) e a **toxoplasmose congênita tem a maior
-  detecção hospitalar no 1º ano (93,1/100 mil NV)**.
+  domina o painel** (`r N(pz("D57","SIA"))` registros SIA; `r N(pz("D57","SIM"))` óbitos) e
+  a **toxoplasmose congênita tem a maior detecção hospitalar no 1º ano
+  (`r D2(pz("P371","SIH_inf_nv"))`/100 mil NV)**.
 - **Ação:** manter o **monitoramento integrado do painel legal completo** da Lei 14.154 (não
   só o núcleo metabólico), com essas condições em **escopo isolado** (nunca somadas às taxas
   de EIM), articulando com os sistemas próprios de **hemoglobinopatias** e de **vigilância da
@@ -298,17 +381,21 @@ A codificação **é**, ela própria, um resultado do estudo — e um alvo de ge
 
 ## Ressalvas finais e próximos passos de verificação
 
-- **Causalidade:** todas as associações (detecção↔triagem, internação↔TRE, capital↔acesso)
-  são **compatíveis com** as hipóteses discutidas — o desenho ecológico **não prova**
-  causalidade nem autoriza inferência individual (falácia ecológica).
+- **Causalidade:** todas as associações (detecção↔triagem, internação↔TRE,
+  mortalidade↔codificação, capital↔acesso, pré/pós-Portaria 199/2014) são **compatíveis
+  com** as hipóteses discutidas — o desenho ecológico **não prova** causalidade nem
+  autoriza inferência individual (falácia ecológica).
 - **A confirmar em fonte primária `[VERIFICAR]`:** números e vigência das Portarias GM/MS
-  822/2001, 2.829/2012 e 7.293/2025; cronograma efetivo de habilitação das Etapas 2–5 por
-  UF; metas de cobertura do PNTN; rótulos de CID-10 de 4 caracteres; incorporações CONITEC e
-  PCDT vigentes de cada TRE e do modulador de CFTR; disponibilidade pública do denominador
-  de triados por doença.
-- **Limites de dado:** SIM só até 2023; idade no SIA mal preenchida (detecção <1 ano no SIA
-  é intensidade, não incidência); envelope é teto de subcodificação, não caso; N pequeno em
-  estratos finos (supressão N<5 obrigatória por LGPD).
+  199/2014, 822/2001, 2.829/2012 e 7.293/2025; cronograma efetivo de habilitação das Fases
+  e Etapas 2–5 por UF; metas de cobertura do PNTN; rótulos de CID-10 de 4 caracteres;
+  incorporações CONITEC e PCDT vigentes de cada TRE e do modulador de CFTR;
+  disponibilidade pública do denominador de triados por doença.
+- **Limites de dado:** SIM/SINASC definitivos só até `r ANO_FIM_SIM` (o ano seguinte é
+  preliminar e fica fora das taxas); a série atravessa o choque da pandemia (vale de 2020)
+  e mudanças de política e de codificação, que podem produzir quebras não epidemiológicas;
+  idade no SIA mal preenchida (detecção <1 ano no SIA é intensidade, não incidência);
+  envelope é teto de subcodificação, não caso; N pequeno em estratos finos (supressão N<5
+  obrigatória por LGPD).
 - **Próximo passo de vigilância:** levantar por UF/ano a data de habilitação de cada etapa e
   o denominador de triados, para transformar as séries de detecção em **indicadores de
   cobertura efetiva** interpretáveis — condição para separar política de epidemiologia.

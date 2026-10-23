@@ -39,7 +39,7 @@ O SIA-PA capta o **acompanhamento ambulatorial crônico** dos EIM. Trabalhamos c
 camadas**: o **core** (`r fmt_n(core_n)` registros, CID-10 nomeados de EIM — o núcleo de
 códigos que identificam um EIM de fato), a **limítrofe** (`r fmt_n(lim_n)` registros —
 códigos de EIM porém inespecíficos, do tipo "não especificado") e o **envelope**
-(`r fmt_n(env_n)` registros — sobretudo **E78 dislipidemia**, doença comum), que é ~20× o
+(`r fmt_n(env_n)` registros — sobretudo **E78 dislipidemia**, doença comum), que é ~`r round(env_n / core_n)`× o
 core e serve apenas como **teto de subcodificação (*bracketing*)** — **nunca** contado como
 caso de EIM. Os termos *core*, *envelope* e *bracketing* estão definidos no
 [Glossário](glossario.qmd).
@@ -66,10 +66,12 @@ a maior parte); ver detalhamento em `scripts/get_eim_data_from_SIA.R`.
 ## Core vs envelope — a escala do *bracketing*
 
 ```{r core-env}
-D$sia_vol_agg |>
+camadas <- D$sia_vol_agg |>
   dplyr::filter(camada %in% c("core", "envelope", "limitrofe")) |>
   dplyr::group_by(camada) |>
-  dplyr::summarise(registros = sum(registros), .groups = "drop") |>
+  dplyr::summarise(registros = sum(registros), .groups = "drop")
+razao_env <- camadas$registros[camadas$camada == "envelope"] / camadas$registros[camadas$camada == "core"]
+camadas |>
   dplyr::mutate(camada = factor(camada, levels = c("envelope","limitrofe","core"),
                                 labels = c("Envelope (E78 etc. — TETO)",
                                            "Limítrofe", "Core (EIM nomeados)"))) |>
@@ -83,7 +85,7 @@ D$sia_vol_agg |>
                                "Limítrofe" = "#7FA6D9",
                                "Core (EIM nomeados)" = "#1B6F6A"), guide = "none") +
   labs(x = NULL, y = paste0("Registros ambulatoriais (SIA, ", PER, ")"),
-       title = "Camadas do SIA: o envelope é ~20× o core",
+       title = paste0("Camadas do SIA: o envelope é ~", round(razao_env), "× o core"),
        subtitle = "Envelope = dislipidemia (E78) e correlatos: doença comum, tratada como bracketing, não caso.") +
   theme_eim()
 ```
@@ -196,17 +198,19 @@ proc_top |>
 ## Tendência ambulatorial
 
 ```{r serie}
-sia_core |>
-  dplyr::count(ano) |>
+serie_sia <- dplyr::count(sia_core, ano)
+tr_sia    <- tendencia_txt(dplyr::rename(serie_sia, eventos = n))
+serie_sia |>
   ggplot(aes(ano, n)) +
   geom_col(fill = "#1B6F6A", width = 0.65) +
-  geom_text(aes(label = fmt_n(n)), vjust = -0.5, size = 3, color = "#0E2F38") +
-  scale_x_continuous(breaks = ANOS) +
+  geom_text(aes(label = scales::label_number(scale = 1e-3, accuracy = 1, suffix = " mil", big.mark = ".")(n)),
+            vjust = -0.5, size = 2.8, color = "#0E2F38") +
+  escala_anos() +
   scale_y_continuous(labels = scales::label_number(big.mark = "."),
                      expand = expansion(mult = c(0, 0.12))) +
   labs(x = NULL, y = "Registros core",
        title = "Registros ambulatoriais de EIM (core) por ano",
-       subtitle = "Crescimento sustentado — expansão de detecção e acompanhamento, não incidência.") +
+       subtitle = paste0("Tendência ", tr_sia$dir, " (", tr_sia$var, "); vale de 2020 = pandemia.\nExpansão de detecção e acompanhamento, não incidência.")) +
   theme_eim()
 ```
 

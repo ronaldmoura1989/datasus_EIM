@@ -170,11 +170,11 @@ tx_ano |>
   geom_line(color = "#1B6F6A", linewidth = 1.1) +
   geom_point(color = "#1B6F6A", size = 2.4) +
   geom_text(aes(label = fmt_2(taxa_pad)), vjust = -1.1, size = 3, color = "#0E2F38") +
-  scale_x_continuous(breaks = ANOS_SIM) +
+  escala_anos(ANOS_SIM) +
   labs(x = NULL, y = "por 100 mil (padronizada)",
        title = "Mortalidade por EIM (causa básica), padronizada por idade e sexo",
-       subtitle = paste0("Padronizada: ", tx_txt, " (", min(ANOS_SIM), "–", max(ANOS_SIM),
-                         "). A estabilidade contrasta com a alta de detecção no SIA/SIH.")) +
+       subtitle = paste0(tx_txt, "\nVariação média ", tr_sim$var, " — ", tr_sim$dir,
+                         ", mais lenta que a detecção (SIA).")) +
   theme_eim()
 ```
 

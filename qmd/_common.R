@@ -246,6 +246,13 @@ serie_txt <- function(tx, col = "taxa_pad", fmt = fmt_2) {
          ifelse(i == which.max(v) & !i %in% c(1L, length(v)), ", máx.", ""))
   paste0(fmt(v[i]), " (", tx$ano[i], rot, ")", collapse = " → ")
 }
+#' Eixo de anos legível em série longa: rótulo de 2 em 2 ou 3 em 3 anos, sempre com o
+#' primeiro e o último (16 rótulos anuais se encavalam).
+escala_anos <- function(anos = ANOS) {
+  span  <- diff(range(anos))
+  passo <- if (span <= 8) 1 else if (span %% 3 == 0) 3 else if (span %% 2 == 0) 2 else 3
+  ggplot2::scale_x_continuous(breaks = seq(min(anos), max(anos), by = passo))
+}
 #' Variação % de um ano para outro numa série (ano, valor)
 variacao_pct <- function(tx, de, para, col = "eventos")
   100 * (tx[[col]][tx$ano == para] / tx[[col]][tx$ano == de] - 1)
