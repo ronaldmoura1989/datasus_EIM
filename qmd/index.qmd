@@ -145,13 +145,14 @@ ggplot(mapping = aes(ano)) +
     name = "SIA — registros ambulatoriais", labels = scales::label_number(big.mark = "."),
     sec.axis = sec_axis(~ . / fac, name = "SIH / SIM — registros",
                         labels = scales::label_number(big.mark = "."))) +
-  scale_x_continuous(breaks = ANOS) +
+  escala_anos() +
   scale_color_manual(values = c("SIA (ambulatorial, core)"   = "#1B6F6A",
                                 "SIH (internação principal)" = "#3E5C8A",
                                 "SIM (óbito causa básica)"    = "#7FA6D9")) +
   labs(x = NULL, color = NULL,
        title = paste0("Carga registrada de EIM por base, ", PER),
-       subtitle = "Eixo esquerdo: SIA (~40× maior). Eixo direito: SIH e SIM. SIM disponível só até 2023.") +
+       subtitle = paste0("Eixo esquerdo: SIA (~", round(fac), "× maior). Eixo direito: SIH e SIM (SIM definitivo até ",
+                         ANO_FIM_SIM, ").")) +
   theme_eim() +
   theme(axis.title.y.left  = element_text(color = "#1B6F6A"),
         axis.title.y.right = element_text(color = "#3E5C8A"))
@@ -197,7 +198,7 @@ num_sim <- D$sim |> dplyr::filter(eim_causa_basica) |>
   contar_estrato(col_uf = "uf_res")
 tx_uf <- taxas_padronizadas(num_sim, D$pop, grupos = "uf")
 mapa_uf(dplyr::select(tx_uf, uf, taxa_pad), valor = "taxa_pad",
-        titulo = "Mortalidade por EIM (causa básica), padronizada por idade e sexo",
+        titulo = paste0("Mortalidade por EIM (causa básica), padronizada por idade e sexo, ", PER_SIM),
         legenda = "por 100 mil\n(pessoa-anos)")
 ```
 

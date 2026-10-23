@@ -93,7 +93,7 @@ pz |>
                     name = NULL) +
   labs(x = NULL, y = "AIH no 1º ano de vida por 100 mil NV (SINASC)",
        title = "Detecção hospitalar no 1º ano de vida — painel do pezinho",
-       subtitle = "Toxoplasmose congênita e doença falciforme (não-EIM) lideram; refletem tratamento neonatal prolongado.") +
+       subtitle = "Toxoplasmose congênita (não-EIM) lidera; a falciforme vem logo após o proxy inespecífico de biotinidase (E88.9). Refletem tratamento neonatal prolongado.") +
   theme_eim()
 ```
 
