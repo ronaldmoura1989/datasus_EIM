@@ -1,7 +1,12 @@
 # =============================================================================
 # get_eim_data_from_SIA.R — Consolidação do SIA-PA filtrado por EIM (STREAMING)
-# Entrada: data/filtered/sia_eim/sia_{uf}_{ano}_{tri}_eim.rds (filtrado no remoto;
-#          data.frame bruto MAIÚSCULO; CID: PA_CIDPRI/PA_CIDSEC/PA_CIDCAS).
+# Entrada: <DIR_FILTRADO>/SIA-PA/filtrado/PA{UF}{AA}{MM}[parte].parquet (scripts/r550/
+#          filtrar_um.R: DBC do DATASUS 2010+, todas as colunas como texto, flags hit_*).
+#          Só as linhas com hit_eim; o painel do pezinho (D56/D57/D81/P371) e os
+#          escopos hemato/nefro/genética/medicamento têm consolidação própria.
+# ANO ANALÍTICO = ano de PA_CMP (competência de ATENDIMENTO), não o mês do arquivo
+#          (processamento): um atendimento de dez/2024 faturado em 2025 conta em 2024.
+#          Registros com PA_CMP fora de ANOS saem. arq_ano/arq_mes guardam o arquivo.
 #
 # ⚠️ VOLUME: a captura nacional tem ~22 M registros, DOMINADA pelo ENVELOPE (E78
 #    dislipidemia etc. — SP sozinho ~14 M). Carregar tudo em RAM é inviável.
@@ -18,14 +23,13 @@
 
 source(here::here("scripts", "00_setup.R"))
 
-DIR_SIA <- here::here("data/filtered/sia_eim")
-PAT <- "^sia_([a-z]{2})_(\\d{4})_(\\d)_eim\\.rds$"
-arqs <- list.files(DIR_SIA, pattern = PAT, full.names = TRUE)
-if (!length(arqs)) stop("Nenhum filtrado SIA em ", DIR_SIA, " — rodar rsync primeiro.")
+DIR_SIA <- file.path(DIR_FILTRADO, "SIA-PA", "filtrado")
+arqs <- list.files(DIR_SIA, pattern = "\\.parquet$", full.names = TRUE)
+if (!length(arqs)) stop("Nenhum filtrado SIA em ", DIR_SIA, " — rodar a filtragem no R550-2 primeiro.")
 
 MON <- c("pa_valpro","pa_valapr","pa_vl_cf","pa_vl_cl","pa_vl_inc")
 
-enriquecer <- function(x, uf, ano, tri) {
+enriquecer <- function(x, uf) {
   # Classifica pelo PRIMEIRO CID EIM válido (principal → secundário → causa
   # associada), restrito ao escopo analítico do EIM. Um registro capturado só
   # por cidsec/cidcas (cidpri não-EIM) herda a camada de quem o capturou, em
@@ -34,7 +38,9 @@ enriquecer <- function(x, uf, ano, tri) {
   x |>
     coagir_tipos(monetarias = MON) |>
     dplyr::mutate(
-      uf_arquivo = uf, ano = ano, trimestre = tri,
+      uf_arquivo = uf,
+      ano = suppressWarnings(as.integer(substr(pa_cmp, 1, 4))),
+      trimestre = (suppressWarnings(as.integer(substr(pa_cmp, 5, 6))) - 1L) %/% 3L + 1L,
       cid_principal = stringr::str_sub(toupper(pa_cidpri), 1, 4),
       cid_capturado = cls$cid, campo_captura = cls$campo_captura,
       subgrupo = cls$subgrupo, classe = cls$classe, camada = cls$camada,
@@ -53,18 +59,23 @@ enriquecer <- function(x, uf, ano, tri) {
       uf_pcn = uf_from_mun(pa_munpcn), regiao = mapear_uf_regiao(uf_pcn),
       competencia = lubridate::ym(pa_cmp),
       qtd_apr = suppressWarnings(as.numeric(pa_qtdapr)),
+      # filtragem 2010+ grava tudo como texto: quantidades voltam a ser numéricas
+      pa_qtdapr = qtd_apr, pa_qtdpro = suppressWarnings(as.numeric(pa_qtdpro)),
       fonte = "datasus_sia_pa")
 }
 
 message("== SIA-EIM (streaming): processando ", length(arqs), " arquivos ==")
-core_lst <- list(); env_lst <- list(); vol_lst <- list()
+core_lst <- list(); env_lst <- list(); vol_lst <- list(); fora <- 0L
 for (i in seq_along(arqs)) {
-  fp <- arqs[i]; meta <- stringr::str_match(basename(fp), PAT)
-  uf <- toupper(meta[2]); ano <- as.integer(meta[3]); tri <- as.integer(meta[4])
-  x <- readRDS(fp) |> as.data.frame() |> janitor::clean_names()
-  log_run("sia", uf, sprintf("%d_T%d", ano, tri), "ok", n_lidas = nrow(x), n_eim = nrow(x))
+  fp <- arqs[i]
+  x <- arrow::read_parquet(fp)
+  x <- x[x$hit_eim %in% TRUE, , drop = FALSE] |> as.data.frame() |> janitor::clean_names()
   if (!nrow(x)) next
-  x <- enriquecer(x, uf, ano, tri)
+  uf <- x$arq_uf[1]
+  x <- enriquecer(x, uf)
+  # Fora do escopo analítico (só pezinho não-EIM) ou competência fora da janela
+  n0 <- nrow(x); x <- dplyr::filter(x, !is.na(camada), ano %in% ANOS); fora <- fora + (n0 - nrow(x))
+  if (!nrow(x)) next
   # (a) core+limítrofe: registros completos
   core_lst[[length(core_lst)+1]] <- dplyr::filter(x, camada %in% c("core","limitrofe"))
   # (b) envelope: só contagens + volume/valor
@@ -77,7 +88,7 @@ for (i in seq_along(arqs)) {
     dplyr::group_by(uf_pcn, ano, camada, subgrupo) |>
     dplyr::summarise(registros = dplyr::n(), qtd = sum(qtd_apr, na.rm=TRUE),
                      valor = sum(pa_valapr, na.rm=TRUE), .groups="drop")
-  rm(x); if (i %% 20 == 0) { gc(verbose=FALSE); message("  ...", i, "/", length(arqs)) }
+  rm(x); if (i %% 200 == 0) { gc(verbose=FALSE); message("  ...", i, "/", length(arqs)) }
 }
 
 # Bind + harmonizar tipos do core
@@ -93,6 +104,8 @@ rm(core_lst, env_lst, vol_lst); gc(verbose=FALSE)
 
 cat(sprintf("\n• core+limítrofe: %d registros | envelope: %d (agregado) registros\n",
             nrow(core), sum(env$n)))
+cat(sprintf("• descartados (só painel do pezinho não-EIM ou PA_CMP fora de %d–%d): %d\n",
+            min(ANOS), max(ANOS), fora))
 cat("• camada (core+limítrofe):\n"); print(janitor::tabyl(core, camada))
 cat("• camada=NA (capturado por eim_qualquer mas sem CID EIM em escopo analítico\n")
 cat("  em nenhum dos 3 campos — não deveria ocorrer; auditar se >0):\n")

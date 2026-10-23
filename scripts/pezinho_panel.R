@@ -22,8 +22,10 @@ PANEL <- EIM_LOOKUP |>
 
 # NV (SINASC) por período de cada base
 nv <- carregar_nv() |> dplyr::group_by(ano) |> dplyr::summarise(nv=sum(nv), .groups="drop")
-NV_SIH <- sum(dplyr::filter(nv, ano %in% ANOS)$nv)          # 2021-2025
-NV_SIM <- sum(dplyr::filter(nv, ano %in% ANOS_SIM)$nv)      # 2021-2023
+# Numerador e denominador nos MESMOS anos: SIH só onde há SINASC definitivo
+ANOS_NV <- intersect(ANOS, nv$ano)
+NV_SIH <- sum(dplyr::filter(nv, ano %in% ANOS_NV)$nv)
+NV_SIM <- sum(dplyr::filter(nv, ano %in% ANOS_SIM)$nv)
 
 norm4 <- function(v) stringr::str_sub(stringr::str_trim(toupper(as.character(v))),1,4)
 conta_pref <- function(vec, pref) sum(stringr::str_starts(norm4(vec), pref), na.rm=TRUE)
@@ -45,8 +47,9 @@ sia_inf <- dplyr::bind_rows(
   dplyr::transmute(sia_eim, cid=cid_principal, idade_anos),
   dplyr::transmute(pz_sia,  cid=cid_principal, idade_anos)) |> dplyr::filter(idade_anos < 1)
 sih_inf <- dplyr::bind_rows(
-  dplyr::transmute(sih_eim, cid=toupper(diag_princ), idade_anos),
-  dplyr::transmute(pz_sih,  cid=toupper(diag_princ), idade_anos)) |> dplyr::filter(idade_anos < 1)
+  dplyr::transmute(sih_eim, cid=toupper(diag_princ), idade_anos, ano),
+  dplyr::transmute(pz_sih,  cid=toupper(diag_princ), idade_anos, ano)) |>
+  dplyr::filter(idade_anos < 1, ano %in% ANOS_NV)
 sim_inf <- dplyr::bind_rows(
   dplyr::transmute(sim_eim, cid=toupper(causabas), idade_anos, obito_infantil),
   dplyr::transmute(pz_sim,  cid=toupper(causabas), idade_anos, obito_infantil)) |>
@@ -68,7 +71,8 @@ tab <- PANEL |>
   dplyr::ungroup() |>
   dplyr::arrange(etapa, dplyr::desc(SIH_princ))
 
-cat("== PAINEL COMPLETO DO PEZINHO nas 3 bases (2021-2025 SIA/SIH; 2021-2023 SIM) ==\n")
+cat(sprintf("== PAINEL COMPLETO DO PEZINHO nas 3 bases (%d–%d SIA/SIH; %d–%d SIM; taxas SIH em %d–%d) ==\n",
+            min(ANOS), max(ANOS), min(ANOS_SIM), max(ANOS_SIM), min(ANOS_NV), max(ANOS_NV)))
 cat("Detecção 1º ano por 100 mil NV (SINASC). Supressão N<5 aplicar antes de publicar.\n\n")
 print(as.data.frame(tab))
 

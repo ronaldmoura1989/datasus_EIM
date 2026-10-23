@@ -1,6 +1,6 @@
 ---
 title: "Internações (SIH-RD)"
-subtitle: "Dois sabores (principal vs qualquer campo) · peso das MPS/TRE · permanência · 2021–2025"
+subtitle: "Dois sabores (principal vs qualquer campo) · peso das MPS/TRE · permanência · 2010–2025"
 toc: false
 ---
 
@@ -50,7 +50,7 @@ tibble::tibble(
   scale_fill_manual(values = c("EIM como diagnóstico principal" = "#1B6F6A",
                                "EIM em qualquer campo (princ. + secundários)" = "#7FA6D9"),
                     guide = "none") +
-  labs(x = NULL, y = "AIH distintas (2021–2025)",
+  labs(x = NULL, y = paste0("AIH distintas (", PER, ")"),
        title = "SIH: dois sabores de captura — NÃO somar",
        subtitle = "Qualquer campo (~6×) inclui comorbidade e contexto; principal é o motivo da internação.") +
   theme_eim()
@@ -92,7 +92,7 @@ sih |>
   scale_fill_manual(values = c(`TRUE` = "#1B6F6A", `FALSE` = "#2E9E96"),
                     labels = c(`TRUE` = "MPS (infusões TRE)", `FALSE` = "Outras"),
                     name = NULL) +
-  labs(x = NULL, y = "AIH com EIM principal (2021–2025)",
+  labs(x = NULL, y = paste0("AIH com EIM principal (", PER, ")"),
        title = "Traçadoras nas internações — peso desproporcional das MPS",
        subtitle = "MPS (I, II, outras) somam grande parte das AIH: infusões de terapia de reposição enzimática (TRE).") +
   theme_eim()
@@ -111,6 +111,9 @@ de tratamento**, não número de indivíduos.
 num_sih <- sih |> dplyr::filter(eim_principal) |>
   contar_estrato(col_uf = "uf_res", distinct_por = "n_aih")
 tx_ano <- taxas_padronizadas(num_sih, D$pop, grupos = "ano")
+tr_sih    <- tendencia_txt(tx_ano)
+tr_sih_sc <- tendencia_txt(tx_ano, excluir_covid = TRUE)
+q_covid   <- variacao_pct(tx_ano, 2019, 2020, "taxa_pad")
 
 tx_ano |>
   ggplot(aes(ano, taxa_pad)) +
@@ -121,13 +124,18 @@ tx_ano |>
   scale_x_continuous(breaks = ANOS) +
   labs(x = NULL, y = "por 100 mil (padronizada)",
        title = "Taxa de internação por EIM (principal), padronizada por idade e sexo",
-       subtitle = "Alta clara: ~2,17 (2021) → ~2,83 (2024), razão de taxas ~+9%/ano — expansão de detecção/TRE.") +
+       subtitle = paste0(serie_txt(tx_ano), " · tendência ", tr_sih$var)) +
   theme_eim()
 ```
 
-Em alta clara: **2,17 → 2,43 → 2,64 → 2,83** por 100 mil (2021–2024; ~2,79 em 2025), razão
-de taxas **~+9%/ano**. Compatível com **expansão de detecção e de TRE**, não necessariamente
-aumento de incidência.
+Na série `r PER`, a internação por EIM (diagnóstico principal) está **`r tr_sih$dir`**
+(`r tr_sih$var`; sem 2020–2022, `r tr_sih_sc$var`): oscila entre
+`r fmt_2(min(tx_ano$taxa_pad))` e `r fmt_2(max(tx_ano$taxa_pad))` por 100 mil
+(`r serie_txt(tx_ano)`). O vale de 2020 (`r fmt_pct(q_covid)`% em relação a 2019) é a
+**pandemia**, e a retomada a partir de 2021 é sobretudo **recuperação** desse vale — num
+recorte curto que começa em 2021 ela parece uma "alta clara", que a série longa desfaz.
+Como o volume hospitalar é dominado pelas **infusões de TRE** (MPS, esfingolipidoses), a
+série mede uso de serviço, não incidência.
 
 ## Estrutura etária e por sexo das internações
 

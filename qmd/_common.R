@@ -21,6 +21,13 @@ select <- dplyr::select; filter <- dplyr::filter; rename <- dplyr::rename
 slice  <- dplyr::slice;  count  <- dplyr::count
 
 # -----------------------------------------------------------------------------
+# Rótulos de período (calculados de 00_setup.R — nunca escrever o período à mão)
+# -----------------------------------------------------------------------------
+PER     <- sprintf("%d–%d", min(ANOS), max(ANOS))          # SIA/SIH
+PER_SIM <- sprintf("%d–%d", min(ANOS_SIM), max(ANOS_SIM))  # SIM (definitivos)
+ANO_INI <- min(ANOS); ANO_FIM <- max(ANOS); ANO_FIM_SIM <- max(ANOS_SIM)
+
+# -----------------------------------------------------------------------------
 # Dados consolidados (lazy no SIA; RDS em memória nas demais)
 # -----------------------------------------------------------------------------
 D <- local({
@@ -210,5 +217,37 @@ kpi_row <- function(cards) {
 fmt_n <- function(x) formatC(x, format = "d", big.mark = ".")
 fmt_1 <- function(x) formatC(x, format = "f", digits = 1, big.mark = ".", decimal.mark = ",")
 fmt_2 <- function(x) formatC(x, format = "f", digits = 2, big.mark = ".", decimal.mark = ",")
+fmt_pct <- function(x, d = 1) sub("^-", "−", formatC(x, format = "f", digits = d, decimal.mark = ",", flag = "+"))
+
+# -----------------------------------------------------------------------------
+# Tendência e resumo de série — o TEXTO de tendência sai do dado, nunca à mão.
+# (A versão 2021–2025 publicava "em alta clara, +9%/ano" para a internação: era a
+#  recuperação do vale da pandemia; na série longa não há tendência sustentada.)
+# -----------------------------------------------------------------------------
+#' Tendência quasi-Poisson (offset log pop) de uma série anual → direção + variação.
+#' @param d tibble com `ano`, `eventos` e `pop` (ex.: saída de taxas_padronizadas) —
+#'   ou só `ano`+`eventos`, e a população anual é juntada de D$pop.
+#' @return list(dir = "em alta" | "em queda" | "sem tendência sustentada",
+#'              var = "+6,2%/ano, IC95% +5,5 a +6,9", rr = tibble)
+tendencia_txt <- function(d, excluir_covid = FALSE) {
+  if (!"pop" %in% names(d))
+    d <- dplyr::inner_join(d, D$pop |> dplyr::group_by(ano) |> dplyr::summarise(pop = sum(pop)), by = "ano")
+  t <- tendencia_poisson(d, excluir_covid = excluir_covid)
+  dir <- if (t$ic_inf > 1) "em alta" else if (t$ic_sup < 1) "em queda" else "sem tendência sustentada"
+  list(dir = dir, rr = t,
+       var = paste0(fmt_pct(100 * (t$razao_taxa_ano - 1)), "%/ano, IC95% ",
+                    fmt_pct(100 * (t$ic_inf - 1)), " a ", fmt_pct(100 * (t$ic_sup - 1))))
+}
+#' Série resumida em texto: início → mínimo/máximo → fim (em vez de 15 valores).
+serie_txt <- function(tx, col = "taxa_pad", fmt = fmt_2) {
+  tx <- tx[order(tx$ano), ]; v <- tx[[col]]
+  i <- sort(unique(c(1L, which.min(v), which.max(v), length(v))))
+  rot <- ifelse(i == which.min(v) & !i %in% c(1L, length(v)), ", mín.",
+         ifelse(i == which.max(v) & !i %in% c(1L, length(v)), ", máx.", ""))
+  paste0(fmt(v[i]), " (", tx$ano[i], rot, ")", collapse = " → ")
+}
+#' Variação % de um ano para outro numa série (ano, valor)
+variacao_pct <- function(tx, de, para, col = "eventos")
+  100 * (tx[[col]][tx$ano == para] / tx[[col]][tx$ano == de] - 1)
 
 `%||%` <- function(a, b) if (is.null(a)) b else a

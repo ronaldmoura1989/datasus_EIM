@@ -1,8 +1,14 @@
 # =============================================================================
 # get_eim_data_from_SIH.R — Consolidação do SIH-RD filtrado por EIM
-# Entrada: data/filtered/sih_eim/sih_{uf}_{ano}_{tri}_eim.rds (filtrado no remoto;
-#          objeto = data.frame bruto MAIÚSCULO, 113 cols).
+# Entrada: <DIR_FILTRADO>/SIH-RD/filtrado/RD{UF}{AA}{MM}.parquet (scripts/r550/
+#          filtrar_um.R: DBC do DATASUS 2010+, todas as colunas como texto, flags hit_*).
+#          Só linhas com hit_eim; fica quem tem EIM no escopo analítico (principal ou
+#          qualquer campo) — o painel do pezinho tem consolidação própria.
+# ANO = ano do arquivo/competência da AIH (ANO_CMPT), como na série anterior.
 # CID no SIH: DIAG_PRINC + DIAG_SECUN + DIAGSEC1..9 (+ CID_ASSO, CID_MORTE).
+#   ⚠️ O CID secundário MUDA DE CAMPO: DIAG_SECUN até 2014 (7,8%→16,6% preenchido),
+#   DIAGSEC1..9 a partir de 2014/15 (17%→29%). "Qualquer campo" cresce por
+#   preenchimento — a série longa usa o diagnóstico PRINCIPAL.
 # DOIS SABORES: (a) diag_princ = EIM (comparável ao SIA); (b) EIM em QUALQUER campo.
 # Deduplicação de AIH: contar N_AIH distinta; IDENT==5 = continuação.
 # Saídas: data/parquet/sih_eim/ + consolidated/sih_eim_nacional.rds
@@ -10,18 +16,17 @@
 
 source(here::here("scripts", "00_setup.R"))
 
-DIR_SIH <- here::here("data/filtered/sih_eim")
-PAT <- "^sih_([a-z]{2})_(\\d{4})_(\\d)_eim\\.rds$"
-arqs <- list.files(DIR_SIH, pattern = PAT, full.names = TRUE)
-if (!length(arqs)) stop("Nenhum filtrado SIH em ", DIR_SIH, " — rodar rsync primeiro.")
+DIR_SIH <- file.path(DIR_FILTRADO, "SIH-RD", "filtrado")
+arqs <- list.files(DIR_SIH, pattern = "\\.parquet$", full.names = TRUE)
+if (!length(arqs)) stop("Nenhum filtrado SIH em ", DIR_SIH, " — rodar a filtragem no R550-2 primeiro.")
 
 ler_sih <- function(fp) {
-  meta <- stringr::str_match(basename(fp), PAT)
-  uf <- toupper(meta[2]); ano <- as.integer(meta[3]); tri <- as.integer(meta[4])
-  x <- readRDS(fp) |> as.data.frame() |> janitor::clean_names()
-  log_run("sih", uf, sprintf("%d_T%d", ano, tri), "ok", n_lidas = nrow(x), n_eim = nrow(x))
+  x <- arrow::read_parquet(fp)
+  x <- x[x$hit_eim %in% TRUE, , drop = FALSE] |> as.data.frame() |> janitor::clean_names()
   if (!nrow(x)) return(NULL)
-  x |> dplyr::mutate(uf_arquivo = uf, ano = ano, trimestre = tri)
+  x |> dplyr::mutate(uf_arquivo = arq_uf, ano = as.integer(arq_ano),
+                     trimestre = (as.integer(arq_mes) - 1L) %/% 3L + 1L) |>
+    dplyr::filter(ano %in% ANOS)
 }
 
 message("== SIH-EIM: consolidando ", length(arqs), " arquivos ==")
@@ -62,6 +67,10 @@ sih <- sih |>
     aih_continuacao = as.character(ident) == "5",     # 5 = AIH de continuação
     fonte      = "datasus_sih_rd"
   )
+
+# Só o escopo analítico do EIM (sai quem foi capturado só por CID do painel do pezinho)
+n0 <- nrow(sih); sih <- dplyr::filter(sih, eim_principal | eim_qualquer)
+cat(sprintf("\n• descartados (só painel do pezinho não-EIM): %d\n", n0 - nrow(sih)))
 
 # Camada mais específica (core > limítrofe > envelope) encontrada em QUALQUER
 # campo de diagnóstico — o KPI "AIH com EIM em qualquer campo" (sabor b) não

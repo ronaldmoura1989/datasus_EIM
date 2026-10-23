@@ -1,6 +1,6 @@
 ---
 title: "Mortalidade (SIM-DO)"
-subtitle: "Eixo central dos EIM · mortalidade padronizada e infantil · incidência ao nascimento por traçadora · 2021–2023"
+subtitle: "Eixo central dos EIM · mortalidade padronizada e infantil · incidência ao nascimento por traçadora · 2010–2024"
 toc: false
 ---
 
@@ -17,7 +17,9 @@ pct_cb   <- 100 * n_cb / n_qualq
 # NUNCA escrever estes valores à mão: eles mudam com a camada da definição de caso.
 num_sim <- sim |> dplyr::filter(eim_causa_basica) |> contar_estrato(col_uf = "uf_res")
 tx_ano  <- taxas_padronizadas(num_sim, D$pop, grupos = "ano")
-tx_txt  <- paste(fmt_2(tx_ano$taxa_pad[order(tx_ano$ano)]), collapse = " → ")
+tx_txt  <- serie_txt(tx_ano)
+tr_sim  <- tendencia_txt(tx_ano)
+q_covid <- variacao_pct(tx_ano, 2019, 2020, "eventos")
 ```
 
 ```{r kpis}
@@ -36,7 +38,8 @@ cat(kpi_row(list(
 
 Nos EIM a mortalidade é um eixo central do painel: são doenças de **alta letalidade
 precoce**, e o SIM é a base do DATASUS com **melhor cobertura e completude**. O SIM cobre
-**2021–2023** (DATASUS não publicou 2024+).
+**`r PER_SIM`** com dados definitivos; o ano seguinte, ainda preliminar no DATASUS, fica
+fora das taxas.
 
 ::: {.callout-alerta}
 **Cobertura boa não é o mesmo que definição de caso válida.** Em doença rara, a causa básica
@@ -61,10 +64,13 @@ termômetro de quanta contaminação de adulto o teto carrega.
 :::
 
 ::: {.callout-nota}
-**Mortalidade registrada, não prevalência.** A mortalidade padronizada por EIM é
-**relativamente estável (`r tx_txt`/100 mil em `r min(ANOS_SIM)`–`r max(ANOS_SIM)`)**. A
-variação por UF combina incidência, acesso a diagnóstico/tratamento e **qualidade de
-codificação** da declaração de óbito.
+**Mortalidade registrada, não prevalência.** A mortalidade padronizada por EIM está
+**`r tr_sim$dir`** em `r PER_SIM` (`r tr_sim$var`): `r tx_txt` por 100 mil. Cresce bem
+menos que a detecção ambulatorial, e o aumento é compatível com **melhor reconhecimento do
+EIM na declaração de óbito** e mais diagnóstico — não necessariamente com mais mortes pela
+doença. Em 2020 os óbitos com EIM como causa básica variaram `r fmt_pct(q_covid)`% em relação a
+2019: a pandemia disputou a causa básica. A variação por UF combina incidência, acesso a
+diagnóstico/tratamento e **qualidade de codificação** da declaração de óbito.
 :::
 
 ## Onde o EIM aparece na Declaração de Óbito
@@ -78,7 +84,7 @@ sim |>
   dplyr::count(posicao, name = "obitos") |>
   dplyr::mutate(`%` = fmt_1(100 * obitos / sum(obitos)),
                obitos = fmt_n(obitos)) |>
-  tabela_eim(titulo = "Posição do EIM na DO (2021–2023)",
+  tabela_eim(titulo = paste0("Posição do EIM na DO (", PER_SIM, ")"),
              nota = "Descreve a estrutura da captura, NÃO a letalidade: o denominador é o conjunto que o próprio filtro capturou (causabas + linhas). Um EIM declarado como sepse, sem nenhum código E na DO, não aparece como 'contribuinte' — é invisível a esta tabela.")
 ```
 
@@ -101,7 +107,7 @@ sim |>
     obitos = fmt_n(obitos)) |>
   dplyr::select(Camada, Óbitos = obitos, `%`) |>
   tabela_eim(
-    titulo = "Óbitos com EIM na causa básica, por camada da definição de caso (2021–2023)",
+    titulo = paste0("Óbitos com EIM na causa básica, por camada da definição de caso (", PER_SIM, ")"),
     nota = "Só a linha 'core' entra nos números primários do painel. As camadas limítrofe e envelope compõem o TETO de subcodificação (bracketing) e nunca são contadas como caso.")
 ```
 
@@ -125,7 +131,7 @@ sim |>
     `Idade mediana ao óbito` = dplyr::if_else(is.na(idade_med), "—",
                                              paste0(fmt_1(idade_med), " anos"))) |>
   tabela_eim(
-    titulo = "Top 25 códigos CID-10 de 4 dígitos na causa básica (todas as camadas, 2021–2023)",
+    titulo = paste0("Top 25 códigos CID-10 de 4 dígitos na causa básica (todas as camadas, ", PER_SIM, ")"),
     nota = "Idade mediana alta (≥60 anos) num código de camada envelope/limítrofe é a assinatura de garbage code em declaração de óbito de idoso — não de EIM. É por isso que só a camada core entra no número primário.")
 ```
 
@@ -155,7 +161,7 @@ lookup já instrui (`scripts/eim_lookup.R`), e não como confirmação de FC let
 em adultos.
 :::
 
-## Mortalidade padronizada por EIM (2021–2023)
+## Mortalidade padronizada por EIM (`r PER_SIM`)
 
 ```{r tx-mort}
 tx_ano |>
@@ -180,7 +186,7 @@ tx_ano |>
 sim |>
   dplyr::filter(eim_causa_basica) |>
   piramide_etaria(
-    titulo = "Pirâmide etária × sexo dos óbitos por EIM (causa básica, 2021–2023)",
+    titulo = paste0("Pirâmide etária × sexo dos óbitos por EIM (causa básica, ", PER_SIM, ")"),
     subtitulo = "Camada core. Compare com a idade mediana do teto ampliado nos KPIs: a diferença mede a contaminação por código inespecífico de adulto.",
     unidade = "óbitos")
 ```
@@ -222,7 +228,7 @@ D$m_incid |>
     `IC95%` = mort_ic,
     `Detecção 1º ano (SIH / SIA)` = paste0(fmt_n(aih_inf), " / ", fmt_n(reg_sia_inf)),
     `Incid. lit. [VERIFICAR]` = fonte) |>
-  tabela_eim(titulo = "Incidência ao nascimento e mortalidade infantil por traçadora (pool 2021–2023)",
+  tabela_eim(titulo = paste0("Incidência ao nascimento e mortalidade infantil por traçadora (pool ", PER_SIM, ")"),
              nota = "Mortalidade infantil = SIM causa básica <1 ano / 100 mil NV (SINASC), IC Poisson exato, supressão N<5. 'Detecção 1º ano' via SIA são registros, não crianças (idade SIA mal preenchida). Incidência da literatura [VERIFICAR].")
 ```
 
@@ -245,7 +251,7 @@ triagem já resolve do que ainda mata.
 ## Limitações
 
 ::: {.callout-nota}
-- **SIM cobre só 2021–2023** (2024+ ainda não publicado).
+- **SIM cobre `r PER_SIM`** (definitivos); o ano preliminar fica fora das taxas.
 - **Definição de caso = camada core** (corrigido; antes o KPI usava o modo "ampliado", que
   incluía a camada envelope e não era comparável com SIA/SIH). O teto ampliado continua
   publicado ao lado, como *bracketing*. Ver a composição do numerador acima e

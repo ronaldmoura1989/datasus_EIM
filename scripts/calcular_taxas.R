@@ -21,10 +21,13 @@ carregar_pop <- function() {
   arrow::read_parquet(fp) |>
     dplyr::mutate(faixa = factor(as.character(faixa), levels = .FAIXA_PAD))
 }
-carregar_nv <- function() {
+carregar_nv <- function(incluir_preliminar = FALSE) {
   fp <- here::here("data/denominators/nascidos_vivos.parquet")
   if (!file.exists(fp)) stop("Rode scripts/get_nascidos_vivos_SINASC.R primeiro.")
-  arrow::read_parquet(fp)
+  nv <- arrow::read_parquet(fp)
+  # Ano preliminar do SINASC fica fora do denominador padrão (incompleto/sujeito a revisão)
+  if (!incluir_preliminar && "status_dado" %in% names(nv)) nv <- dplyr::filter(nv, status_dado == "DEFINITIVO")
+  nv
 }
 
 #' Conta eventos por estrato (uf × ano × sexo × faixa[QUINQUENAL] [× extra]).
