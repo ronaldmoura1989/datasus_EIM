@@ -67,13 +67,20 @@ COLS_CID <- list(
   "SIA-PA" = c("PA_CIDPRI", "PA_CIDSEC", "PA_CIDCAS"),
   "SIH-RD" = c("DIAG_PRINC", "DIAG_SECUN", paste0("DIAGSEC", 1:9), "CID_ASSO", "CID_MORTE"),
   "SIM-DO" = c("CAUSABAS", "CAUSABAS_O"),                     # 1 CID por campo
-  "SINASC" = character())
+  "SINASC" = character(),
+  # APAC de medicamentos (AM) e de laudos diversos (AD): mesmas colunas de CID com prefixo AP_
+  "SIA-AM" = c("AP_CIDPRI", "AP_CIDSEC", "AP_CIDCAS"),
+  "SIA-AD" = c("AP_CIDPRI", "AP_CIDSEC", "AP_CIDCAS"))
 # SIM: campos de CAUSAS MÚLTIPLAS trazem vários CIDs concatenados com "*" (ex. "*A419*J960");
 # casar em QUALQUER posição — o filtro antigo (4 primeiros caracteres) perdia todos.
 COLS_CID_MULTI <- list("SIM-DO" = c("LINHAA", "LINHAB", "LINHAC", "LINHAD", "LINHAII"),
                        "SINASC" = c("CODANOMAL"))
 COLS_PROC <- list("SIA-PA" = "PA_PROC_ID", "SIH-RD" = c("PROC_REA", "PROC_SOLIC"),
-                  "SIM-DO" = character(), "SINASC" = character())
+                  "SIM-DO" = character(), "SINASC" = character(),
+                  "SIA-AM" = "AP_PRIPAL", "SIA-AD" = "AP_PRIPAL")
+# Identificador do paciente criptografado (CNS) em BI e APAC: bytes binários → gravado em
+# hexadecimal (determinístico, ASCII). Pseudonimização: só para contar/ligar, nunca exportar.
+COLS_CNS <- c("AP_CNSPCN", "CNS_PAC")
 
 # Regex para campos multi-CID. SIM: códigos separados por "*" ("*A419*J960");
 # SINASC: blocos de 4 caracteres SEM separador ("Q059Q669") → casar só em posição múltipla de 4.

@@ -20,6 +20,7 @@
 #      [--status=PRELIM|DEFINITIVO]
 # =============================================================================
 suppressPackageStartupMessages({ library(data.table); library(arrow) })
+data.table::setDTthreads(1)   # um processo R por arquivo, N em paralelo: sem threads extras (evita sobrecarga)
 
 args <- commandArgs(trailingOnly = TRUE)
 arg  <- function(k, d = NULL) { m <- grep(paste0("^--", k, "="), args, value = TRUE); if (length(m)) sub(paste0("^--", k, "="), "", m[1]) else d }
@@ -53,8 +54,8 @@ if (file.exists(f_ok) && file.exists(f_filt) && file.exists(f_den) &&
 # -----------------------------------------------------------------------------
 # Metadados do nome do arquivo
 # -----------------------------------------------------------------------------
-meta_arquivo <- function(arq) {   # PA/RD: {UF}{AA}{MM}[parte] (mensal) · DO/DN: {UF}{AAAA} (anual)
-  m <- regmatches(arq, regexec("^(PA|RD)([A-Z]{2})(\\d{2})(\\d{2})([a-z]?)$", arq, ignore.case = TRUE))[[1]]
+meta_arquivo <- function(arq) {   # PA/RD/AM/AD: {UF}{AA}{MM}[parte] (mensal) · DO/DN: {UF}{AAAA} (anual)
+  m <- regmatches(arq, regexec("^(PA|RD|AM|AD)([A-Z]{2})(\\d{2})(\\d{2})([a-z]?)$", arq, ignore.case = TRUE))[[1]]
   if (length(m)) return(list(uf = toupper(m[3]), ano = 2000L + as.integer(m[4]), mes = as.integer(m[5]), parte = tolower(m[6])))
   m <- regmatches(arq, regexec("^(DO|DN)([A-Z]{2})(\\d{4})$", arq, ignore.case = TRUE))[[1]]
   if (length(m)) return(list(uf = toupper(m[3]), ano = as.integer(m[4]), mes = NA_integer_, parte = ""))
@@ -88,22 +89,31 @@ texto <- function(v) {   # numérico → texto sem notação científica; texto 
 # Denominadores (sobre TODAS as linhas, antes do filtro)
 # -----------------------------------------------------------------------------
 denominador <- function(x) {
-  g <- function(c) if (c %in% names(x)) x[[c]] else NA
+  # Colunas usadas DENTRO de j referenciadas diretamente (valem por grupo). Antes uma função
+  # auxiliar devolvia x[[c]] — a coluna INTEIRA do arquivo — e somas/contagens por grupo
+  # (qtd_apr, val_apr, obitos, diarias) saíam com o total do arquivo em cada grupo (corrigido
+  # 24/10/2026). Colunas ausentes no ano viram NA antes do agrupamento.
+  precisa <- c("PA_QTDAPR", "PA_VALAPR", "PA_CMP", "PA_DOCORIG", "PA_PROC_ID", "PA_MUNPCN", "MORTE", "DIAS_PERM",
+               "ANO_CMPT", "MES_CMPT", "IDENT", "MUNIC_RES", "MUNIC_MOV", "SEXO", "DTOBITO", "CODMUNRES", "IDADE",
+               "CAUSABAS", "DTNASC", "IDANOMAL", "AP_AUTORIZ", "AP_CNSPCN", "AP_CMP", "AP_PRIPAL", "AP_MUNPCN", "N_AIH")
+  x <- x[, intersect(precisa, names(x)), with = FALSE]          # cópia enxuta: não altera o arquivo lido
+  for (c in setdiff(precisa, names(x))) data.table::set(x, j = c, value = NA_character_)
   switch(BASE,
-    "SIA-PA" = x[, .(linhas = .N, qtd_apr = sum(as.numeric(g("PA_QTDAPR")), na.rm = TRUE),
-                     val_apr = sum(as.numeric(g("PA_VALAPR")), na.rm = TRUE)),
-                 by = .(cmp = g("PA_CMP"), docorig = g("PA_DOCORIG"), grupo_proc = substr(g("PA_PROC_ID"), 1, 4),
-                        uf_res = uf_de(g("PA_MUNPCN")))],
-    "SIH-RD" = x[, .(aih = uniqueN(N_AIH), obitos = sum(as.integer(g("MORTE")) == 1L, na.rm = TRUE),
-                     diarias = sum(as.numeric(g("DIAS_PERM")), na.rm = TRUE)),
-                 by = .(ano_cmpt = g("ANO_CMPT"), mes_cmpt = g("MES_CMPT"), ident = g("IDENT"),
-                        uf_res = uf_de(g("MUNIC_RES")), uf_mov = uf_de(g("MUNIC_MOV")), sexo = g("SEXO"))],
+    "SIA-PA" = x[, .(linhas = .N, qtd_apr = sum(as.numeric(PA_QTDAPR), na.rm = TRUE),
+                     val_apr = sum(as.numeric(PA_VALAPR), na.rm = TRUE)),
+                 by = .(cmp = PA_CMP, docorig = PA_DOCORIG, grupo_proc = substr(PA_PROC_ID, 1, 4), uf_res = uf_de(PA_MUNPCN))],
+    "SIH-RD" = x[, .(aih = uniqueN(N_AIH), obitos = sum(as.integer(MORTE) == 1L, na.rm = TRUE),
+                     diarias = sum(as.numeric(DIAS_PERM), na.rm = TRUE)),
+                 by = .(ano_cmpt = ANO_CMPT, mes_cmpt = MES_CMPT, ident = IDENT,
+                        uf_res = uf_de(MUNIC_RES), uf_mov = uf_de(MUNIC_MOV), sexo = SEXO)],
     "SIM-DO" = x[, .(obitos = .N),
-                 by = .(ano = substr(g("DTOBITO"), 5, 8), uf_res = uf_de(g("CODMUNRES")), sexo = g("SEXO"),
-                        faixa = faixa5(idade_sim(g("IDADE"))), causabas3 = substr(g("CAUSABAS"), 1, 3))],
+                 by = .(ano = substr(DTOBITO, 5, 8), uf_res = uf_de(CODMUNRES), sexo = SEXO,
+                        faixa = faixa5(idade_sim(IDADE)), causabas3 = substr(CAUSABAS, 1, 3))],
     "SINASC" = x[, .(nascidos = .N),
-                 by = .(ano = substr(g("DTNASC"), 5, 8), uf_res = uf_de(g("CODMUNRES")), sexo = g("SEXO"),
-                        idanomal = g("IDANOMAL"))])
+                 by = .(ano = substr(DTNASC, 5, 8), uf_res = uf_de(CODMUNRES), sexo = SEXO, idanomal = IDANOMAL)],
+    # APAC (AM/AD): APAC e pacientes distintos por competência × procedimento principal × UF
+    "SIA-AM" = , "SIA-AD" = x[, .(apac = uniqueN(AP_AUTORIZ), pacientes = uniqueN(AP_CNSPCN), linhas = .N),
+                              by = .(cmp = AP_CMP, proc = AP_PRIPAL, uf_res = uf_de(AP_MUNPCN))])
 }
 
 # -----------------------------------------------------------------------------
@@ -147,6 +157,9 @@ res <- tryCatch({
   fl  <- flags(x)
   keep <- Reduce(`|`, fl)
   y <- x[keep]; fl <- fl[keep]; rm(x); invisible(gc(verbose = FALSE))
+  for (c in intersect(COLS_CNS, names(y)))      # CNS criptografado (bytes) → hexadecimal
+    data.table::set(y, j = c, value = vapply(iconv(y[[c]], from = "latin1", to = "latin1", toRaw = TRUE),
+                                             function(r) if (is.null(r)) NA_character_ else paste(as.character(r), collapse = ""), ""))
   for (c in names(y)) data.table::set(y, j = c, value = texto(y[[c]]))
   y[, `:=`(arq = ARQ, arq_uf = MT$uf, arq_ano = MT$ano, arq_mes = MT$mes, arq_parte = MT$parte, status_dado = STATUS_DADO)]
   y <- cbind(y, fl)

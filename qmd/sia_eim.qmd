@@ -13,8 +13,14 @@ source("_common.R")
 sia_cl   <- readRDS(here::here("data/consolidated/sia_eim_core_limitrofe.rds"))
 sia_core <- dplyr::filter(sia_cl, camada == "core")
 lim_n    <- sum(sia_cl$camada == "limitrofe", na.rm = TRUE)
-pseudo  <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"),
-                           show_col_types = FALSE)
+# Pacientes distintos pelo CNS criptografado das APAC (scripts/pacientes_cns_apac.R) e a
+# validação do pseudo-ID contra ele (scripts/validar_pseudo_id_cns.R)
+pac     <- readr::read_csv(here::here("manifest/sia_pacientes_cns.csv"), show_col_types = FALSE)
+val     <- readr::read_csv(here::here("manifest/validacao_pseudo_id_cns.csv"), show_col_types = FALSE)
+TOT     <- "TOTAL (todos os subgrupos core)"
+pac_br  <- dplyr::filter(pac, escopo == "Brasil", subgrupo != TOT)
+tot_br  <- dplyr::filter(pac, escopo == "Brasil", subgrupo == TOT)
+val_br  <- dplyr::filter(val, escopo == "Brasil")
 proc_top <- readr::read_csv(here::here("manifest/sia_procedimentos_top.csv"),
                             show_col_types = FALSE)
 ```
@@ -135,42 +141,42 @@ criança acompanhada gera muitos registros/ano. A idade no SIA vem em **anos int
 mal preenchida — a barra `<1 mês` × `1–11 m` é **frágil** (ver limitações).
 :::
 
-## De registros a pseudo-pacientes — intervalo, não contagem
+## Quantos pacientes? Contagem pelo CNS das APAC
 
-O SIA-PA público **não tem identificador de paciente**. Para os subgrupos crônicos de alto
-volume, construímos um **pseudo-ID** por *record linkage* determinístico (blocking
-sexo × município [× raça/cor na chave estrita], janela de ano de nascimento ±1, ligação certa
-entre registros da mesma APAC, componentes conexos) e reportamos o número de pacientes como
-**intervalo [frouxa ; estrita]** com a **razão registros/paciente** (intensidade de uso). O
-método (*bracketing*, chave estrita↔frouxa) está no [Glossário](glossario.qmd); a correção de
-outubro/2026 do motor está nas [Notas de lançamento](notas_lancamento.qmd).
+O SIA-PA não traz identificador do paciente, mas as **APAC de medicamentos (AM) e de laudos
+diversos (AD)** trazem o Cartão Nacional de Saúde **criptografado**, estável entre meses, anos e
+arquivos. Cada APAC do PA foi ligada à AM/AD pelo número da autorização
+(`r fmt_1(tot_br$ligados_pct)`% dos registros de APAC de EIM ligados), o que permite contar
+**pacientes distintos**, sem estimativa e sem intervalo: são
+**`r fmt_n(tot_br$pacientes)` pacientes** com APAC de EIM (camada core) em `r PER`, dos quais
+`r fmt_n(tot_br$pacientes_ano_ref)` tiveram APAC em `r tot_br$ano_ref`. Quem só aparece em
+consulta ou exame (BPA, sem APAC) não entra nesta contagem.
 
-```{r pseudo-tab}
-pseudo |>
+```{r pacientes-tab}
+pac_br |>
+  dplyr::filter(!is.na(pacientes)) |>
+  dplyr::slice_max(pacientes, n = 15) |>
   dplyr::transmute(
     Subgrupo = stringr::str_replace_all(subgrupo, "_", " "),
-    Registros = fmt_n(registros),
-    `Pseudo-pac. (estrita)` = fmt_n(pseudo_pac_estrita),
-    `Pseudo-pac. (frouxa)`  = fmt_n(pseudo_pac_frouxa),
-    `Intervalo de pacientes` = paste0("[", fmt_n(pseudo_pac_frouxa), " ; ",
-                                      fmt_n(pseudo_pac_estrita), "]"),
-    `Reg./paciente` = fmt_2(razao),
-    `% chave completa` = fmt_1(pct_chave_completa),
-    `Ref.: pacientes/mês no CEAF (2024)` = dplyr::if_else(is.na(ref_ceaf_mes), "—",
-                                                         fmt_n(round(ref_ceaf_mes)))) |>
+    !!paste0("Pacientes (", PER, ")") := fmt_n(pacientes),
+    !!paste0("Pacientes em ", tot_br$ano_ref) := dplyr::if_else(is.na(pacientes_ano_ref), "N<5", fmt_n(pacientes_ano_ref)),
+    `Registros de APAC` = fmt_n(registros_apac),
+    `Registros por paciente` = fmt_1(registros_por_paciente),
+    `% ligados ao CNS` = fmt_1(ligados_pct)) |>
   tabela_eim(
-    titulo = "Registros vs pseudo-pacientes por subgrupo crônico de alto volume (SIA core)",
-    nota = paste0("Pseudo-ID é AGRUPADOR de registros compatíveis, não identificador de pessoas (LGPD; ver Glossário). Estrita = limite superior de pacientes; frouxa = inferior. Razão reg./paciente = intensidade de uso. Referência CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês; o pseudo-ID conta quem apareceu em ", PER, ", com ou sem medicamento, e por isso fica acima). Só agregados; supressão N<5."))
+    titulo = "Pacientes distintos com APAC de EIM por subgrupo (SIA core, Brasil)",
+    nota = "Paciente = CNS criptografado distinto nas APAC de medicamentos e de laudos diversos, ligado ao PA pelo número da APAC. O CNS é usado só para contar (LGPD): nenhum dado individual sai do processamento. Não inclui quem só tem consulta ou exame (BPA). Supressão N<5.")
 ```
 
 ::: {.callout-nota}
-**Como ler o intervalo.** A fibrose cística tem
-~`r fmt_1(pseudo$razao[pseudo$subgrupo == "fibrose_cistica"])` registros por
-pseudo-paciente — muitos atendimentos por pessoa acompanhada, coerente com doença crônica de
-seguimento intensivo (cada medicamento dispensado no CEAF é um registro mensal). A
-**cautela do EIM**: como a idade SIA está em anos inteiros, o `ano_nasc_proxy` tem **resolução
-ruim em <1 ano**, então o pseudo-ID é um limite **grosseiro** — intensidade de uso, **não**
-contagem de pessoas. O intervalo estrita↔frouxa é o indicador honesto; nunca um número pontual.
+**E o pseudo-ID usado até o Ciclo 4?** Aplicado aos mesmos registros de APAC, o intervalo do
+pseudo-ID continha o número verdadeiro em `r sum(val$dentro_do_intervalo)` de `r nrow(val)`
+subgrupos, com erro mediano de `r fmt_1(median(abs(val$erro_central_pct)))`% na estimativa
+central. No Brasil, a central **superestimava** em todos os subgrupos testados
+(`r fmt_1(min(val_br$erro_central_pct))`% a `r fmt_1(max(val_br$erro_central_pct))`%): a mesma
+pessoa, com município, raça/cor ou idade inconsistentes entre registros, virava duas. Por isso
+a contagem pelo CNS substitui o pseudo-ID para quem tem APAC. Detalhes nas
+[Notas de lançamento](notas_lancamento.qmd).
 :::
 
 ## Procedimentos SIGTAP mais frequentes

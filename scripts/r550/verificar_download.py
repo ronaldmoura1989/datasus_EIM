@@ -9,8 +9,9 @@ import argparse, collections, csv, datetime, os
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--raiz", default=os.path.expanduser("~/Documentos/ronald/datasus_raw"))
+ap.add_argument("--manifesto", default="")
 a = ap.parse_args()
-man = os.path.join(a.raiz, "manifest", "manifesto_atual.tsv")
+man = a.manifesto or os.path.join(a.raiz, "manifest", "manifesto_atual.tsv")
 
 res = collections.defaultdict(lambda: collections.Counter())
 pend = []

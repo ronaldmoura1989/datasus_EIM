@@ -33,7 +33,7 @@ LOG=$OUT/filtro_$(date +%Y%m%d_%H%M).log
 # base \t caminho_dbc  — só os completos, do maior para o menor
 LISTA=$(awk -F'\t' -v b="$BASE" -v uf="$UF" -v a0="$ANO_MIN" -v a1="$ANO_MAX" -v raiz="$RAIZ" \
   'NR>1 && (b=="todas" || $1==b) && (uf=="" || $4==uf) && $3>=a0 && $3<=a1 {print $8"\t"$1"\t"raiz"/"$2"/"$6}' \
-  "$RAIZ/manifest/manifesto_atual.tsv" |
+  "${MANIFESTO:-$RAIZ/manifest/manifesto_atual.tsv}" |
   while IFS=$'\t' read -r tam b fp; do [[ -f $fp && $(stat -c%s "$fp") -eq $tam ]] && printf "%s\t%s\t%s\n" "$tam" "$b" "$fp"; done |
   sort -t$'\t' -k1,1nr | cut -f2,3)
 N=$(printf "%s\n" "$LISTA" | grep -c . || true)

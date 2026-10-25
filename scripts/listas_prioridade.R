@@ -11,7 +11,8 @@
 #   razão PE/BR = (casos PE / pop PE) ÷ (casos BR / pop BR), população 2010–2025 somada;
 #   pacientes/mês = mediana mensal de APAC distintas do medicamento em 2024;
 #   testes = exames individualizados (BPA-I/APAC) de residentes, 2010–2025.
-# Contagens < 5 viram "<5" (LGPD). Saída: ../misc/ (fora do repositório).
+# Contagens < 5 viram "<5" (LGPD). Saída: ../misc/ (fora do repositório), ou EIM_DIR_LISTAS.
+# No Mac, as listas publicadas ficam em projetos/PROFIX_FACEPE/misc/ (o projeto mudou de pasta).
 # Critérios de prioridade: misc/listas_prioridade_LEIAME.md
 # =============================================================================
 
@@ -88,7 +89,7 @@ linha <- function(rank, doenca, cids, ..., pac = NULL, subgrupos = NULL, renal =
   }
   dplyr::bind_cols(out, tibble::as_tibble(list(...)))
 }
-OUT <- here::here("..", "misc")
+OUT <- Sys.getenv("EIM_DIR_LISTAS", here::here("..", "misc"))
 grava <- function(d, nome) { readr::write_tsv(d, file.path(OUT, nome), na = ""); message("✓ ", nome, " (", nrow(d), " linhas)") }
 
 # =============================================================================

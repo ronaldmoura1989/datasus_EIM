@@ -23,8 +23,10 @@ sih_princ      <- sum(D$sih$eim_principal, na.rm = TRUE)
 # diagnóstico — o total bruto (eim_qualquer) é ~100% do recorte extraído, não
 # um achado epidemiológico (ref. N3/E4 da auditoria).
 sih_qualq_core <- sum(D$sih$camada_qualquer == "core", na.rm = TRUE)
-pseudo_razao <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"),
-                                show_col_types = FALSE)$razao
+# Registros de APAC por paciente (CNS) nos subgrupos com pelo menos 100 pacientes no Brasil
+reg_pac <- readr::read_csv(here::here("manifest/sia_pacientes_cns.csv"), show_col_types = FALSE) |>
+  dplyr::filter(escopo == "Brasil", !grepl("^TOTAL", subgrupo), pacientes >= 100) |>
+  dplyr::pull(registros_por_paciente)
 sim_cb     <- sum(D$sim$eim_causa_basica, na.rm = TRUE)   # camada core (definição primária)
 sim_cb_max <- sum(D$sim$eim_cb_ampliado,  na.rm = TRUE)   # teto: core+limítrofe+envelope
 
@@ -183,8 +185,8 @@ aumento de incidência.
 - O SIM é a base de melhor **cobertura e completude** — o que **não** é o mesmo que melhor
   **validade da definição de caso** (ver as limitações em [Mortalidade](sim_eim.qmd)).
 - As três séries **não são comensuráveis**: o SIA conta **registros de produção**, não
-  pessoas (~`r fmt_1(min(pseudo_razao))`–`r fmt_1(max(pseudo_razao))` registros por
-  pseudo-paciente nos subgrupos crônicos, ver [Ambulatorial](sia_eim.qmd)),
+  pessoas (~`r fmt_1(min(reg_pac))`–`r fmt_1(max(reg_pac))` registros de APAC por
+  paciente nos subgrupos com APAC, ver [Ambulatorial](sia_eim.qmd)),
   enquanto SIH conta AIH e SIM conta pessoas. O eixo duplo do gráfico é uma conveniência
   de escala, **não** uma equivalência.
 :::

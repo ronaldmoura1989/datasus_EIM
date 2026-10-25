@@ -7,6 +7,11 @@
 #   SIH-RD  SIHSUS/200801_/Dados          RD{UF}{AA}{MM}.dbc
 #   SIM-DO  SIM/CID10/DORES               DO{UF}{AAAA}.dbc         (definitivo)
 #           SIM/PRELIM/DORES              DO{UF}{AAAA}.dbc         (preliminar → subdir PRELIM)
+#   SIA-AM  SIASUS/200801_/Dados          AM{UF}{AA}{MM}.dbc       (APAC de medicamentos — CEAF)
+#   SIA-AD  SIASUS/200801_/Dados          AD{UF}{AA}{MM}.dbc       (APAC de laudos diversos)
+#   SIA-BI  SIASUS/200801_/Dados          BI{UF}{AA}{MM}[_n].dbc   (BPA individualizado; MG/RJ/SP 2023+ em
+#           partes _1, _2…; em alguns meses o arquivo inteiro COEXISTE com as partes, mesmo conteúdo →
+#           quando há partes, o inteiro do mesmo mês é descartado para não duplicar registros)
 #   SINASC  SINASC/1996_/Dados/DNRES      DN{UF}{AAAA}.dbc         (definitivo)
 #           SINASC/PRELIM/DNRES           DN{UF}{AAAA}.dbc         (preliminar → subdir PRELIM)
 # Ano preliminar que já tem definitivo é descartado (o definitivo prevalece).
@@ -14,6 +19,9 @@
 # Saída: <raiz>/manifest/manifesto_<AAAAMMDD>.tsv  + link manifesto_atual.tsv
 #   colunas: base  destino  ano  uf  periodo  arquivo  url  tamanho
 # Uso: python3 gerar_manifesto.py [--raiz ~/Documentos/ronald/datasus_raw] [--ano-min 2010]
+#        [--bases SIA-AM,SIA-AD] [--saida manifesto_apac.tsv]
+# Com --saida, grava só esse arquivo e NÃO mexe em manifesto_atual.tsv: para acrescentar uma
+# base nova sem que arquivos republicados das bases já baixadas sejam baixados de novo.
 # =============================================================================
 import argparse, datetime, ftplib, os, re, sys, time
 
@@ -22,6 +30,9 @@ FONTES = [
     # base,     destino,          diretório FTP,                               regex,                                    tipo
     ("SIA-PA",  "SIA-PA",         "/dissemin/publicos/SIASUS/200801_/Dados",   r"^PA([A-Z]{2})(\d{2})(\d{2})([a-z]?)\.dbc$", "mensal"),
     ("SIH-RD",  "SIH-RD",         "/dissemin/publicos/SIHSUS/200801_/Dados",   r"^RD([A-Z]{2})(\d{2})(\d{2})()\.dbc$",       "mensal"),
+    ("SIA-AM",  "SIA-AM",         "/dissemin/publicos/SIASUS/200801_/Dados",   r"^AM([A-Z]{2})(\d{2})(\d{2})([a-z]?)\.dbc$", "mensal"),
+    ("SIA-AD",  "SIA-AD",         "/dissemin/publicos/SIASUS/200801_/Dados",   r"^AD([A-Z]{2})(\d{2})(\d{2})([a-z]?)\.dbc$", "mensal"),
+    ("SIA-BI",  "SIA-BI",         "/dissemin/publicos/SIASUS/200801_/Dados",   r"^BI([A-Z]{2})(\d{2})(\d{2})(_\d+)?\.dbc$",  "mensal"),
     ("SIM-DO",  "SIM-DO",         "/dissemin/publicos/SIM/CID10/DORES",        r"^DO([A-Z]{2})(\d{4})()()\.dbc$",            "anual"),
     ("SIM-DO",  "SIM-DO/PRELIM",  "/dissemin/publicos/SIM/PRELIM/DORES",       r"^DO([A-Z]{2})(\d{4})()()\.dbc$",            "anual"),
     ("SINASC",  "SINASC",         "/dissemin/publicos/SINASC/1996_/Dados/DNRES", r"^DN([A-Z]{2})(\d{4})()()\.dbc$",          "anual"),
@@ -54,11 +65,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--raiz", default=os.path.expanduser("~/Documentos/ronald/datasus_raw"))
     ap.add_argument("--ano-min", type=int, default=2010)
+    ap.add_argument("--bases", default="", help="lista separada por vírgula (padrão: todas)")
+    ap.add_argument("--saida", default="", help="nome do manifesto; não atualiza manifesto_atual.tsv")
     a = ap.parse_args()
+    so = set(a.bases.split(",")) if a.bases else None
 
     ftp = conectar()
     linhas_out, definitivos = [], set()
     for base, destino, d, pat, tipo in FONTES:
+        if so and base not in so:
+            continue
         n = 0
         for l in listar(ftp, d):
             p = l.split()
@@ -72,7 +88,7 @@ def main():
             # LIST do DATASUS no formato Windows ("data hora tamanho nome") ou Unix (tamanho em p[4])
             tamanho = int(p[2]) if p[2].isdigit() else int(p[4])
             if tipo == "mensal":
-                ano, periodo = 2000 + int(m.group(2)), f"{m.group(2)}{m.group(3)}{m.group(4)}"
+                ano, periodo = 2000 + int(m.group(2)), f"{m.group(2)}{m.group(3)}{m.group(4) or ''}"
             else:
                 ano, periodo = int(m.group(2)), m.group(2)
             if ano < a.ano_min:
@@ -87,16 +103,24 @@ def main():
         print(f"{destino:15s} {n:6d} arquivos", file=sys.stderr)
     ftp.quit()
 
+    # BI: descartar o arquivo inteiro quando o mesmo UF × mês também vem em partes (_n)
+    com_partes = {(r[0], r[3], r[4][:4]) for r in linhas_out if r[0] == "SIA-BI" and "_" in r[4]}
+    antes = len(linhas_out)
+    linhas_out = [r for r in linhas_out if not (r[0] == "SIA-BI" and "_" not in r[4] and (r[0], r[3], r[4][:4]) in com_partes)]
+    if antes != len(linhas_out):
+        print(f"SIA-BI: {antes - len(linhas_out)} arquivos inteiros descartados (o mesmo mês vem em partes)", file=sys.stderr)
+
     os.makedirs(os.path.join(a.raiz, "manifest"), exist_ok=True)
-    fp = os.path.join(a.raiz, "manifest", f"manifesto_{datetime.date.today():%Y%m%d}.tsv")
+    fp = os.path.join(a.raiz, "manifest", a.saida or f"manifesto_{datetime.date.today():%Y%m%d}.tsv")
     with open(fp, "w") as f:
         f.write("base\tdestino\tano\tuf\tperiodo\tarquivo\turl\ttamanho\n")
         for r in sorted(linhas_out, key=lambda r: (r[0] != "SIM-DO", r[0] != "SINASC", r[0] != "SIH-RD", r[2], r[3], r[4])):
             f.write("\t".join(map(str, r)) + "\n")
-    link = os.path.join(a.raiz, "manifest", "manifesto_atual.tsv")
-    if os.path.lexists(link):
-        os.remove(link)
-    os.symlink(os.path.basename(fp), link)
+    if not a.saida:
+        link = os.path.join(a.raiz, "manifest", "manifesto_atual.tsv")
+        if os.path.lexists(link):
+            os.remove(link)
+        os.symlink(os.path.basename(fp), link)
     tot = sum(r[7] for r in linhas_out) / 1e9
     print(f"✓ {len(linhas_out)} arquivos, {tot:.1f} GB → {fp}", file=sys.stderr)
 

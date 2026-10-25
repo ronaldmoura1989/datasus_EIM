@@ -14,7 +14,7 @@
 # =============================================================================
 set -uo pipefail
 RAIZ=${RAIZ:-$HOME/Documentos/ronald/datasus_raw}
-MANIFESTO=$RAIZ/manifest/manifesto_atual.tsv
+MANIFESTO=${MANIFESTO:-$RAIZ/manifest/manifesto_atual.tsv}   # outro manifesto: MANIFESTO=... bash baixar_brutos.sh
 BASE=todas; JOBS=4; ANO_MIN=2010; ANO_MAX=2100; UF=""; LIMITE=0; DRY=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -62,4 +62,4 @@ printf "%s\n" "$SEL" | awk -F'\t' 'NF{print $1"\t"$2"\t"$6"\t"$7"\t"$8}' |
   xargs -d '\n' -P "$JOBS" -I{} bash -c 'IFS=$'"'"'\t'"'"' read -r b d a u t <<< "$1"; baixar "$b" "$d" "$a" "$u" "$t"' _ {} >> "$LOG" 2>&1
 
 echo "[$(date '+%F %T')] fim da passada" | tee -a "$LOG"
-python3 "$(dirname "$0")/verificar_download.py" --raiz "$RAIZ" | tee -a "$LOG"
+python3 "$(dirname "$0")/verificar_download.py" --raiz "$RAIZ" --manifesto "$MANIFESTO" | tee -a "$LOG"
