@@ -66,8 +66,9 @@ registram os valores de cada versão.
 **Se você citou este painel antes desta data**, confira sua citação nas tabelas abaixo.
 Vários números de destaque mudaram por **ordem de grandeza** — notadamente o total de
 óbitos por EIM no SIM (Ciclo 1), o KPI de AIH com EIM em qualquer campo (Ciclo 2), o
-número estimado de pacientes do SIA (pseudo-ID, Ciclo 3) e, no Ciclo 4, **todos os totais**,
-que passaram a cobrir `r PER` em vez de 2021–2025.
+número estimado de pacientes do SIA (pseudo-ID, Ciclo 3), no Ciclo 4 **todos os totais**,
+que passaram a cobrir `r PER` em vez de 2021–2025, e no Ciclo 5 o **número de pacientes**, que
+passou a ser contado pelo CNS criptografado das APAC em vez de estimado.
 :::
 
 ## Estado atual dos números de destaque
@@ -85,6 +86,71 @@ cat(kpi_row(list(
 ```
 
 ---
+
+# Ciclo 5 — pacientes contados pelo CNS criptografado das APAC (outubro/2026)
+
+```{r ciclo5-setup}
+#| include: false
+pac5 <- readr::read_csv(here::here("manifest/sia_pacientes_cns.csv"), show_col_types = FALSE)
+val5 <- readr::read_csv(here::here("manifest/validacao_pseudo_id_cns.csv"), show_col_types = FALSE)
+ps_br <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes.csv"), show_col_types = FALSE)
+ps_pe <- readr::read_csv(here::here("manifest/sia_pseudo_pacientes_PE.csv"), show_col_types = FALSE)
+tot5  <- dplyr::filter(pac5, escopo == "Brasil", grepl("^TOTAL", subgrupo))
+```
+
+**O que mudou.** O painel passou a usar dois arquivos do SIA que antes não baixava: as **APAC de
+medicamentos (AM)** e as **APAC de laudos diversos (AD)**. Elas trazem o Cartão Nacional de Saúde
+do paciente **criptografado**. Testamos a criptografia: ela é estável entre meses, entre anos e
+entre arquivos (o mesmo paciente tem o mesmo código, com sexo e idade coerentes). Ligando cada
+APAC do PA à AM/AD pelo número da autorização (`r fmt_1(tot5$ligados_pct)`% dos registros de APAC
+de EIM ligados), o número de pacientes deixa de ser **estimado** pelo pseudo-ID e passa a ser
+**contado**.
+
+**Validação do pseudo-ID.** Aplicamos o pseudo-ID aos mesmos registros de APAC e comparamos com
+o número verdadeiro:
+
+- o intervalo publicado continha o verdadeiro em `r sum(val5$dentro_do_intervalo)` de
+  `r nrow(val5)` subgrupos;
+- o erro mediano da estimativa central foi de `r fmt_1(median(abs(val5$erro_central_pct)))`%;
+- no Brasil, a central **superestimava** (a mesma pessoa, com dados inconsistentes entre
+  registros, virava duas);
+- em PE, **subestimava** a fibrose cística, porque o município das APAC do CEAF sai quase sempre
+  como Recife e pacientes diferentes colapsavam numa só chave.
+
+```{r ciclo5-tab}
+lin <- function(esc, sub, ps) {
+  p <- dplyr::filter(pac5, escopo == esc, subgrupo == sub)
+  v <- dplyr::filter(val5, escopo == esc, subgrupo == sub)
+  tibble::tibble(Item = paste0(stringr::str_replace_all(sub, "_", " "), " — ", esc),
+                 `Estava publicado (pseudo-ID, todos os registros do SIA)` = paste0(fmt_n(ps$frouxa), "–", fmt_n(ps$estrita)),
+                 `Publicado agora (pacientes com APAC, CNS)` = fmt_n(p$pacientes),
+                 `Pseudo-ID sobre os mesmos registros de APAC` = paste0(fmt_n(v$pseudo_frouxa), "–", fmt_n(v$pseudo_estrita)))
+}
+psb <- function(sub) { x <- dplyr::filter(ps_br, subgrupo == sub); list(frouxa = x$pseudo_pac_frouxa, estrita = x$pseudo_pac_estrita) }
+psp <- function(sub) { x <- dplyr::filter(ps_pe, subgrupo == sub); list(frouxa = x$pseudo_frouxa, estrita = x$pseudo_estrita) }
+dplyr::bind_rows(
+  lin("Brasil", "fibrose_cistica", psb("fibrose_cistica")),
+  lin("Brasil", "aminoacidopatia_PKU", psb("aminoacidopatia_PKU")),
+  lin("Brasil", "mucopolissacaridose", psb("mucopolissacaridose")),
+  lin("Brasil", "esfingolipidose_outras", psb("esfingolipidose_outras")),
+  lin("PE", "fibrose_cistica", psp("fibrose_cistica")),
+  lin("PE", "mucopolissacaridose", psp("mucopolissacaridose"))) |>
+  tabela_eim(
+    titulo = paste0("Ciclo 5 · pacientes estimados (pseudo-ID) e contados (CNS), ", PER),
+    nota = "A coluna 'estava publicado' cobre todos os registros do SIA com chave, inclusive consultas e exames sem APAC; a coluna 'publicado agora' cobre só quem teve APAC. A comparação justa é com a última coluna, o pseudo-ID aplicado aos mesmos registros de APAC.")
+```
+
+**O que continua igual.**
+
+- Quem só aparece em consulta ou exame (BPA, sem APAC) não tem CNS no PA e fica fora da contagem
+  de pacientes. O BPA individualizado (BI), também com CNS criptografado, está sendo incorporado.
+- A análise de Recife na [página de Pernambuco](pe_eim.qmd) segue no pseudo-ID, porque a
+  residência registrada nas APAC de PE não separa a capital do interior.
+- O CNS criptografado é pseudonimização: usado só para contar e ligar registros, nunca exportado.
+
+**Correção de processamento sem efeito no painel.** Os totais calculados antes do filtro
+(quantidade e valor aprovados no SIA; óbitos e diárias no SIH) somavam o arquivo inteiro em cada
+grupo. Nenhum número do painel usa esses totais; o motor foi corrigido.
 
 # Ciclo 4 — série 2010–2025 a partir dos dados brutos do DATASUS (outubro/2026)
 

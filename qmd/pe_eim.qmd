@@ -184,58 +184,55 @@ top_pe |>
     nota = "Nomes via microdatasus::sigtab. Supressão N<5. Detecção/uso, não prevalência.")
 ```
 
-## Quantos indivíduos há por trás dos registros? (pseudo-individualização)
+## Quantos pacientes há por trás dos registros?
 
-O SIA-PA público **não tem identificador de paciente (CNS)** — cada linha é um
-atendimento, não uma pessoa. Para estimar **quantos indivíduos** geram os registros de
-EIM em Pernambuco, construímos um **pseudo-ID** por *record linkage* determinístico
-(agrupando registros compatíveis por sexo × município × ano de nascimento aproximado,
-ligando com certeza os registros da mesma APAC, com resolução por componentes conexos). O
-resultado é reportado como **intervalo [frouxa ; estrita]**, nunca como número exato (ver
-[Glossário](glossario.qmd)); nos grupos do CEAF, a contagem mensal de APAC com medicamento
-serve de referência externa.
+O SIA-PA não traz identificador do paciente, mas as **APAC de medicamentos e de laudos
+diversos** trazem o Cartão Nacional de Saúde **criptografado**, estável entre meses e anos.
+Ligando cada APAC do PA a elas pelo número da autorização, contamos **pacientes distintos** de
+EIM em Pernambuco, sem estimativa. Quem só aparece em consulta ou exame (BPA, sem APAC) fica
+fora desta contagem.
 
-```{r pseudo-pe-setup}
+```{r pac-pe-setup}
 #| include: false
-pp_pe  <- readr::read_csv(here::here("manifest","sia_pseudo_pacientes_PE.csv"), show_col_types = FALSE)
-tot_pe <- dplyr::filter(pp_pe, subgrupo == "TOTAL (todos os subgrupos core)")
+pac_pe <- readr::read_csv(here::here("manifest/sia_pacientes_cns.csv"), show_col_types = FALSE) |>
+  dplyr::filter(escopo == "PE")
+tot_pe <- dplyr::filter(pac_pe, subgrupo == "TOTAL (todos os subgrupos core)")
+val_pe <- readr::read_csv(here::here("manifest/validacao_pseudo_id_cns.csv"), show_col_types = FALSE) |>
+  dplyr::filter(escopo == "PE")
+fc_pe  <- dplyr::filter(val_pe, subgrupo == "fibrose_cistica")
 ```
 
-```{r pseudo-pe-kpi}
+```{r pac-pe-kpi}
 #| output: asis
 cat(kpi_row(list(
-  c(fmt_n(tot_pe$registros), "registros SIA core (EIM) em PE"),
-  c(paste0(fmt_n(tot_pe$pseudo_frouxa), "–", fmt_n(tot_pe$pseudo_estrita)),
-    "indivíduos estimados (intervalo frouxa–estrita)"),
-  c(fmt_1(tot_pe$razao), "registros por indivíduo (intensidade de uso)")
+  c(fmt_n(tot_pe$pacientes), paste0("pacientes com APAC de EIM em PE (", PER, ")")),
+  c(fmt_n(tot_pe$pacientes_ano_ref), paste0("pacientes com APAC em ", tot_pe$ano_ref)),
+  c(fmt_1(tot_pe$registros_por_paciente), "registros de APAC por paciente")
 )))
 ```
 
-```{r pseudo-pe-tab}
-pp_pe |>
-  dplyr::filter(subgrupo != "TOTAL (todos os subgrupos core)", !is.na(pseudo_intermediaria)) |>
-  dplyr::arrange(dplyr::desc(registros)) |>
+```{r pac-pe-tab}
+pac_pe |>
+  dplyr::filter(subgrupo != "TOTAL (todos os subgrupos core)", !is.na(pacientes)) |>
+  dplyr::arrange(dplyr::desc(pacientes)) |>
   dplyr::transmute(
     Subgrupo = stringr::str_replace_all(subgrupo, "_", " "),
-    Registros = fmt_n(registros),
-    `Indivíduos (frouxa–estrita)` = paste0(dplyr::if_else(is.na(pseudo_frouxa), "N<5", fmt_n(pseudo_frouxa)),
-                                           "–", fmt_n(pseudo_estrita)),
-    `Reg./indivíduo` = fmt_1(razao),
-    `Ref.: pacientes/mês no CEAF (2024)` = dplyr::if_else(is.na(ref_ceaf_mes), "—",
-                                                         fmt_n(round(ref_ceaf_mes)))) |>
+    !!paste0("Pacientes (", PER, ")") := fmt_n(pacientes),
+    !!paste0("Pacientes em ", tot_pe$ano_ref) := dplyr::if_else(is.na(pacientes_ano_ref), "N<5", fmt_n(pacientes_ano_ref)),
+    `Registros de APAC` = fmt_n(registros_apac),
+    `Registros por paciente` = fmt_1(registros_por_paciente)) |>
   tabela_eim(
-    titulo = "Indivíduos estimados por subgrupo no SIA-EIM (core) — Pernambuco",
-    nota = paste0("Pseudo-ID = agrupador de registros compatíveis, NÃO identificador de pessoas (LGPD: só agregados, supressão N<5). Intervalo, não ponto. Razão registros/indivíduo = intensidade de acompanhamento crônico. Referência CEAF = mediana mensal de APAC distintas com medicamento em 2024 (pacientes em tratamento num mês; o pseudo-ID conta quem apareceu em ", PER, ", com ou sem medicamento). '—' = grupo sem medicamento no CEAF ou N<5. Cautela: idade no SIA em anos inteiros → resolução fraca em <1 ano."))
+    titulo = "Pacientes distintos com APAC de EIM por subgrupo — Pernambuco (SIA core)",
+    nota = "Paciente = CNS criptografado distinto nas APAC de medicamentos e de laudos diversos, ligado ao PA pelo número da APAC (residência do paciente em PE). O CNS é usado só para contar (LGPD). Não inclui quem só tem consulta ou exame. Supressão N<5.")
 ```
 
 ::: {.callout-nota}
-**Como ler.** São **~`r fmt_n(tot_pe$pseudo_frouxa)`–`r fmt_n(tot_pe$pseudo_estrita)`
-indivíduos estimados** por trás dos `r fmt_n(tot_pe$registros)` registros ambulatoriais de
-EIM em PE — cada pessoa gera, em média, **~`r fmt_1(tot_pe$razao)` atendimentos**
-(acompanhamento crônico: fibrose cística, infusões de TRE nas mucopolissacaridoses,
-dietoterapia na PKU). O pseudo-ID **subestima** pessoas quando duas pessoas distintas
-compartilham os quase-identificadores (colisão) e **superestima** quando a mesma pessoa
-migra de município — por isso o **intervalo**, não um número único.
+**Por que a contagem mudou em relação ao pseudo-ID.** Em Pernambuco, o pseudo-ID errava nos dois
+sentidos e, na fibrose cística, **subestimava**: `r fmt_n(fc_pe$pacientes_cns)` pacientes
+verdadeiros contra um intervalo de `r fmt_n(fc_pe$pseudo_frouxa)`–`r fmt_n(fc_pe$pseudo_estrita)`
+estimado sobre os mesmos registros. A causa é o município do paciente nas APAC do Componente
+Especializado de PE, que sai quase sempre como Recife: pacientes diferentes com o mesmo sexo e
+o mesmo ano de nascimento colapsavam num só. O CNS não depende do município.
 :::
 
 ## Internações (SIH) em Pernambuco
@@ -770,7 +767,11 @@ que na mortalidade (que ocorre onde a pessoa mora/morre, mais distribuída pelo 
 #| include: false
 pp_rec  <- readr::read_csv(here::here("manifest","sia_pseudo_pacientes_Recife.csv"), show_col_types = FALSE)
 tot_rec <- dplyr::filter(pp_rec, subgrupo == "TOTAL (todos os subgrupos core)")
-pct_ind_rec <- 100 * tot_rec$pseudo_intermediaria / tot_pe$pseudo_intermediaria
+# Recife continua no pseudo-ID: a residência nas APAC do CEAF de PE não é confiável, então o
+# CNS sozinho não diz quem mora na capital. Total de PE do mesmo motor, para a razão.
+tot_pe_ps <- readr::read_csv(here::here("manifest","sia_pseudo_pacientes_PE.csv"), show_col_types = FALSE) |>
+  dplyr::filter(subgrupo == "TOTAL (todos os subgrupos core)")
+pct_ind_rec <- 100 * tot_rec$pseudo_intermediaria / tot_pe_ps$pseudo_intermediaria
 ```
 
 ```{r pseudo-rec-kpi}
@@ -788,7 +789,7 @@ cat(kpi_row(list(
 **Concentra registros mais do que indivíduos.** Recife tem **`r fmt_1(pct_sia_rec)`% dos
 registros** ambulatoriais de EIM de PE, mas apenas **~`r fmt_1(pct_ind_rec)`% dos indivíduos
 estimados** — e a **intensidade de uso é maior na capital** (**~`r fmt_1(tot_rec$razao)`
-registros/indivíduo** em Recife vs **~`r fmt_1(tot_pe$razao)`** no estado). É a assinatura da
+registros/indivíduo** em Recife vs **~`r fmt_1(tot_pe_ps$razao)`** no estado). É a assinatura da
 **rede de referência**: relativamente menos pacientes, cada um com muito mais atendimentos
 (infusões de TRE, seguimento crônico), inclusive pacientes **encaminhados do interior** via
 TFD que passam a ser atendidos — e por vezes registrados — na capital. Nas APAC do CEAF o
@@ -796,7 +797,9 @@ efeito é extremo: o município do paciente sai quase sempre como Recife, qualqu
 residência (ver a seção de medicamentos acima), então os indivíduos "de Recife" incluem
 pacientes do interior em tratamento pelo CEAF. Reforça que o dado de Recife mede
 **acesso/oferta**, não onde os casos "existem". Intervalo, não ponto; pseudo-ID é agrupador,
-não identificador (LGPD).
+não identificador (LGPD). Esta seção ainda usa o pseudo-ID, porque a residência registrada nas
+APAC de PE não permite separar Recife do interior; ele tende a juntar pacientes diferentes em
+PE (ver a contagem pelo CNS acima).
 :::
 
 ```{r recife-tracadoras}
