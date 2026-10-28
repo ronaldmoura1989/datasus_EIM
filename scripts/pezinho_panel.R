@@ -17,7 +17,7 @@ PANEL <- EIM_LOOKUP |>
   dplyr::filter(pezinho) |>
   dplyr::transmute(prefixo, subgrupo,
                    etapa = dplyr::if_else(pezinho_tradicional, "Tradicional", "Expandido"),
-                   eim   = escopo != "painel_pezinho") |>
+                   eim   = escopo %in% c("nucleo_eim", "fora_capitulo_E")) |>   # AME (contexto_raras) não é EIM (parecer M6)
   dplyr::distinct()
 
 # NV (SINASC) por período de cada base
@@ -46,16 +46,23 @@ sim_cid <- c(toupper(sim_eim$causabas),  toupper(pz_sim$causabas))
 sia_inf <- dplyr::bind_rows(
   dplyr::transmute(sia_eim, cid=cid_principal, idade_anos),
   dplyr::transmute(pz_sia,  cid=cid_principal, idade_anos)) |> dplyr::filter(idade_anos < 1)
+# AIH distintas (a mesma AIH pode estar nos dois rds) — regra canônica de detecção no
+# 1º ano, idêntica a incidencia_nascimento_tracadoras.R (parecer 2026-10-25, C3)
 sih_inf <- dplyr::bind_rows(
-  dplyr::transmute(sih_eim, cid=toupper(diag_princ), idade_anos, ano),
-  dplyr::transmute(pz_sih,  cid=toupper(diag_princ), idade_anos, ano)) |>
-  dplyr::filter(idade_anos < 1, ano %in% ANOS_NV)
+  dplyr::transmute(sih_eim, n_aih, cid=toupper(diag_princ), idade_anos, ano),
+  dplyr::transmute(pz_sih,  n_aih, cid=toupper(diag_princ), idade_anos, ano)) |>
+  dplyr::filter(idade_anos < 1, ano %in% ANOS_NV) |>
+  dplyr::distinct(n_aih, .keep_all = TRUE)
 sim_inf <- dplyr::bind_rows(
   dplyr::transmute(sim_eim, cid=toupper(causabas), idade_anos, obito_infantil),
   dplyr::transmute(pz_sim,  cid=toupper(causabas), idade_anos, obito_infantil)) |>
   dplyr::filter(obito_infantil %in% TRUE)
 
 taxa <- function(x, nvv, por=1e5) round(por * x / nvv, 2)
+# SIA do envelope (E88.9 = biotinidase): o rds individual do SIA é core+limítrofe; a
+# contagem vem do agregado do envelope — a MESMA fonte da Tabela 2 (parecer 2026-10-25, C4)
+sia_env <- readRDS(here::here("data/consolidated/sia_eim_envelope_agg.rds")) |>
+  dplyr::summarise(SIA_env = sum(n), .by = subgrupo)
 
 tab <- PANEL |>
   dplyr::rowwise() |>
@@ -69,6 +76,10 @@ tab <- PANEL |>
     SIM_inf_100k_nv = taxa(SIM_inf, NV_SIM)
   ) |>
   dplyr::ungroup() |>
+  dplyr::left_join(sia_env, by = "subgrupo") |>
+  dplyr::mutate(SIA_fonte = dplyr::if_else(!is.na(SIA_env), "agregado envelope (teto)", "registros individuais"),
+                SIA_princ = dplyr::coalesce(SIA_env, SIA_princ)) |>
+  dplyr::select(-SIA_env) |>
   dplyr::arrange(etapa, dplyr::desc(SIH_princ))
 
 cat(sprintf("== PAINEL COMPLETO DO PEZINHO nas 3 bases (%d–%d SIA/SIH; %d–%d SIM; taxas SIH em %d–%d) ==\n",
