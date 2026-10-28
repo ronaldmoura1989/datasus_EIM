@@ -54,8 +54,8 @@ if (file.exists(f_ok) && file.exists(f_filt) && file.exists(f_den) &&
 # -----------------------------------------------------------------------------
 # Metadados do nome do arquivo
 # -----------------------------------------------------------------------------
-meta_arquivo <- function(arq) {   # PA/RD/AM/AD: {UF}{AA}{MM}[parte] (mensal) · DO/DN: {UF}{AAAA} (anual)
-  m <- regmatches(arq, regexec("^(PA|RD|AM|AD)([A-Z]{2})(\\d{2})(\\d{2})([a-z]?)$", arq, ignore.case = TRUE))[[1]]
+meta_arquivo <- function(arq) {   # PA/RD/AM/AD/BI: {UF}{AA}{MM}[parte a|b… ou _n] (mensal) · DO/DN: {UF}{AAAA} (anual)
+  m <- regmatches(arq, regexec("^(PA|RD|AM|AD|BI)([A-Z]{2})(\\d{2})(\\d{2})([a-z]?|_\\d+)$", arq, ignore.case = TRUE))[[1]]
   if (length(m)) return(list(uf = toupper(m[3]), ano = 2000L + as.integer(m[4]), mes = as.integer(m[5]), parte = tolower(m[6])))
   m <- regmatches(arq, regexec("^(DO|DN)([A-Z]{2})(\\d{4})$", arq, ignore.case = TRUE))[[1]]
   if (length(m)) return(list(uf = toupper(m[3]), ano = as.integer(m[4]), mes = NA_integer_, parte = ""))
@@ -95,7 +95,8 @@ denominador <- function(x) {
   # 24/10/2026). Colunas ausentes no ano viram NA antes do agrupamento.
   precisa <- c("PA_QTDAPR", "PA_VALAPR", "PA_CMP", "PA_DOCORIG", "PA_PROC_ID", "PA_MUNPCN", "MORTE", "DIAS_PERM",
                "ANO_CMPT", "MES_CMPT", "IDENT", "MUNIC_RES", "MUNIC_MOV", "SEXO", "DTOBITO", "CODMUNRES", "IDADE",
-               "CAUSABAS", "DTNASC", "IDANOMAL", "AP_AUTORIZ", "AP_CNSPCN", "AP_CMP", "AP_PRIPAL", "AP_MUNPCN", "N_AIH")
+               "CAUSABAS", "DTNASC", "IDANOMAL", "AP_AUTORIZ", "AP_CNSPCN", "AP_CMP", "AP_PRIPAL", "AP_MUNPCN", "N_AIH",
+               "DT_ATEND", "MUNPAC", "CNS_PAC", "QT_APROV")
   x <- x[, intersect(precisa, names(x)), with = FALSE]          # cópia enxuta: não altera o arquivo lido
   for (c in setdiff(precisa, names(x))) data.table::set(x, j = c, value = NA_character_)
   switch(BASE,
@@ -113,7 +114,10 @@ denominador <- function(x) {
                  by = .(ano = substr(DTNASC, 5, 8), uf_res = uf_de(CODMUNRES), sexo = SEXO, idanomal = IDANOMAL)],
     # APAC (AM/AD): APAC e pacientes distintos por competência × procedimento principal × UF
     "SIA-AM" = , "SIA-AD" = x[, .(apac = uniqueN(AP_AUTORIZ), pacientes = uniqueN(AP_CNSPCN), linhas = .N),
-                              by = .(cmp = AP_CMP, proc = AP_PRIPAL, uf_res = uf_de(AP_MUNPCN))])
+                              by = .(cmp = AP_CMP, proc = AP_PRIPAL, uf_res = uf_de(AP_MUNPCN))],
+    # BPA individualizado: linhas, pacientes distintos e quantidade por mês de atendimento × UF
+    "SIA-BI" = x[, .(linhas = .N, pacientes = uniqueN(CNS_PAC), qtd_apr = sum(as.numeric(QT_APROV), na.rm = TRUE)),
+                 by = .(cmp = DT_ATEND, uf_res = uf_de(MUNPAC))])
 }
 
 # -----------------------------------------------------------------------------
