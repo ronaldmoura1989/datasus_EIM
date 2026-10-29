@@ -1,0 +1,1418 @@
+nivel,codigo,nome,geres,regiao_saude,pop,subgrupo,pessoas,pessoas_recentes,pessoas_sih_sem_cns,periodo,recentes
+estado,PE,Pernambuco,NA,NA,9058931,TOTAL,2651,1696,1552,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,fibrose_cistica,1183,781,124,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,hipotireoidismo_congenito,644,331,20,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,aminoacidopatia_PKU,237,130,628,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,mucopolissacaridose,161,114,167,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,hiperplasia_adrenal_cong,99,51,157,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,esfingolipidose_outras,89,76,108,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,amiloidose_familiar,84,79,76,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,metab_cobre,47,34,33,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,glicogenose,35,27,37,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,glicoproteinose,31,24,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,aminoacidopatia_tirosina,22,15,173,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,galactosemia,21,17,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,transporte_aminoacidos,20,10,8,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,deposito_lipidios,18,18,22,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,faod,18,16,12,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,acuduria_organica,16,13,28,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,ciclo_ureia,13,8,9,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,aminoacidopatia_MSUD,11,9,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,lipofuscinose_NCL,9,6,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,homocistinuria,7,NA,6,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,metab_frutose,6,NA,10,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,defeito_catalase,5,5,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,porfiria_aguda,5,5,9,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,aminoacidopatia_hiperfenil,0,0,40,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,crigler_najjar,0,0,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,metab_piruvato,0,0,23,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,esfingolipidose_GM1,NA,NA,8,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,esfingolipidose_GM2,NA,NA,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,lesch_nyhan,NA,NA,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,metab_glicina,NA,NA,6,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,metab_ornitina,NA,0,NA,2010–2025,2023–2025
+estado,PE,Pernambuco,NA,NA,9058931,porfiria,NA,NA,7,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,TOTAL,27,18,9,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,fibrose_cistica,15,11,0,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,hipotireoidismo_congenito,5,NA,0,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,deposito_lipidios,NA,NA,NA,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,260005,Abreu e Lima,I,Recife,98462,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,TOTAL,6,6,6,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260010,Afogados da Ingazeira,X,Afogados da Ingazeira,40241,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260020,Afrânio,VIII,Petrolina,18674,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260020,Afrânio,VIII,Petrolina,18674,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,260030,Agrestina,IV,Caruaru,23779,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260030,Agrestina,IV,Caruaru,23779,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260030,Agrestina,IV,Caruaru,23779,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260030,Agrestina,IV,Caruaru,23779,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260050,Águas Belas,V,Garanhuns,41548,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260060,Alagoinha,IV,Caruaru,13542,TOTAL,6,6,0,2010–2025,2023–2025
+municipio,260060,Alagoinha,IV,Caruaru,13542,aminoacidopatia_PKU,5,5,0,2010–2025,2023–2025
+municipio,260060,Alagoinha,IV,Caruaru,13542,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,TOTAL,7,NA,NA,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,porfiria,0,0,NA,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260070,Aliança,XII,Goiana,35741,mucopolissacaridose,NA,0,0,2010–2025,2023–2025
+municipio,260080,Altinho,IV,Caruaru,20674,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260080,Altinho,IV,Caruaru,20674,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260080,Altinho,IV,Caruaru,20674,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260080,Altinho,IV,Caruaru,20674,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260080,Altinho,IV,Caruaru,20674,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260090,Amaraji,III,Palmares,18205,TOTAL,7,NA,0,2010–2025,2023–2025
+municipio,260090,Amaraji,III,Palmares,18205,fibrose_cistica,5,NA,0,2010–2025,2023–2025
+municipio,260090,Amaraji,III,Palmares,18205,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260100,Angelim,V,Garanhuns,10241,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260100,Angelim,V,Garanhuns,10241,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260100,Angelim,V,Garanhuns,10241,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260100,Angelim,V,Garanhuns,10241,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,TOTAL,7,NA,8,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,aminoacidopatia_tirosina,0,0,5,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,metab_frutose,0,0,NA,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,lipofuscinose_NCL,NA,0,0,2010–2025,2023–2025
+municipio,260105,Araçoiaba,I,Recife,19243,mucopolissacaridose,NA,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,TOTAL,23,17,52,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,fibrose_cistica,9,6,5,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,hipotireoidismo_congenito,6,6,0,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,acuduria_organica,0,0,6,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,faod,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,glicogenose,0,0,16,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,homocistinuria,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,metab_frutose,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,metab_glicina,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,metab_ornitina,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,aminoacidopatia_MSUD,NA,NA,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,aminoacidopatia_PKU,NA,NA,6,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,aminoacidopatia_tirosina,NA,0,0,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,galactosemia,NA,0,NA,2010–2025,2023–2025
+municipio,260110,Araripina,IX,Ouricuri,85088,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,TOTAL,24,18,5,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,fibrose_cistica,13,10,NA,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,lipofuscinose_NCL,0,0,NA,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,faod,NA,NA,0,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260120,Arcoverde,VI,Arcoverde,77742,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260130,Barra de Guabiraba,IV,Caruaru,12263,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260130,Barra de Guabiraba,IV,Caruaru,12263,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+municipio,260130,Barra de Guabiraba,IV,Caruaru,12263,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260130,Barra de Guabiraba,IV,Caruaru,12263,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,TOTAL,9,6,16,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,amiloidose_familiar,0,0,5,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,aminoacidopatia_PKU,NA,0,10,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,glicoproteinose,NA,0,0,2010–2025,2023–2025
+municipio,260140,Barreiros,III,Palmares,40121,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260150,Belém de Maria,III,Palmares,10378,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,260150,Belém de Maria,III,Palmares,10378,TOTAL,NA,0,0,2010–2025,2023–2025
+municipio,260160,Belém do São Francisco,VII,Salgueiro,18301,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260160,Belém do São Francisco,VII,Salgueiro,18301,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260160,Belém do São Francisco,VII,Salgueiro,18301,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260160,Belém do São Francisco,VII,Salgueiro,18301,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260160,Belém do São Francisco,VII,Salgueiro,18301,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,TOTAL,13,9,NA,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,hipotireoidismo_congenito,7,NA,0,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260170,Belo Jardim,IV,Caruaru,79507,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,260180,Betânia,XI,Serra Talhada,11232,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260180,Betânia,XI,Serra Talhada,11232,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,260190,Bezerros,IV,Caruaru,61694,TOTAL,7,6,NA,2010–2025,2023–2025
+municipio,260190,Bezerros,IV,Caruaru,61694,aminoacidopatia_tirosina,NA,NA,0,2010–2025,2023–2025
+municipio,260190,Bezerros,IV,Caruaru,61694,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260190,Bezerros,IV,Caruaru,61694,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260190,Bezerros,IV,Caruaru,61694,metab_frutose,NA,NA,0,2010–2025,2023–2025
+municipio,260200,Bodocó,IX,Ouricuri,34478,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260200,Bodocó,IX,Ouricuri,34478,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260210,Bom Conselho,V,Garanhuns,44294,TOTAL,13,5,NA,2010–2025,2023–2025
+municipio,260210,Bom Conselho,V,Garanhuns,44294,hipotireoidismo_congenito,5,NA,0,2010–2025,2023–2025
+municipio,260210,Bom Conselho,V,Garanhuns,44294,mucopolissacaridose,5,NA,NA,2010–2025,2023–2025
+municipio,260210,Bom Conselho,V,Garanhuns,44294,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260210,Bom Conselho,V,Garanhuns,44294,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,TOTAL,9,6,39,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,aminoacidopatia_PKU,0,0,34,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260220,Bom Jardim,II,Limoeiro,37629,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260230,Bonito,IV,Caruaru,37474,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260230,Bonito,IV,Caruaru,37474,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260230,Bonito,IV,Caruaru,37474,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260230,Bonito,IV,Caruaru,37474,glicoproteinose,NA,0,0,2010–2025,2023–2025
+municipio,260240,Brejão,V,Garanhuns,9079,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260240,Brejão,V,Garanhuns,9079,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260240,Brejão,V,Garanhuns,9079,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260240,Brejão,V,Garanhuns,9079,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260260,Brejo da Madre de Deus,IV,Caruaru,48648,TOTAL,10,9,NA,2010–2025,2023–2025
+municipio,260260,Brejo da Madre de Deus,IV,Caruaru,48648,hipotireoidismo_congenito,5,NA,0,2010–2025,2023–2025
+municipio,260260,Brejo da Madre de Deus,IV,Caruaru,48648,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260260,Brejo da Madre de Deus,IV,Caruaru,48648,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260260,Brejo da Madre de Deus,IV,Caruaru,48648,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,260270,Buenos Aires,II,Limoeiro,12808,fibrose_cistica,5,NA,0,2010–2025,2023–2025
+municipio,260270,Buenos Aires,II,Limoeiro,12808,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260270,Buenos Aires,II,Limoeiro,12808,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,TOTAL,8,6,49,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,amiloidose_familiar,0,0,42,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,faod,0,0,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,homocistinuria,0,0,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260280,Buíque,VI,Arcoverde,52097,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,TOTAL,40,16,10,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,fibrose_cistica,21,7,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,hipotireoidismo_congenito,7,NA,0,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,glicogenose,NA,0,0,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,hiperplasia_adrenal_cong,NA,0,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260290,Cabo de Santo Agostinho,I,Recife,203440,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,260300,Cabrobó,VIII,Petrolina,30294,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,260300,Cabrobó,VIII,Petrolina,30294,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260300,Cabrobó,VIII,Petrolina,30294,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260300,Cabrobó,VIII,Petrolina,30294,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260300,Cabrobó,VIII,Petrolina,30294,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260310,Cachoeirinha,IV,Caruaru,19899,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260310,Cachoeirinha,IV,Caruaru,19899,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260310,Cachoeirinha,IV,Caruaru,19899,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260320,Caetés,V,Garanhuns,28827,TOTAL,5,NA,0,2010–2025,2023–2025
+municipio,260320,Caetés,V,Garanhuns,28827,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260320,Caetés,V,Garanhuns,28827,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260320,Caetés,V,Garanhuns,28827,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260330,Calçado,V,Garanhuns,11093,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260330,Calçado,V,Garanhuns,11093,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260330,Calçado,V,Garanhuns,11093,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260330,Calçado,V,Garanhuns,11093,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260340,Calumbi,XI,Serra Talhada,5228,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260340,Calumbi,XI,Serra Talhada,5228,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,TOTAL,45,30,22,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,fibrose_cistica,24,18,0,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,hipotireoidismo_congenito,12,6,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,aminoacidopatia_PKU,6,5,7,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,porfiria,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,faod,NA,NA,0,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,glicoproteinose,NA,0,0,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,hiperplasia_adrenal_cong,NA,NA,8,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,260345,Camaragibe,I,Recife,147771,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260350,Camocim de São Félix,IV,Caruaru,17419,hipotireoidismo_congenito,0,0,NA,2010–2025,2023–2025
+municipio,260350,Camocim de São Félix,IV,Caruaru,17419,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260350,Camocim de São Félix,IV,Caruaru,17419,fibrose_cistica,NA,0,NA,2010–2025,2023–2025
+municipio,260350,Camocim de São Félix,IV,Caruaru,17419,TOTAL,NA,0,NA,2010–2025,2023–2025
+municipio,260360,Camutanga,XII,Goiana,7750,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260360,Camutanga,XII,Goiana,7750,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260360,Camutanga,XII,Goiana,7750,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260360,Camutanga,XII,Goiana,7750,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260360,Camutanga,XII,Goiana,7750,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,TOTAL,7,6,NA,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,faod,0,0,NA,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260370,Canhotinho,V,Garanhuns,24329,homocistinuria,NA,NA,0,2010–2025,2023–2025
+municipio,260380,Capoeiras,V,Garanhuns,18338,TOTAL,5,NA,0,2010–2025,2023–2025
+municipio,260380,Capoeiras,V,Garanhuns,18338,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260380,Capoeiras,V,Garanhuns,18338,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260380,Capoeiras,V,Garanhuns,18338,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,260390,Carnaíba,X,Afogados da Ingazeira,18644,TOTAL,6,5,NA,2010–2025,2023–2025
+municipio,260390,Carnaíba,X,Afogados da Ingazeira,18644,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,260390,Carnaíba,X,Afogados da Ingazeira,18644,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260390,Carnaíba,X,Afogados da Ingazeira,18644,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260390,Carnaíba,X,Afogados da Ingazeira,18644,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,TOTAL,6,6,NA,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260392,Carnaubeira da Penha,XI,Serra Talhada,12239,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,TOTAL,19,12,13,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,fibrose_cistica,9,8,0,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,hipotireoidismo_congenito,7,NA,0,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,aminoacidopatia_PKU,NA,0,7,2010–2025,2023–2025
+municipio,260400,Carpina,II,Limoeiro,79293,esfingolipidose_outras,NA,0,0,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,TOTAL,82,53,19,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,fibrose_cistica,41,31,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,hipotireoidismo_congenito,24,11,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,aminoacidopatia_PKU,7,NA,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,mucopolissacaridose,6,5,8,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,crigler_najjar,0,0,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,lesch_nyhan,0,0,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,amiloidose_familiar,NA,NA,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,esfingolipidose_outras,NA,0,NA,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,hiperplasia_adrenal_cong,NA,NA,0,2010–2025,2023–2025
+municipio,260410,Caruaru,IV,Caruaru,378048,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,260415,Casinhas,II,Limoeiro,12967,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260415,Casinhas,II,Limoeiro,12967,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260415,Casinhas,II,Limoeiro,12967,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260415,Casinhas,II,Limoeiro,12967,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,260415,Casinhas,II,Limoeiro,12967,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260415,Casinhas,II,Limoeiro,12967,TOTAL,NA,NA,6,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,TOTAL,8,NA,6,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,glicoproteinose,NA,0,0,2010–2025,2023–2025
+municipio,260420,Catende,III,Palmares,32156,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260430,Cedro,VII,Salgueiro,10518,TOTAL,9,7,0,2010–2025,2023–2025
+municipio,260430,Cedro,VII,Salgueiro,10518,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+municipio,260430,Cedro,VII,Salgueiro,10518,faod,NA,0,0,2010–2025,2023–2025
+municipio,260430,Cedro,VII,Salgueiro,10518,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260430,Cedro,VII,Salgueiro,10518,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260440,Chã de Alegria,I,Recife,12984,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260440,Chã de Alegria,I,Recife,12984,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260440,Chã de Alegria,I,Recife,12984,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260440,Chã de Alegria,I,Recife,12984,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260440,Chã de Alegria,I,Recife,12984,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260440,Chã de Alegria,I,Recife,12984,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260450,Chã Grande,I,Recife,20546,TOTAL,10,9,NA,2010–2025,2023–2025
+municipio,260450,Chã Grande,I,Recife,20546,fibrose_cistica,6,5,0,2010–2025,2023–2025
+municipio,260450,Chã Grande,I,Recife,20546,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260450,Chã Grande,I,Recife,20546,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260460,Condado,XII,Goiana,24587,TOTAL,7,6,NA,2010–2025,2023–2025
+municipio,260460,Condado,XII,Goiana,24587,fibrose_cistica,5,5,0,2010–2025,2023–2025
+municipio,260460,Condado,XII,Goiana,24587,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,260460,Condado,XII,Goiana,24587,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260460,Condado,XII,Goiana,24587,hipotireoidismo_congenito,NA,NA,NA,2010–2025,2023–2025
+municipio,260470,Correntes,V,Garanhuns,17131,TOTAL,6,6,0,2010–2025,2023–2025
+municipio,260470,Correntes,V,Garanhuns,17131,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260470,Correntes,V,Garanhuns,17131,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260470,Correntes,V,Garanhuns,17131,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260490,Cumaru,II,Limoeiro,15920,aminoacidopatia_PKU,0,0,8,2010–2025,2023–2025
+municipio,260490,Cumaru,II,Limoeiro,15920,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260490,Cumaru,II,Limoeiro,15920,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260490,Cumaru,II,Limoeiro,15920,TOTAL,0,0,10,2010–2025,2023–2025
+municipio,260500,Cupira,IV,Caruaru,23518,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260500,Cupira,IV,Caruaru,23518,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260500,Cupira,IV,Caruaru,23518,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260510,Custódia,VI,Arcoverde,37699,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260510,Custódia,VI,Arcoverde,37699,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260510,Custódia,VI,Arcoverde,37699,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260510,Custódia,VI,Arcoverde,37699,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,260510,Custódia,VI,Arcoverde,37699,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260515,Dormentes,VIII,Petrolina,17188,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260515,Dormentes,VIII,Petrolina,17188,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260515,Dormentes,VIII,Petrolina,17188,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,TOTAL,9,9,8,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,glicoproteinose,NA,NA,NA,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260520,Escada,III,Palmares,59891,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260530,Exu,IX,Ouricuri,31843,TOTAL,NA,NA,6,2010–2025,2023–2025
+municipio,260540,Feira Nova,II,Limoeiro,21427,TOTAL,7,NA,17,2010–2025,2023–2025
+municipio,260540,Feira Nova,II,Limoeiro,21427,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260540,Feira Nova,II,Limoeiro,21427,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260540,Feira Nova,II,Limoeiro,21427,aminoacidopatia_PKU,NA,0,13,2010–2025,2023–2025
+municipio,260540,Feira Nova,II,Limoeiro,21427,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260540,Feira Nova,II,Limoeiro,21427,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260545,Fernando de Noronha,I,Recife,3167,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260545,Fernando de Noronha,I,Recife,3167,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260550,Ferreiros,XII,Goiana,15026,TOTAL,6,5,NA,2010–2025,2023–2025
+municipio,260550,Ferreiros,XII,Goiana,15026,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260550,Ferreiros,XII,Goiana,15026,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260550,Ferreiros,XII,Goiana,15026,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260560,Flores,XI,Serra Talhada,20347,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260560,Flores,XI,Serra Talhada,20347,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,260560,Flores,XI,Serra Talhada,20347,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,260560,Flores,XI,Serra Talhada,20347,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260560,Flores,XI,Serra Talhada,20347,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,TOTAL,8,5,5,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,crigler_najjar,0,0,NA,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,metab_glicina,NA,NA,0,2010–2025,2023–2025
+municipio,260570,Floresta,XI,Serra Talhada,30137,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,260580,Frei Miguelinho,IV,Caruaru,13636,lesch_nyhan,0,0,NA,2010–2025,2023–2025
+municipio,260580,Frei Miguelinho,IV,Caruaru,13636,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260580,Frei Miguelinho,IV,Caruaru,13636,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260580,Frei Miguelinho,IV,Caruaru,13636,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260590,Gameleira,III,Palmares,18214,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260590,Gameleira,III,Palmares,18214,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,TOTAL,21,16,6,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,hipotireoidismo_congenito,9,6,0,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,fibrose_cistica,6,5,0,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,aminoacidopatia_PKU,5,NA,NA,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260600,Garanhuns,V,Garanhuns,142506,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,TOTAL,7,NA,15,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,aminoacidopatia_PKU,0,0,6,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,aminoacidopatia_hiperfenil,0,0,5,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,aminoacidopatia_tirosina,NA,0,NA,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,fibrose_cistica,NA,0,NA,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260610,Glória do Goitá,I,Recife,29347,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,TOTAL,15,10,NA,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,fibrose_cistica,9,7,NA,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,hiperplasia_adrenal_cong,NA,0,0,2010–2025,2023–2025
+municipio,260620,Goiana,XII,Goiana,81055,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260630,Granito,IX,Ouricuri,6967,metab_ornitina,0,0,NA,2010–2025,2023–2025
+municipio,260630,Granito,IX,Ouricuri,6967,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,260630,Granito,IX,Ouricuri,6967,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,TOTAL,23,13,7,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,hipotireoidismo_congenito,10,5,0,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,aminoacidopatia_PKU,7,NA,NA,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,fibrose_cistica,5,NA,NA,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,hiperplasia_adrenal_cong,NA,NA,NA,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,homocistinuria,NA,0,0,2010–2025,2023–2025
+municipio,260640,Gravatá,IV,Caruaru,86516,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,260650,Iati,V,Garanhuns,17165,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260650,Iati,V,Garanhuns,17165,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,260650,Iati,V,Garanhuns,17165,fibrose_cistica,NA,0,NA,2010–2025,2023–2025
+municipio,260650,Iati,V,Garanhuns,17165,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260660,Ibimirim,VI,Arcoverde,26593,TOTAL,7,6,NA,2010–2025,2023–2025
+municipio,260660,Ibimirim,VI,Arcoverde,26593,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260660,Ibimirim,VI,Arcoverde,26593,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260670,Ibirajuba,IV,Caruaru,7140,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260670,Ibirajuba,IV,Caruaru,7140,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260670,Ibirajuba,IV,Caruaru,7140,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,TOTAL,17,11,10,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,hipotireoidismo_congenito,8,NA,0,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,fibrose_cistica,6,NA,NA,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,hiperplasia_adrenal_cong,0,0,6,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260680,Igarassu,I,Recife,115196,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260690,Iguaracy,X,Afogados da Ingazeira,11081,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260690,Iguaracy,X,Afogados da Ingazeira,11081,fibrose_cistica,0,0,NA,2010–2025,2023–2025
+municipio,260690,Iguaracy,X,Afogados da Ingazeira,11081,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260690,Iguaracy,X,Afogados da Ingazeira,11081,glicogenose,NA,NA,NA,2010–2025,2023–2025
+municipio,260690,Iguaracy,X,Afogados da Ingazeira,11081,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260690,Iguaracy,X,Afogados da Ingazeira,11081,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260700,Inajá,VI,Arcoverde,25603,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+municipio,260700,Inajá,VI,Arcoverde,25603,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260700,Inajá,VI,Arcoverde,25603,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,260700,Inajá,VI,Arcoverde,25603,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260700,Inajá,VI,Arcoverde,25603,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,260700,Inajá,VI,Arcoverde,25603,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,TOTAL,20,18,8,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,fibrose_cistica,7,7,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,hipotireoidismo_congenito,7,5,0,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,porfiria,0,0,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,260720,Ipojuca,I,Recife,98932,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,TOTAL,7,6,NA,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260730,Ipubi,IX,Ouricuri,29009,mucopolissacaridose,NA,0,0,2010–2025,2023–2025
+municipio,260740,Itacuruba,XI,Serra Talhada,4284,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,260740,Itacuruba,XI,Serra Talhada,4284,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,260750,Itaíba,V,Garanhuns,32650,TOTAL,7,NA,NA,2010–2025,2023–2025
+municipio,260750,Itaíba,V,Garanhuns,32650,hipotireoidismo_congenito,5,NA,0,2010–2025,2023–2025
+municipio,260750,Itaíba,V,Garanhuns,32650,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260750,Itaíba,V,Garanhuns,32650,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260750,Itaíba,V,Garanhuns,32650,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,260750,Itaíba,V,Garanhuns,32650,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260760,Ilha de Itamaracá,I,Recife,24540,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260760,Ilha de Itamaracá,I,Recife,24540,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,260760,Ilha de Itamaracá,I,Recife,24540,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260760,Ilha de Itamaracá,I,Recife,24540,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260760,Ilha de Itamaracá,I,Recife,24540,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,TOTAL,12,6,NA,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,hipotireoidismo_congenito,6,NA,0,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,ciclo_ureia,NA,0,0,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,hiperplasia_adrenal_cong,NA,NA,0,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,metab_ornitina,NA,0,0,2010–2025,2023–2025
+municipio,260765,Itambé,XII,Goiana,34935,transporte_aminoacidos,NA,0,0,2010–2025,2023–2025
+municipio,260770,Itapetim,X,Afogados da Ingazeira,13791,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+municipio,260770,Itapetim,X,Afogados da Ingazeira,13791,faod,0,0,NA,2010–2025,2023–2025
+municipio,260770,Itapetim,X,Afogados da Ingazeira,13791,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,260775,Itapissuma,I,Recife,27749,TOTAL,9,7,NA,2010–2025,2023–2025
+municipio,260775,Itapissuma,I,Recife,27749,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260775,Itapissuma,I,Recife,27749,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,260775,Itapissuma,I,Recife,27749,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,260775,Itapissuma,I,Recife,27749,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260775,Itapissuma,I,Recife,27749,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,TOTAL,7,5,NA,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,esfingolipidose_outras,5,5,NA,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,260780,Itaquitinga,XII,Goiana,16554,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,TOTAL,160,95,61,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,fibrose_cistica,85,47,13,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,hipotireoidismo_congenito,31,17,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,mucopolissacaridose,16,12,13,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,aminoacidopatia_PKU,13,8,11,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,glicoproteinose,5,NA,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,crigler_najjar,0,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,esfingolipidose_GM2,0,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,hiperplasia_adrenal_cong,0,0,7,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,metab_frutose,0,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,aminoacidopatia_tirosina,NA,NA,6,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,deposito_lipidios,NA,NA,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,esfingolipidose_outras,NA,NA,11,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,faod,NA,0,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,glicogenose,NA,NA,NA,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+municipio,260790,Jaboatão dos Guararapes,I,Recife,644037,transporte_aminoacidos,NA,0,NA,2010–2025,2023–2025
+municipio,260795,Jaqueira,III,Palmares,10247,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,260795,Jaqueira,III,Palmares,10247,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260795,Jaqueira,III,Palmares,10247,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260795,Jaqueira,III,Palmares,10247,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260800,Jataúba,IV,Caruaru,15843,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+municipio,260800,Jataúba,IV,Caruaru,15843,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,260800,Jataúba,IV,Caruaru,15843,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260800,Jataúba,IV,Caruaru,15843,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,TOTAL,8,6,NA,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,esfingolipidose_GM1,NA,NA,NA,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260805,Jatobá,VI,Arcoverde,14020,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,TOTAL,7,5,17,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,aminoacidopatia_PKU,NA,NA,15,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260810,João Alfredo,II,Limoeiro,27725,lipofuscinose_NCL,NA,0,0,2010–2025,2023–2025
+municipio,260820,Joaquim Nabuco,III,Palmares,13269,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260820,Joaquim Nabuco,III,Palmares,13269,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260820,Joaquim Nabuco,III,Palmares,13269,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260825,Jucati,V,Garanhuns,11517,faod,NA,NA,0,2010–2025,2023–2025
+municipio,260825,Jucati,V,Garanhuns,11517,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260825,Jucati,V,Garanhuns,11517,galactosemia,NA,0,0,2010–2025,2023–2025
+municipio,260825,Jucati,V,Garanhuns,11517,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,TOTAL,7,NA,NA,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,esfingolipidose_outras,NA,0,NA,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260830,Jupi,V,Garanhuns,15329,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260840,Jurema,IV,Caruaru,13648,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260840,Jurema,IV,Caruaru,13648,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260840,Jurema,IV,Caruaru,13648,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260845,Lagoa do Carro,II,Limoeiro,17981,aminoacidopatia_PKU,0,0,13,2010–2025,2023–2025
+municipio,260845,Lagoa do Carro,II,Limoeiro,17981,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260845,Lagoa do Carro,II,Limoeiro,17981,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260845,Lagoa do Carro,II,Limoeiro,17981,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260845,Lagoa do Carro,II,Limoeiro,17981,TOTAL,NA,NA,17,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,TOTAL,5,NA,9,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,aminoacidopatia_PKU,0,0,5,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,260850,Lagoa de Itaenga,II,Limoeiro,19003,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260860,Lagoa do Ouro,V,Garanhuns,11933,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260860,Lagoa do Ouro,V,Garanhuns,11933,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260860,Lagoa do Ouro,V,Garanhuns,11933,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,260860,Lagoa do Ouro,V,Garanhuns,11933,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260870,Lagoa dos Gatos,III,Palmares,14076,fibrose_cistica,5,NA,0,2010–2025,2023–2025
+municipio,260870,Lagoa dos Gatos,III,Palmares,14076,TOTAL,5,NA,0,2010–2025,2023–2025
+municipio,260875,Lagoa Grande,VIII,Petrolina,24088,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260875,Lagoa Grande,VIII,Petrolina,24088,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,260875,Lagoa Grande,VIII,Petrolina,24088,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,260875,Lagoa Grande,VIII,Petrolina,24088,galactosemia,NA,0,0,2010–2025,2023–2025
+municipio,260875,Lagoa Grande,VIII,Petrolina,24088,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260875,Lagoa Grande,VIII,Petrolina,24088,TOTAL,NA,0,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,TOTAL,7,5,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260880,Lajedo,V,Garanhuns,39582,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,TOTAL,17,9,187,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,fibrose_cistica,8,5,NA,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,hipotireoidismo_congenito,6,NA,0,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,aminoacidopatia_PKU,NA,NA,183,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260890,Limoeiro,II,Limoeiro,56510,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260900,Macaparana,XII,Goiana,23879,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260900,Macaparana,XII,Goiana,23879,hipotireoidismo_congenito,0,0,NA,2010–2025,2023–2025
+municipio,260900,Macaparana,XII,Goiana,23879,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,260900,Macaparana,XII,Goiana,23879,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260900,Macaparana,XII,Goiana,23879,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260900,Macaparana,XII,Goiana,23879,TOTAL,NA,NA,6,2010–2025,2023–2025
+municipio,260910,Machados,II,Limoeiro,11333,TOTAL,6,5,7,2010–2025,2023–2025
+municipio,260910,Machados,II,Limoeiro,11333,aminoacidopatia_PKU,0,0,7,2010–2025,2023–2025
+municipio,260910,Machados,II,Limoeiro,11333,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260910,Machados,II,Limoeiro,11333,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,260910,Machados,II,Limoeiro,11333,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,260915,Manari,VI,Arcoverde,23763,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,260915,Manari,VI,Arcoverde,23763,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260915,Manari,VI,Arcoverde,23763,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,260915,Manari,VI,Arcoverde,23763,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260915,Manari,VI,Arcoverde,23763,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260920,Maraial,III,Palmares,9359,TOTAL,6,5,0,2010–2025,2023–2025
+municipio,260920,Maraial,III,Palmares,9359,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,260920,Maraial,III,Palmares,9359,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,260920,Maraial,III,Palmares,9359,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260920,Maraial,III,Palmares,9359,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260930,Mirandiba,VII,Salgueiro,14166,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260930,Mirandiba,VII,Salgueiro,14166,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260930,Mirandiba,VII,Salgueiro,14166,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260930,Mirandiba,VII,Salgueiro,14166,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,TOTAL,12,9,10,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,hipotireoidismo_congenito,5,NA,0,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,aminoacidopatia_PKU,NA,0,8,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,260940,Moreno,I,Recife,55292,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,260950,Nazaré da Mata,II,Limoeiro,30648,TOTAL,14,10,0,2010–2025,2023–2025
+municipio,260950,Nazaré da Mata,II,Limoeiro,30648,fibrose_cistica,8,6,0,2010–2025,2023–2025
+municipio,260950,Nazaré da Mata,II,Limoeiro,30648,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,260950,Nazaré da Mata,II,Limoeiro,30648,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,TOTAL,124,78,56,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,fibrose_cistica,76,50,9,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,hipotireoidismo_congenito,27,15,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,mucopolissacaridose,7,NA,8,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,aminoacidopatia_PKU,6,NA,23,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,metab_frutose,0,0,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,acuduria_organica,NA,NA,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,amiloidose_familiar,NA,NA,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,aminoacidopatia_tirosina,NA,NA,9,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,esfingolipidose_outras,NA,NA,8,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,hiperplasia_adrenal_cong,NA,NA,5,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,metab_cobre,NA,0,0,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,porfiria,NA,NA,0,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,porfiria_aguda,NA,NA,NA,2010–2025,2023–2025
+municipio,260960,Olinda,I,Recife,349976,transporte_aminoacidos,NA,0,0,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,TOTAL,6,5,43,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,fibrose_cistica,5,NA,0,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,aminoacidopatia_PKU,0,0,11,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,aminoacidopatia_hiperfenil,0,0,11,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,aminoacidopatia_tirosina,0,0,20,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260970,Orobó,II,Limoeiro,21808,faod,NA,NA,0,2010–2025,2023–2025
+municipio,260980,Orocó,VIII,Petrolina,13613,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,260980,Orocó,VIII,Petrolina,13613,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,260980,Orocó,VIII,Petrolina,13613,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,260980,Orocó,VIII,Petrolina,13613,TOTAL,NA,0,NA,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,TOTAL,15,10,7,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,hipotireoidismo_congenito,7,NA,0,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,metab_piruvato,0,0,5,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,aminoacidopatia_MSUD,NA,NA,NA,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,aminoacidopatia_tirosina,NA,NA,0,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,260990,Ouricuri,IX,Ouricuri,65245,glicogenose,NA,0,0,2010–2025,2023–2025
+municipio,261000,Palmares,III,Palmares,54584,TOTAL,13,6,5,2010–2025,2023–2025
+municipio,261000,Palmares,III,Palmares,54584,hipotireoidismo_congenito,7,NA,NA,2010–2025,2023–2025
+municipio,261000,Palmares,III,Palmares,54584,fibrose_cistica,5,NA,NA,2010–2025,2023–2025
+municipio,261000,Palmares,III,Palmares,54584,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,261000,Palmares,III,Palmares,54584,porfiria,0,0,NA,2010–2025,2023–2025
+municipio,261000,Palmares,III,Palmares,54584,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,261010,Palmeirina,V,Garanhuns,7031,homocistinuria,0,0,NA,2010–2025,2023–2025
+municipio,261010,Palmeirina,V,Garanhuns,7031,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,261010,Palmeirina,V,Garanhuns,7031,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261010,Palmeirina,V,Garanhuns,7031,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,TOTAL,7,5,5,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,hiperplasia_adrenal_cong,NA,NA,0,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261020,Panelas,IV,Caruaru,22991,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,261030,Paranatama,V,Garanhuns,12199,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,261030,Paranatama,V,Garanhuns,12199,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261030,Paranatama,V,Garanhuns,12199,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261040,Parnamirim,IX,Ouricuri,18612,galactosemia,0,0,NA,2010–2025,2023–2025
+municipio,261040,Parnamirim,IX,Ouricuri,18612,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,261040,Parnamirim,IX,Ouricuri,18612,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261040,Parnamirim,IX,Ouricuri,18612,TOTAL,NA,0,NA,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,TOTAL,6,NA,28,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,aminoacidopatia_PKU,NA,0,24,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261050,Passira,II,Limoeiro,28340,mucopolissacaridose,NA,0,NA,2010–2025,2023–2025
+municipio,261060,Paudalho,II,Limoeiro,56665,TOTAL,15,9,38,2010–2025,2023–2025
+municipio,261060,Paudalho,II,Limoeiro,56665,fibrose_cistica,10,6,0,2010–2025,2023–2025
+municipio,261060,Paudalho,II,Limoeiro,56665,aminoacidopatia_tirosina,0,0,23,2010–2025,2023–2025
+municipio,261060,Paudalho,II,Limoeiro,56665,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261060,Paudalho,II,Limoeiro,56665,aminoacidopatia_PKU,NA,NA,14,2010–2025,2023–2025
+municipio,261060,Paudalho,II,Limoeiro,56665,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,TOTAL,74,47,32,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,fibrose_cistica,39,26,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,hipotireoidismo_congenito,26,14,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,aminoacidopatia_MSUD,0,0,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,hiperplasia_adrenal_cong,0,0,8,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,aminoacidopatia_PKU,NA,NA,8,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,defeito_catalase,NA,NA,0,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,glicoproteinose,NA,0,0,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,metab_frutose,NA,NA,0,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,261070,Paulista,I,Recife,342167,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,261080,Pedra,VI,Arcoverde,22795,TOTAL,7,6,NA,2010–2025,2023–2025
+municipio,261080,Pedra,VI,Arcoverde,22795,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,261080,Pedra,VI,Arcoverde,22795,faod,NA,NA,0,2010–2025,2023–2025
+municipio,261080,Pedra,VI,Arcoverde,22795,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261080,Pedra,VI,Arcoverde,22795,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,TOTAL,10,6,5,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,fibrose_cistica,6,5,NA,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,faod,0,0,NA,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261090,Pesqueira,IV,Caruaru,62722,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,TOTAL,11,7,6,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,metab_glicina,0,0,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,esfingolipidose_GM1,NA,NA,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,esfingolipidose_GM2,NA,NA,0,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,hipotireoidismo_congenito,NA,0,NA,2010–2025,2023–2025
+municipio,261100,Petrolândia,VI,Arcoverde,34161,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,TOTAL,44,33,17,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,fibrose_cistica,25,21,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,hipotireoidismo_congenito,13,7,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,porfiria,0,0,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,glicogenose,NA,0,0,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,261110,Petrolina,VIII,Petrolina,386791,metab_cobre,NA,NA,NA,2010–2025,2023–2025
+municipio,261120,Poção,IV,Caruaru,10500,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261120,Poção,IV,Caruaru,10500,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,TOTAL,7,5,NA,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,aminoacidopatia_MSUD,NA,0,0,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,galactosemia,NA,0,0,2010–2025,2023–2025
+municipio,261130,Pombos,I,Recife,27552,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261140,Primavera,III,Palmares,13838,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,261140,Primavera,III,Palmares,13838,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,261140,Primavera,III,Palmares,13838,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,261140,Primavera,III,Palmares,13838,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,amiloidose_familiar,0,0,7,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,fibrose_cistica,0,0,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,glicoproteinose,0,0,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,homocistinuria,0,0,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,porfiria,0,0,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+municipio,261150,Quipapá,III,Palmares,17928,TOTAL,0,0,14,2010–2025,2023–2025
+municipio,261153,Quixaba,X,Afogados da Ingazeira,6554,fibrose_cistica,0,0,NA,2010–2025,2023–2025
+municipio,261153,Quixaba,X,Afogados da Ingazeira,6554,glicogenose,NA,NA,NA,2010–2025,2023–2025
+municipio,261153,Quixaba,X,Afogados da Ingazeira,6554,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261153,Quixaba,X,Afogados da Ingazeira,6554,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,261153,Quixaba,X,Afogados da Ingazeira,6554,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,TOTAL,534,312,247,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,fibrose_cistica,262,161,24,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,hipotireoidismo_congenito,153,67,6,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,aminoacidopatia_PKU,48,25,81,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,mucopolissacaridose,19,13,47,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,esfingolipidose_outras,17,16,21,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,amiloidose_familiar,8,6,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,glicoproteinose,8,8,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,faod,7,7,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,hiperplasia_adrenal_cong,7,NA,56,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,glicogenose,6,NA,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,aminoacidopatia_hiperfenil,0,0,5,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,esfingolipidose_GM2,0,0,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,metab_ornitina,0,0,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,acuduria_organica,NA,0,9,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,aminoacidopatia_tirosina,NA,NA,24,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,defeito_catalase,NA,NA,0,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,deposito_lipidios,NA,NA,5,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,homocistinuria,NA,NA,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,metab_cobre,NA,NA,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,metab_frutose,NA,0,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,metab_glicina,NA,NA,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,porfiria_aguda,NA,NA,NA,2010–2025,2023–2025
+municipio,261160,Recife,I,Recife,1488920,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,261170,Riacho das Almas,IV,Caruaru,20639,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,261170,Riacho das Almas,IV,Caruaru,20639,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261170,Riacho das Almas,IV,Caruaru,20639,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261170,Riacho das Almas,IV,Caruaru,20639,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,261180,Ribeirão,III,Palmares,33507,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261180,Ribeirão,III,Palmares,33507,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261180,Ribeirão,III,Palmares,33507,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261180,Ribeirão,III,Palmares,33507,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261180,Ribeirão,III,Palmares,33507,mucopolissacaridose,NA,0,0,2010–2025,2023–2025
+municipio,261180,Ribeirão,III,Palmares,33507,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,TOTAL,9,6,NA,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,aminoacidopatia_tirosina,NA,NA,0,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,esfingolipidose_GM2,NA,NA,0,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261190,Rio Formoso,III,Palmares,20009,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261200,Sairé,IV,Caruaru,10887,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261200,Sairé,IV,Caruaru,10887,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261200,Sairé,IV,Caruaru,10887,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261210,Salgadinho,II,Limoeiro,5727,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261210,Salgadinho,II,Limoeiro,5727,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261210,Salgadinho,II,Limoeiro,5727,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,TOTAL,21,15,8,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,hipotireoidismo_congenito,10,6,0,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,fibrose_cistica,5,5,0,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,metab_frutose,NA,NA,NA,2010–2025,2023–2025
+municipio,261220,Salgueiro,VII,Salgueiro,62372,mucopolissacaridose,NA,0,5,2010–2025,2023–2025
+municipio,261230,Saloá,V,Garanhuns,13836,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261230,Saloá,V,Garanhuns,13836,ciclo_ureia,NA,0,0,2010–2025,2023–2025
+municipio,261230,Saloá,V,Garanhuns,13836,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261230,Saloá,V,Garanhuns,13836,transporte_aminoacidos,NA,0,0,2010–2025,2023–2025
+municipio,261230,Saloá,V,Garanhuns,13836,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,porfiria_aguda,NA,NA,0,2010–2025,2023–2025
+municipio,261240,Sanharó,IV,Caruaru,18624,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261245,Santa Cruz,IX,Ouricuri,13841,TOTAL,7,NA,NA,2010–2025,2023–2025
+municipio,261245,Santa Cruz,IX,Ouricuri,13841,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,261245,Santa Cruz,IX,Ouricuri,13841,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261245,Santa Cruz,IX,Ouricuri,13841,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261245,Santa Cruz,IX,Ouricuri,13841,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261245,Santa Cruz,IX,Ouricuri,13841,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261247,Santa Cruz da Baixa Verde,XI,Serra Talhada,11567,fibrose_cistica,0,0,NA,2010–2025,2023–2025
+municipio,261247,Santa Cruz da Baixa Verde,XI,Serra Talhada,11567,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261247,Santa Cruz da Baixa Verde,XI,Serra Talhada,11567,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261247,Santa Cruz da Baixa Verde,XI,Serra Talhada,11567,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,TOTAL,21,15,5,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,fibrose_cistica,13,10,NA,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,aminoacidopatia_tirosina,NA,NA,0,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,hiperplasia_adrenal_cong,NA,NA,NA,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,mucopolissacaridose,NA,0,0,2010–2025,2023–2025
+municipio,261250,Santa Cruz do Capibaribe,IV,Caruaru,98254,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+municipio,261255,Santa Filomena,IX,Ouricuri,12106,TOTAL,6,NA,NA,2010–2025,2023–2025
+municipio,261255,Santa Filomena,IX,Ouricuri,12106,fibrose_cistica,5,NA,NA,2010–2025,2023–2025
+municipio,261255,Santa Filomena,IX,Ouricuri,12106,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,261255,Santa Filomena,IX,Ouricuri,12106,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261255,Santa Filomena,IX,Ouricuri,12106,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261260,Santa Maria da Boa Vista,VIII,Petrolina,40578,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261260,Santa Maria da Boa Vista,VIII,Petrolina,40578,aminoacidopatia_PKU,NA,0,0,2010–2025,2023–2025
+municipio,261260,Santa Maria da Boa Vista,VIII,Petrolina,40578,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261260,Santa Maria da Boa Vista,VIII,Petrolina,40578,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261270,Santa Maria do Cambucá,IV,Caruaru,14013,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261270,Santa Maria do Cambucá,IV,Caruaru,14013,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261270,Santa Maria do Cambucá,IV,Caruaru,14013,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261270,Santa Maria do Cambucá,IV,Caruaru,14013,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261270,Santa Maria do Cambucá,IV,Caruaru,14013,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261270,Santa Maria do Cambucá,IV,Caruaru,14013,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261280,Santa Terezinha,X,Afogados da Ingazeira,10244,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,261280,Santa Terezinha,X,Afogados da Ingazeira,10244,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261280,Santa Terezinha,X,Afogados da Ingazeira,10244,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261280,Santa Terezinha,X,Afogados da Ingazeira,10244,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261280,Santa Terezinha,X,Afogados da Ingazeira,10244,TOTAL,NA,0,6,2010–2025,2023–2025
+municipio,261290,São Benedito do Sul,III,Palmares,13113,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,261290,São Benedito do Sul,III,Palmares,13113,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261290,São Benedito do Sul,III,Palmares,13113,TOTAL,0,0,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,TOTAL,14,10,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,hipotireoidismo_congenito,7,NA,0,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,metab_frutose,0,0,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261300,São Bento do Una,IV,Caruaru,49449,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261310,São Caitano,IV,Caruaru,37126,TOTAL,8,NA,0,2010–2025,2023–2025
+municipio,261310,São Caitano,IV,Caruaru,37126,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261310,São Caitano,IV,Caruaru,37126,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,261310,São Caitano,IV,Caruaru,37126,fibrose_cistica,NA,0,0,2010–2025,2023–2025
+municipio,261310,São Caitano,IV,Caruaru,37126,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261310,São Caitano,IV,Caruaru,37126,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,261320,São João,V,Garanhuns,23837,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261320,São João,V,Garanhuns,23837,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261320,São João,V,Garanhuns,23837,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261330,São Joaquim do Monte,IV,Caruaru,20037,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261330,São Joaquim do Monte,IV,Caruaru,20037,hiperplasia_adrenal_cong,NA,0,0,2010–2025,2023–2025
+municipio,261330,São Joaquim do Monte,IV,Caruaru,20037,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261330,São Joaquim do Monte,IV,Caruaru,20037,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261340,São José da Coroa Grande,III,Palmares,18825,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261340,São José da Coroa Grande,III,Palmares,18825,faod,0,0,NA,2010–2025,2023–2025
+municipio,261340,São José da Coroa Grande,III,Palmares,18825,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261340,São José da Coroa Grande,III,Palmares,18825,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261340,São José da Coroa Grande,III,Palmares,18825,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,TOTAL,9,8,NA,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,aminoacidopatia_tirosina,NA,NA,0,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261350,São José do Belmonte,XI,Serra Talhada,34843,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+municipio,261360,São José do Egito,X,Afogados da Ingazeira,31004,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261360,São José do Egito,X,Afogados da Ingazeira,31004,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,261360,São José do Egito,X,Afogados da Ingazeira,31004,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261360,São José do Egito,X,Afogados da Ingazeira,31004,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,TOTAL,45,32,12,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,fibrose_cistica,20,18,0,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,hipotireoidismo_congenito,15,5,0,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,metab_glicina,0,0,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,aminoacidopatia_PKU,NA,NA,5,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,aminoacidopatia_tirosina,NA,0,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,deposito_lipidios,NA,NA,NA,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,faod,NA,NA,0,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,261370,São Lourenço da Mata,I,Recife,111249,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,hiperplasia_adrenal_cong,NA,0,0,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261380,São Vicente Férrer,XII,Goiana,16677,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,TOTAL,26,18,12,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,fibrose_cistica,21,15,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+municipio,261390,Serra Talhada,XI,Serra Talhada,92228,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261400,Serrita,VII,Salgueiro,18207,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261400,Serrita,VII,Salgueiro,18207,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+municipio,261400,Serrita,VII,Salgueiro,18207,faod,NA,NA,0,2010–2025,2023–2025
+municipio,261400,Serrita,VII,Salgueiro,18207,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261400,Serrita,VII,Salgueiro,18207,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261400,Serrita,VII,Salgueiro,18207,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,TOTAL,13,13,NA,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,fibrose_cistica,6,6,0,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,metab_cobre,NA,NA,0,2010–2025,2023–2025
+municipio,261410,Sertânia,VI,Arcoverde,32811,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,261420,Sirinhaém,III,Palmares,37596,TOTAL,10,7,NA,2010–2025,2023–2025
+municipio,261420,Sirinhaém,III,Palmares,37596,fibrose_cistica,5,NA,NA,2010–2025,2023–2025
+municipio,261420,Sirinhaém,III,Palmares,37596,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+municipio,261420,Sirinhaém,III,Palmares,37596,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261430,Moreilândia,IX,Ouricuri,10540,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261430,Moreilândia,IX,Ouricuri,10540,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+municipio,261430,Moreilândia,IX,Ouricuri,10540,faod,0,0,NA,2010–2025,2023–2025
+municipio,261430,Moreilândia,IX,Ouricuri,10540,mucopolissacaridose,NA,0,0,2010–2025,2023–2025
+municipio,261430,Moreilândia,IX,Ouricuri,10540,TOTAL,NA,0,5,2010–2025,2023–2025
+municipio,261440,Solidão,X,Afogados da Ingazeira,5210,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261440,Solidão,X,Afogados da Ingazeira,5210,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261440,Solidão,X,Afogados da Ingazeira,5210,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,TOTAL,30,19,16,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,fibrose_cistica,17,9,NA,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,hipotireoidismo_congenito,8,5,0,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,aminoacidopatia_PKU,NA,NA,8,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,lesch_nyhan,NA,NA,0,2010–2025,2023–2025
+municipio,261450,Surubim,II,Limoeiro,64120,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,261460,Tabira,X,Afogados da Ingazeira,27681,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,261460,Tabira,X,Afogados da Ingazeira,27681,fibrose_cistica,NA,NA,NA,2010–2025,2023–2025
+municipio,261460,Tabira,X,Afogados da Ingazeira,27681,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261470,Tacaimbó,IV,Caruaru,13738,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,261470,Tacaimbó,IV,Caruaru,13738,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,261470,Tacaimbó,IV,Caruaru,13738,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261470,Tacaimbó,IV,Caruaru,13738,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261470,Tacaimbó,IV,Caruaru,13738,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261480,Tacaratu,VI,Arcoverde,23902,TOTAL,9,NA,NA,2010–2025,2023–2025
+municipio,261480,Tacaratu,VI,Arcoverde,23902,lesch_nyhan,0,0,NA,2010–2025,2023–2025
+municipio,261480,Tacaratu,VI,Arcoverde,23902,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261480,Tacaratu,VI,Arcoverde,23902,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261480,Tacaratu,VI,Arcoverde,23902,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261480,Tacaratu,VI,Arcoverde,23902,lipofuscinose_NCL,NA,0,0,2010–2025,2023–2025
+municipio,261485,Tamandaré,III,Palmares,23561,TOTAL,6,5,NA,2010–2025,2023–2025
+municipio,261485,Tamandaré,III,Palmares,23561,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261485,Tamandaré,III,Palmares,23561,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+municipio,261485,Tamandaré,III,Palmares,23561,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261485,Tamandaré,III,Palmares,23561,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261485,Tamandaré,III,Palmares,23561,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,261500,Taquaritinga do Norte,IV,Caruaru,24736,metab_cobre,0,0,23,2010–2025,2023–2025
+municipio,261500,Taquaritinga do Norte,IV,Caruaru,24736,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261500,Taquaritinga do Norte,IV,Caruaru,24736,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261500,Taquaritinga do Norte,IV,Caruaru,24736,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261500,Taquaritinga do Norte,IV,Caruaru,24736,TOTAL,NA,NA,23,2010–2025,2023–2025
+municipio,261510,Terezinha,V,Garanhuns,6513,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261510,Terezinha,V,Garanhuns,6513,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,261520,Terra Nova,VII,Salgueiro,8920,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261520,Terra Nova,VII,Salgueiro,8920,mucopolissacaridose,0,0,5,2010–2025,2023–2025
+municipio,261520,Terra Nova,VII,Salgueiro,8920,esfingolipidose_outras,NA,0,6,2010–2025,2023–2025
+municipio,261520,Terra Nova,VII,Salgueiro,8920,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261520,Terra Nova,VII,Salgueiro,8920,TOTAL,NA,NA,7,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,TOTAL,18,10,18,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,hipotireoidismo_congenito,10,6,0,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,fibrose_cistica,7,NA,NA,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,acuduria_organica,0,0,NA,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,aminoacidopatia_PKU,NA,0,14,2010–2025,2023–2025
+municipio,261530,Timbaúba,XII,Goiana,46147,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,261540,Toritama,IV,Caruaru,41137,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,261540,Toritama,IV,Caruaru,41137,defeito_catalase,0,0,NA,2010–2025,2023–2025
+municipio,261540,Toritama,IV,Caruaru,41137,esfingolipidose_outras,NA,NA,0,2010–2025,2023–2025
+municipio,261540,Toritama,IV,Caruaru,41137,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261550,Tracunhaém,II,Limoeiro,13867,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,261550,Tracunhaém,II,Limoeiro,13867,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261550,Tracunhaém,II,Limoeiro,13867,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261550,Tracunhaém,II,Limoeiro,13867,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261550,Tracunhaém,II,Limoeiro,13867,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,TOTAL,6,NA,NA,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,metab_piruvato,0,0,NA,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,mucopolissacaridose,NA,NA,0,2010–2025,2023–2025
+municipio,261560,Trindade,IX,Ouricuri,30321,porfiria,NA,NA,0,2010–2025,2023–2025
+municipio,261570,Triunfo,XI,Serra Talhada,14705,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261570,Triunfo,XI,Serra Talhada,14705,esfingolipidose_GM2,0,0,NA,2010–2025,2023–2025
+municipio,261570,Triunfo,XI,Serra Talhada,14705,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261570,Triunfo,XI,Serra Talhada,14705,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261580,Tupanatinga,VI,Arcoverde,26937,TOTAL,5,NA,NA,2010–2025,2023–2025
+municipio,261580,Tupanatinga,VI,Arcoverde,26937,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,261580,Tupanatinga,VI,Arcoverde,26937,aminoacidopatia_tirosina,NA,NA,0,2010–2025,2023–2025
+municipio,261580,Tupanatinga,VI,Arcoverde,26937,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261580,Tupanatinga,VI,Arcoverde,26937,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261590,Tuparetama,X,Afogados da Ingazeira,8005,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,261590,Tuparetama,X,Afogados da Ingazeira,8005,TOTAL,NA,NA,0,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,TOTAL,15,11,NA,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,fibrose_cistica,7,7,0,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,mucopolissacaridose,6,NA,NA,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,glicogenose,0,0,NA,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,aminoacidopatia_PKU,NA,NA,0,2010–2025,2023–2025
+municipio,261600,Venturosa,VI,Arcoverde,17251,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261610,Verdejante,VII,Salgueiro,9169,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261610,Verdejante,VII,Salgueiro,9169,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261610,Verdejante,VII,Salgueiro,9169,TOTAL,NA,NA,NA,2010–2025,2023–2025
+municipio,261618,Vertente do Lério,II,Limoeiro,7558,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261618,Vertente do Lério,II,Limoeiro,7558,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+municipio,261618,Vertente do Lério,II,Limoeiro,7558,TOTAL,0,0,5,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,TOTAL,5,NA,6,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,aminoacidopatia_PKU,0,0,NA,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,metab_glicina,0,0,NA,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261620,Vertentes,IV,Caruaru,21959,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,TOTAL,7,NA,29,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,aminoacidopatia_tirosina,0,0,27,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,aminoacidopatia_PKU,NA,0,NA,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,fibrose_cistica,NA,NA,0,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,glicogenose,NA,NA,0,2010–2025,2023–2025
+municipio,261630,Vicência,II,Limoeiro,26359,hipotireoidismo_congenito,NA,0,0,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,TOTAL,37,22,33,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,fibrose_cistica,18,10,NA,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,hipotireoidismo_congenito,6,NA,0,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,metab_cobre,0,0,NA,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,aminoacidopatia_PKU,NA,NA,16,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,galactosemia,NA,NA,0,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,glicogenose,NA,0,0,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,hiperplasia_adrenal_cong,NA,0,8,2010–2025,2023–2025
+municipio,261640,Vitória de Santo Antão,I,Recife,134084,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+municipio,261650,Xexéu,III,Palmares,11611,TOTAL,6,NA,NA,2010–2025,2023–2025
+municipio,261650,Xexéu,III,Palmares,11611,fibrose_cistica,NA,0,NA,2010–2025,2023–2025
+municipio,261650,Xexéu,III,Palmares,11611,hipotireoidismo_congenito,NA,NA,0,2010–2025,2023–2025
+municipio,261650,Xexéu,III,Palmares,11611,porfiria,NA,NA,0,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,TOTAL,1186,723,543,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,fibrose_cistica,597,376,60,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,hipotireoidismo_congenito,311,152,12,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,aminoacidopatia_PKU,96,53,178,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,mucopolissacaridose,63,44,88,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,esfingolipidose_outras,30,28,55,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,glicoproteinose,19,15,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,amiloidose_familiar,17,15,5,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,galactosemia,14,13,0,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,glicogenose,14,9,7,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,aminoacidopatia_tirosina,12,7,59,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,faod,12,11,5,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,hiperplasia_adrenal_cong,11,6,109,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,metab_cobre,9,7,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,transporte_aminoacidos,9,NA,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,deposito_lipidios,8,8,14,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,acuduria_organica,7,NA,16,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,aminoacidopatia_MSUD,6,5,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,ciclo_ureia,6,NA,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,defeito_catalase,5,5,0,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,aminoacidopatia_hiperfenil,0,0,17,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,crigler_najjar,0,0,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,esfingolipidose_GM2,0,0,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,metab_ornitina,0,0,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,homocistinuria,NA,NA,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,metab_frutose,NA,NA,6,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,metab_glicina,NA,NA,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,porfiria,NA,NA,NA,2010–2025,2023–2025
+regiao,I,Recife,I,Recife,3954654,porfiria_aguda,NA,NA,6,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,TOTAL,164,101,486,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,fibrose_cistica,89,58,5,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,hipotireoidismo_congenito,41,17,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,mucopolissacaridose,15,12,13,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,aminoacidopatia_PKU,12,NA,356,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,aminoacidopatia_hiperfenil,0,0,12,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,aminoacidopatia_tirosina,0,0,91,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,hiperplasia_adrenal_cong,0,0,9,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,deposito_lipidios,NA,NA,NA,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,esfingolipidose_outras,NA,NA,6,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,faod,NA,NA,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,galactosemia,NA,NA,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,glicogenose,NA,NA,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,lesch_nyhan,NA,NA,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,lipofuscinose_NCL,NA,0,0,2010–2025,2023–2025
+regiao,II,Limoeiro,II,Limoeiro,567688,metab_cobre,NA,NA,0,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,TOTAL,109,65,70,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,fibrose_cistica,55,31,11,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,hipotireoidismo_congenito,29,17,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,aminoacidopatia_PKU,9,5,22,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,esfingolipidose_outras,8,7,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,glicoproteinose,5,NA,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,amiloidose_familiar,0,0,14,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,faod,0,0,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,hiperplasia_adrenal_cong,0,0,5,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,homocistinuria,0,0,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,acuduria_organica,NA,NA,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,esfingolipidose_GM2,NA,NA,0,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,galactosemia,NA,NA,0,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,glicogenose,NA,NA,0,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,mucopolissacaridose,NA,NA,NA,2010–2025,2023–2025
+regiao,III,Palmares,III,Palmares,507147,porfiria,NA,NA,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,TOTAL,273,185,101,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,fibrose_cistica,122,88,13,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,hipotireoidismo_congenito,83,44,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,aminoacidopatia_PKU,32,23,17,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,mucopolissacaridose,16,12,22,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,esfingolipidose_outras,6,5,13,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,hiperplasia_adrenal_cong,6,5,10,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,transporte_aminoacidos,5,NA,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,crigler_najjar,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,defeito_catalase,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,faod,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,lesch_nyhan,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,metab_cobre,0,0,24,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,metab_glicina,0,0,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,acuduria_organica,NA,NA,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,amiloidose_familiar,NA,NA,6,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,deposito_lipidios,NA,NA,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,glicogenose,NA,NA,0,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,homocistinuria,NA,0,0,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,metab_frutose,NA,NA,NA,2010–2025,2023–2025
+regiao,IV,Caruaru,IV,Caruaru,1340060,porfiria_aguda,NA,NA,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,TOTAL,71,45,87,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,fibrose_cistica,30,22,6,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,hipotireoidismo_congenito,21,12,0,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,aminoacidopatia_PKU,9,5,11,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,mucopolissacaridose,6,NA,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,acuduria_organica,0,0,6,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,faod,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,homocistinuria,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,metab_frutose,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,metab_glicina,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,metab_ornitina,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,metab_piruvato,0,0,20,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,porfiria_aguda,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,aminoacidopatia_MSUD,NA,NA,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,galactosemia,NA,0,NA,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,glicogenose,NA,0,17,2010–2025,2023–2025
+regiao,IX,Ouricuri,IX,Ouricuri,338050,porfiria,NA,NA,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,TOTAL,109,72,35,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,hipotireoidismo_congenito,41,24,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,fibrose_cistica,33,26,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,aminoacidopatia_PKU,18,9,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,mucopolissacaridose,6,NA,10,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,aminoacidopatia_tirosina,0,0,5,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,hiperplasia_adrenal_cong,0,0,8,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,metab_cobre,0,0,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,metab_piruvato,0,0,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,acuduria_organica,NA,NA,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,ciclo_ureia,NA,NA,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,faod,NA,NA,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,galactosemia,NA,0,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,glicogenose,NA,NA,0,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,homocistinuria,NA,NA,NA,2010–2025,2023–2025
+regiao,V,Garanhuns,V,Garanhuns,538978,transporte_aminoacidos,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,TOTAL,118,85,79,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,fibrose_cistica,52,40,8,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,hipotireoidismo_congenito,28,16,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,mucopolissacaridose,11,5,5,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,aminoacidopatia_PKU,7,NA,5,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,amiloidose_familiar,0,0,47,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,homocistinuria,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,lesch_nyhan,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,metab_glicina,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,transporte_aminoacidos,0,0,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,deposito_lipidios,NA,NA,0,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,esfingolipidose_GM1,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,esfingolipidose_GM2,NA,NA,0,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,faod,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,galactosemia,NA,NA,0,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,glicogenose,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,lipofuscinose_NCL,NA,NA,NA,2010–2025,2023–2025
+regiao,VI,Arcoverde,VI,Arcoverde,415374,metab_cobre,NA,NA,0,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,TOTAL,45,32,25,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,hipotireoidismo_congenito,19,11,0,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,fibrose_cistica,15,15,NA,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,aminoacidopatia_PKU,5,NA,NA,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,acuduria_organica,0,0,NA,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,esfingolipidose_outras,NA,0,12,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,faod,NA,NA,0,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,metab_frutose,NA,NA,NA,2010–2025,2023–2025
+regiao,VII,Salgueiro,VII,Salgueiro,141653,mucopolissacaridose,NA,0,12,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,TOTAL,56,41,25,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,fibrose_cistica,29,25,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,hipotireoidismo_congenito,18,10,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,aminoacidopatia_PKU,6,NA,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,hiperplasia_adrenal_cong,0,0,5,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,metab_piruvato,0,0,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,mucopolissacaridose,0,0,5,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,porfiria,0,0,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,galactosemia,NA,0,0,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,glicogenose,NA,NA,0,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+regiao,VIII,Petrolina,VIII,Petrolina,531226,metab_cobre,NA,NA,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,TOTAL,28,20,28,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,fibrose_cistica,12,10,5,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,hipotireoidismo_congenito,11,5,0,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,esfingolipidose_GM1,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,esfingolipidose_outras,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,faod,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,hiperplasia_adrenal_cong,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,amiloidose_familiar,NA,NA,0,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,glicogenose,NA,NA,11,2010–2025,2023–2025
+regiao,X,Afogados da Ingazeira,X,Afogados da Ingazeira,184940,metab_cobre,NA,NA,0,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,TOTAL,58,44,28,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,fibrose_cistica,31,22,5,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,hipotireoidismo_congenito,12,7,0,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,ciclo_ureia,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,crigler_najjar,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,esfingolipidose_GM2,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,glicogenose,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,hiperplasia_adrenal_cong,0,0,5,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,mucopolissacaridose,0,0,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,acuduria_organica,NA,NA,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,aminoacidopatia_MSUD,NA,NA,0,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,aminoacidopatia_PKU,NA,NA,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,aminoacidopatia_tirosina,NA,NA,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,deposito_lipidios,NA,NA,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,esfingolipidose_outras,NA,NA,NA,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,galactosemia,NA,NA,0,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,lipofuscinose_NCL,NA,NA,0,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,metab_glicina,NA,NA,0,2010–2025,2023–2025
+regiao,XI,Serra Talhada,XI,Serra Talhada,236810,transporte_aminoacidos,NA,NA,0,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,TOTAL,82,51,45,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,fibrose_cistica,38,26,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,hipotireoidismo_congenito,30,16,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,esfingolipidose_outras,5,5,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,acuduria_organica,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,amiloidose_familiar,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,aminoacidopatia_hiperfenil,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,aminoacidopatia_tirosina,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,deposito_lipidios,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,metab_cobre,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,porfiria,0,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,aminoacidopatia_PKU,NA,NA,22,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,ciclo_ureia,NA,0,0,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,glicogenose,NA,NA,0,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,glicoproteinose,NA,NA,0,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,hiperplasia_adrenal_cong,NA,NA,0,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,metab_ornitina,NA,0,0,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,mucopolissacaridose,NA,0,NA,2010–2025,2023–2025
+regiao,XII,Goiana,XII,Goiana,302351,transporte_aminoacidos,NA,0,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,TOTAL,352,232,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,fibrose_cistica,80,42,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,hiperplasia_adrenal_cong,78,38,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,amiloidose_familiar,62,60,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,mucopolissacaridose,38,33,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,aminoacidopatia_PKU,36,18,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,metab_cobre,30,19,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,esfingolipidose_outras,24,19,0,2010–2025,2023–2025
+sem_municipio,NA,Sem município confiável,NA,NA,NA,glicogenose,NA,NA,0,2010–2025,2023–2025
