@@ -4144,6 +4144,7 @@ margin: 0 0 !important;
    
   <ul>
   <li><a href="#estado-atual-dos-números-de-destaque" id="toc-estado-atual-dos-números-de-destaque" class="nav-link active" data-scroll-target="#estado-atual-dos-números-de-destaque">Estado atual dos números de destaque</a></li>
+  <li><a href="#novidade-pessoas-com-eim-por-município-e-região-de-saúde-de-residência-outubro2026" id="toc-novidade-pessoas-com-eim-por-município-e-região-de-saúde-de-residência-outubro2026" class="nav-link" data-scroll-target="#novidade-pessoas-com-eim-por-município-e-região-de-saúde-de-residência-outubro2026">Novidade — pessoas com EIM por município e região de saúde de residência (outubro/2026)</a></li>
   <li><a href="#ciclo-5-pacientes-contados-pelo-cns-criptografado-das-apac-outubro2026" id="toc-ciclo-5-pacientes-contados-pelo-cns-criptografado-das-apac-outubro2026" class="nav-link" data-scroll-target="#ciclo-5-pacientes-contados-pelo-cns-criptografado-das-apac-outubro2026">Ciclo 5 — pacientes contados pelo CNS criptografado das APAC (outubro/2026)</a></li>
   <li><a href="#ciclo-4-série-20102025-a-partir-dos-dados-brutos-do-datasus-outubro2026" id="toc-ciclo-4-série-20102025-a-partir-dos-dados-brutos-do-datasus-outubro2026" class="nav-link" data-scroll-target="#ciclo-4-série-20102025-a-partir-dos-dados-brutos-do-datasus-outubro2026">Ciclo 4 — série 2010–2025 a partir dos dados brutos do DATASUS (outubro/2026)</a>
   <ul class="collapse">
@@ -4192,7 +4193,7 @@ margin: 0 0 !important;
 
 
 <div class="meta-atualizacao">
-<p><strong>Última atualização do painel:</strong> 25 de outubro de 2026 · <a href="./index.html">Voltar ao início</a></p>
+<p><strong>Última atualização do painel:</strong> 29 de outubro de 2026 · <a href="./index.html">Voltar ao início</a></p>
 </div>
 <p>Este painel é <strong>auditado ativamente</strong>. Duas rodadas independentes de auditoria já revisaram a definição de caso, a lookup CID-10, os denominadores e os números publicados — e as duas encontraram erros, alguns deles em números de destaque da página inicial. Esta página registra <strong>cada correção, ponto a ponto</strong>: o que estava publicado, o que está publicado agora e por que mudou.</p>
 <div class="callout-nota">
@@ -4237,6 +4238,16 @@ mortalidade padronizada nacional (2024)
 </div>
 </div>
 </div>
+<hr>
+</section>
+<section id="novidade-pessoas-com-eim-por-município-e-região-de-saúde-de-residência-outubro2026" class="level1">
+<h1>Novidade — pessoas com EIM por município e região de saúde de residência (outubro/2026)</h1>
+<p>A <a href="./pe_eim.html">página de Pernambuco</a> ganhou a seção <strong>“Onde moram as pessoas com EIM”</strong>, feita para planejar uma rota itinerante de coleta de amostras: os 10 municípios com mais pessoas com EIM em seguimento (e os 10 fora da I GERES), as 12 regiões de saúde (GERES) e as 5 doenças com mais pessoas em cada área. Script <code>scripts/hotspots_pe.R</code>, saída <code>manifest/pe_hotspots.csv</code>; município → GERES e população do Censo 2022 em <code>ref/pe_regioes_saude.csv</code> (<code>scripts/get_regioes_saude_pe.R</code>).</p>
+<ul>
+<li><strong>Nenhum número anterior mudou.</strong> O total de pessoas de PE é o mesmo da contagem por CNS (APAC ∪ BPA-I) de <code>scripts/pacientes_cns_bi.R</code>; a seção só distribui essas pessoas pelo município de residência.</li>
+<li><strong>Pessoa = CNS, município = BPA-I.</strong> O município das APAC do CEAF (quase sempre Recife em PE) não é usado; quem só aparece no CEAF fica como “sem município confiável”.</li>
+<li><strong>Achado de qualidade de dado:</strong> o SIH ficou fora da contagem de pessoas. Sem CNS, a pessoa seria a chave nascimento × sexo × município, e em PE ela infla com erro de codificação de hospital local; o caso mais forte é um hospital de Limoeiro com AIH de E70.0 (PKU) recorrentes ao longo da década passada. As chaves do SIH sem CNS correspondente vão ao manifest só como auditoria.</li>
+</ul>
 <hr>
 </section>
 <section id="ciclo-5-pacientes-contados-pelo-cns-criptografado-das-apac-outubro2026" class="level1">

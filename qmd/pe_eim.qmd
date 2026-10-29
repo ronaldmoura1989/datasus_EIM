@@ -25,6 +25,50 @@ pz_sim_pe <- D$pz_sim |> dplyr::filter(uf_res == "PE", !is.na(uf_res))
 
 # Helper de supressão N<5 para rótulos de contagem
 sup5 <- function(x) dplyr::if_else(x < N_SUPRESSAO & x > 0, NA_integer_, as.integer(x))
+
+# Rótulo amigável do subgrupo clínico (lookup); sem rótulo, o nome do subgrupo sem "_"
+.NOMES_SUBGRUPO <- c(
+  mucopolissacaridose         = "Mucopolissacaridoses (MPS)",
+  esfingolipidose_outras      = "Esfingolipidoses (Gaucher/Fabry/NP-C)",
+  fibrose_cistica             = "Fibrose cística",
+  glicogenose                 = "Glicogenoses (inclui Pompe)",
+  aminoacidopatia_tirosina    = "Tirosinemia",
+  amiloidose_familiar         = "Amiloidose familiar (PAF-TTR)",
+  hiperplasia_adrenal_cong    = "Hiperplasia adrenal congênita (HAC)",
+  metab_piruvato              = "Distúrbios do metabolismo do piruvato",
+  metab_cobre                 = "Doença de Wilson",
+  aminoacidopatia_PKU         = "Fenilcetonúria (PKU)",
+  aminoacidopatia_hiperfenil  = "Outras hiperfenilalaninemias",
+  aminoacidopatia_MSUD        = "Doença do xarope de bordo (MSUD)",
+  hipotireoidismo_congenito   = "Hipotireoidismo congênito",
+  acuduria_organica           = "Acidúrias orgânicas",
+  faod                        = "Defeitos da β-oxidação (FAOD)",
+  transporte_aminoacidos      = "Distúrbios do transporte de aminoácidos",
+  homocistinuria              = "Homocistinúria",
+  ciclo_ureia                 = "Distúrbios do ciclo da ureia",
+  metab_ornitina              = "Distúrbios do metabolismo da ornitina",
+  metab_glicina               = "Distúrbios do metabolismo da glicina",
+  metab_frutose               = "Distúrbios do metabolismo da frutose",
+  galactosemia                = "Galactosemia",
+  esfingolipidose_GM1         = "Gangliosidose GM1",
+  esfingolipidose_GM2         = "Gangliosidose GM2 (Tay-Sachs/Sandhoff)",
+  deposito_lipidios           = "Outros distúrbios de depósito de lipídios",
+  glicoproteinose             = "Glicoproteinoses",
+  lipofuscinose_NCL           = "Lipofuscinoses ceroides (CLN)",
+  lesch_nyhan                 = "Síndrome de Lesch-Nyhan",
+  defeito_catalase            = "Defeitos da catalase e peroxidase",
+  crigler_najjar              = "Crigler-Najjar",
+  metab_minerais_outros       = "Distúrbios do metabolismo de minerais (outros)",
+  atrofia_muscular_espinhal   = "Atrofia muscular espinhal (AME, contexto)",
+  hemofilia_A                 = "Hemofilia A (contexto)",
+  hemofilia_B                 = "Hemofilia B (contexto)",
+  porfiria                    = "Porfirias",
+  porfiria_aguda              = "Porfirias agudas",
+  porfiria_bilirrubina_outros = "Porfirias / distúrbios da bilirrubina",
+  amiloidose_outras           = "Amiloidoses (outras)")
+nome_subgrupo <- function(s) dplyr::coalesce(unname(.NOMES_SUBGRUPO[s]), stringr::str_replace_all(s, "_", " "))
+fmt_n_sup <- function(x) dplyr::if_else(is.na(x), "N<5", fmt_n(x))
+fmt_1_sup <- function(x) dplyr::if_else(is.na(x), "—", fmt_1(x))
 ```
 
 ```{r kpis}
@@ -118,6 +162,155 @@ Fernando de Noronha (não exibido no mapa): **`r fmt_n(noronha_sih)` AIH** com E
 o padrão esperado de uma rede de referência centralizada; municípios do interior "aparecem
 pouco" sobretudo por **encaminharem** seus pacientes aos centros da capital — o município de
 residência registrado pode inclusive já ser o da RM.
+:::
+
+## Onde moram as pessoas com EIM: municípios e regiões de saúde
+
+Os mapas acima mostram **onde o SUS registra atendimento**. Para planejar uma **rota itinerante
+de coleta de amostras**, a pergunta é outra: **onde moram as pessoas** com EIM em seguimento.
+Esta seção conta **pessoas distintas** (CNS criptografado) com EIM da camada core no BPA
+individualizado (consulta ou acompanhamento; quem só fez exame fica de fora) ou em APAC, pelo
+**município de residência** do atendimento mais recente no BPA-I. O município das APAC de
+medicamento do CEAF não é usado, porque em PE sai quase sempre Recife. A região é a **região
+de saúde** (Gerência Regional de Saúde, GERES) a que o município pertence.
+
+```{r hs-setup}
+#| include: false
+hs <- readr::read_csv(here::here("manifest/pe_hotspots.csv"),
+                      col_types = readr::cols(codigo = "c", .default = readr::col_guess()))
+REG_PE <- readr::read_csv(here::here("ref/pe_regioes_saude.csv"), col_types = readr::cols(munic_6 = "c"))
+hs_tot <- dplyr::filter(hs, subgrupo == "TOTAL")
+hs_est <- dplyr::filter(hs_tot, nivel == "estado")
+hs_sem <- dplyr::filter(hs_tot, nivel == "sem_municipio")
+hs_reg <- hs_tot |> dplyr::filter(nivel == "regiao") |> dplyr::arrange(dplyr::desc(pessoas)) |>
+  dplyr::mutate(taxa = 1e5 * pessoas / pop)
+hs_mun <- hs_tot |> dplyr::filter(nivel == "municipio") |> dplyr::arrange(dplyr::desc(pessoas)) |>
+  dplyr::mutate(taxa = 1e5 * pessoas / pop)
+HS_PER <- hs_est$periodo; HS_REC <- hs_est$recentes
+pes_com_mun <- sum(hs_reg$pessoas, na.rm = TRUE)
+pct_fora_I  <- 100 * sum(hs_reg$pessoas[hs_reg$codigo != "I"], na.rm = TRUE) / pes_com_mun
+
+# As 5 doenças com mais pessoas em cada área; as de N<5 vêm por último, sem ordem entre si
+top_doencas <- function(niv, n = 5) hs |>
+  dplyr::filter(nivel == niv, subgrupo != "TOTAL", pessoas > 0 | is.na(pessoas)) |>
+  dplyr::arrange(codigo, is.na(pessoas), dplyr::desc(pessoas), subgrupo) |>
+  dplyr::group_by(codigo) |>
+  dplyr::slice_head(n = n) |>
+  dplyr::summarise(doencas = paste0(nome_subgrupo(subgrupo), " (", fmt_n_sup(pessoas), ")",
+                                    collapse = " · "), .groups = "drop")
+tab_hotspot <- function(d, niv, rotulo) d |>
+  dplyr::left_join(top_doencas(niv), by = "codigo") |>
+  dplyr::transmute(
+    `#` = dplyr::row_number(),
+    !!rotulo := nome,
+    GERES = paste0(geres, " · ", regiao_saude),
+    !!paste0("Pessoas (", HS_PER, ")") := fmt_n_sup(pessoas),
+    !!paste0("Atendidas em ", HS_REC) := fmt_n_sup(pessoas_recentes),
+    `Por 100 mil hab.` = fmt_1_sup(taxa),
+    `5 doenças com mais pessoas (nº de pessoas)` = doencas)
+NOTA_HS <- paste0("Pessoa = CNS criptografado distinto com EIM (camada core) no BPA-I, fora do grupo SIGTAP 02 (exame), ou em APAC, ",
+                  HS_PER, "; conta uma vez em cada doença que tem e uma vez no total. Município = residência no atendimento mais recente do BPA-I ",
+                  "(ou no PA fora do CEAF, para quem não tem BPA-I). Atendidas em ", HS_REC, " = com algum registro nesses anos (em seguimento). ",
+                  "Por 100 mil hab. = pessoas acumuladas no período ÷ população do Censo 2022: razão de uso do serviço, não prevalência. Supressão N<5.")
+
+# Auditoria do SIH: o exemplo de Limoeiro sai do dado
+lim <- hs |> dplyr::filter(nivel == "municipio", nome == "Limoeiro", subgrupo == "aminoacidopatia_PKU")
+sem_top <- hs |> dplyr::filter(nivel == "sem_municipio", subgrupo != "TOTAL", !is.na(pessoas)) |>
+  dplyr::slice_max(pessoas, n = 2)
+reg_int <- dplyr::filter(hs_reg, codigo != "I")
+lista_e <- function(x) if (length(x) < 2) x else paste(paste(x[-length(x)], collapse = ", "), "e", x[length(x)])
+```
+
+```{r hs-kpis}
+#| output: asis
+cat(kpi_row(list(
+  c(fmt_n(hs_est$pessoas), paste0("pessoas com EIM (CNS) residentes em PE, ", HS_PER)),
+  c(paste0(fmt_1(100 * hs_est$pessoas_recentes / hs_est$pessoas), "%"), paste0("atendidas em ", HS_REC, " (em seguimento)")),
+  c(paste0(fmt_1(pct_fora_I), "%"), "moram fora da I GERES (Recife e RM)"),
+  c(fmt_n(hs_sem$pessoas), "sem município confiável (só APAC do CEAF)")
+)))
+```
+
+```{r hs-top-mun}
+hs_mun |>
+  dplyr::slice_head(n = 10) |>
+  tab_hotspot("municipio", "Município") |>
+  tabela_eim(titulo = paste0("Os 10 municípios de PE com mais pessoas com EIM em seguimento no SUS, por residência — ", HS_PER),
+             nota = NOTA_HS)
+```
+
+A I GERES (Recife e região metropolitana) domina a lista acima por tamanho de população e
+porque fica perto dos centros de referência; quem mora ali já chega à capital. Para uma rota
+itinerante, a tabela abaixo deixa a I GERES de fora:
+
+```{r hs-top-interior}
+hs_mun |>
+  dplyr::filter(geres != "I") |>
+  dplyr::slice_head(n = 10) |>
+  tab_hotspot("municipio", "Município") |>
+  tabela_eim(titulo = paste0("Os 10 municípios fora da I GERES (Recife e RM) com mais pessoas com EIM em seguimento — ", HS_PER),
+             nota = NOTA_HS)
+```
+
+```{r hs-mapa-reg}
+#| fig-width: 12
+#| fig-height: 6.5
+malha_reg <- malha_pe() |>
+  dplyr::filter(munic_6 != NORONHA_6) |>
+  dplyr::left_join(dplyr::select(REG_PE, munic_6, geres), by = "munic_6") |>
+  sf::st_transform(31985) |>                       # buffer de ±200 m fecha as frestas da malha simplificada
+  sf::st_buffer(200) |>
+  dplyr::group_by(geres) |>
+  dplyr::summarise(.groups = "drop") |>
+  sf::st_buffer(-200) |>
+  sf::st_transform(sf::st_crs(malha_pe())) |>
+  dplyr::left_join(dplyr::select(hs_reg, codigo, pessoas, taxa), by = c("geres" = "codigo"))
+rot_reg <- suppressWarnings(sf::st_point_on_surface(malha_reg))
+
+ggplot(malha_reg) +
+  geom_sf(aes(fill = taxa), color = "white", linewidth = 0.5) +
+  geom_sf_text(data = rot_reg, aes(label = paste0(geres, "\n", fmt_n_sup(pessoas))),
+               size = 3.1, color = "#0E2F38", fontface = "bold", lineheight = 0.9) +
+  grad_eim(name = "pessoas por\n100 mil hab.", labels = function(x) fmt_1(x)) +
+  labs(title = paste0("Pessoas com EIM em seguimento por região de saúde (GERES) de residência — PE, ", HS_PER),
+       subtitle = "Rótulo = GERES e nº de pessoas; cor = pessoas por 100 mil habitantes (Censo 2022). Fernando de Noronha (I GERES) fora do mapa.") +
+  theme_void(base_size = 12) +
+  theme(plot.title    = element_text(color = "#0E2F38", face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(color = "#26495C", hjust = 0.5),
+        legend.position = "bottom", legend.key.width = grid::unit(1.6, "cm"))
+```
+
+```{r hs-tab-reg}
+hs_reg |>
+  tab_hotspot("regiao", "Região de saúde (sede)") |>
+  dplyr::select(-GERES) |>
+  dplyr::mutate(GERES = hs_reg$codigo, .after = 1) |>
+  tabela_eim(titulo = paste0("Pessoas com EIM em seguimento por região de saúde (GERES) de residência — PE, ", HS_PER),
+             nota = NOTA_HS)
+```
+
+::: {.callout-nota}
+**Leitura para a rota de coleta.**
+
+- **Fora da I GERES**, as regiões com mais pessoas são `r lista_e(paste0(reg_int$codigo[1:3], " (", reg_int$nome[1:3], ", ", fmt_n_sup(reg_int$pessoas[1:3]), ")"))`;
+  a maior razão por habitante é a da `r reg_int$codigo[which.max(reg_int$taxa)]` GERES
+  (`r reg_int$nome[which.max(reg_int$taxa)]`, `r fmt_1(max(reg_int$taxa, na.rm = TRUE))` por 100 mil,
+  contra `r fmt_1(1e5 * pes_com_mun / hs_est$pop)` no estado). Uma razão alta pode indicar
+  aglomerado de casos (efeito fundador, consanguinidade) ou só um serviço local que acompanha
+  bem; a coleta ajuda a separar uma coisa da outra.
+- **Pessoas em seguimento, não registros nem internações.** O SIH ficou fora da contagem: sem
+  CNS, a pessoa seria a chave nascimento × sexo × município, que em PE infla com erro de
+  codificação de hospital local. Em Limoeiro, por exemplo, há `r fmt_n_sup(lim$pessoas_sih_sem_cns)`
+  chaves do SIH com fenilcetonúria sem nenhum CNS correspondente no BPA-I, contra
+  `r fmt_n_sup(lim$pessoas)` pessoas com PKU em seguimento ambulatorial.
+- **Sem município confiável:** `r fmt_n(hs_sem$pessoas)` pessoas só aparecem em APAC do CEAF
+  (sobretudo `r lista_e(sub("^(.)", "\\L\\1", nome_subgrupo(sem_top$subgrupo), perl = TRUE))`), cujo
+  município em PE sai quase sempre Recife. Elas existem, mas não entram em nenhum município
+  nem região; a rede de dispensação do CEAF é o caminho para alcançá-las.
+- **Residência registrada.** O município é o do atendimento mais recente; mudança de endereço,
+  endereço de parente na capital para facilitar o tratamento e erro de digitação deslocam
+  pessoas. A camada core inclui condições da triagem neonatal (hipotireoidismo congênito, HAC),
+  que pesam na lista de doenças.
 :::
 
 ## Estrutura etária × sexo em Pernambuco
@@ -291,25 +484,6 @@ intensidade**: MPS e demais doenças de depósito internam repetidamente para in
 então o nº de AIH mede uso do serviço, não nº de pacientes.
 
 ```{r diag-princ-sih}
-.NOMES_SUBGRUPO <- c(
-  mucopolissacaridose         = "Mucopolissacaridoses (MPS)",
-  esfingolipidose_outras      = "Esfingolipidoses (Gaucher/Fabry/NP-C)",
-  fibrose_cistica             = "Fibrose cística",
-  glicogenose                 = "Glicogenoses (inclui Pompe)",
-  aminoacidopatia_tirosina    = "Tirosinemia",
-  amiloidose_familiar         = "Amiloidose familiar (PAF-TTR)",
-  hiperplasia_adrenal_cong    = "Hiperplasia adrenal congênita (HAC)",
-  metab_piruvato              = "Distúrbios do metabolismo do piruvato",
-  metab_cobre                 = "Doença de Wilson",
-  aminoacidopatia_PKU         = "Fenilcetonúria (PKU)",
-  hipotireoidismo_congenito   = "Hipotireoidismo congênito",
-  metab_minerais_outros       = "Distúrbios do metabolismo de minerais (outros)",
-  atrofia_muscular_espinhal   = "Atrofia muscular espinhal (AME, contexto)",
-  hemofilia_A                 = "Hemofilia A (contexto)",
-  hemofilia_B                 = "Hemofilia B (contexto)",
-  porfiria_bilirrubina_outros = "Porfirias / distúrbios da bilirrubina",
-  amiloidose_outras           = "Amiloidoses (outras)")
-
 diag_princ_pe <- sih_pe |>
   dplyr::filter(eim_principal, !is.na(subgrupo)) |>
   dplyr::group_by(subgrupo) |>
@@ -319,8 +493,7 @@ diag_princ_pe <- sih_pe |>
   dplyr::filter(aih >= N_SUPRESSAO) |>
   dplyr::arrange(dplyr::desc(aih)) |>
   dplyr::slice_head(n = 10) |>
-  dplyr::mutate(doenca = dplyr::coalesce(.NOMES_SUBGRUPO[subgrupo],
-                                        stringr::str_replace_all(subgrupo, "_", " ")))
+  dplyr::mutate(doenca = nome_subgrupo(subgrupo))
 
 diag_princ_pe |>
   dplyr::transmute(
@@ -446,9 +619,6 @@ ufs_acima <- function(t) {
 }
 top_4a <- med_uf |> dplyr::filter(tipo == "MPS IVA", !is.na(por_milhao)) |>
   dplyr::slice_max(por_milhao, n = 1)
-
-fmt_n_sup <- function(x) dplyr::if_else(is.na(x), "N<5", fmt_n(x))
-fmt_1_sup <- function(x) dplyr::if_else(is.na(x), "—", fmt_1(x))
 ```
 
 ```{r med-kpis}

@@ -45,6 +45,7 @@ ETAPAS=(
   "14 scripts/genetica_sus_procedimentos.R"
   "15 scripts/pacientes_cns_apac.R"
   "16 scripts/validar_pseudo_id_cns.R"
+  "17 scripts/hotspots_pe.R"
 )
 PAGINAS=(index sia_eim sih_eim sim_eim pezinho pe_eim discussao glossario notas_lancamento)
 
@@ -62,7 +63,7 @@ if [[ $SO_RENDER -eq 0 ]]; then
   done
 fi
 
-if [[ 10#$ATE -ge 17 || $SO_RENDER -eq 1 ]]; then
+if [[ 10#$ATE -ge 18 || $SO_RENDER -eq 1 ]]; then
   # Uma página por comando: render em lote funde os .qmd num só .knit.md (ver notas de lançamento)
   for p in "${PAGINAS[@]}"; do
     echo "[$(date '+%F %T')] render $p"
